@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                android:background="@color/background"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="15dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="5dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_baseline_menu_open_24"
+                            app:tint="@color/font" />
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/back"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/splash_logo" />
+
+
+                    <LinearLayout
+                        android:id="@+id/wallet_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
+                        android:layout_toLeftOf="@id/lang_switch"
+                        android:background="@drawable/wallet_out"
+                        android:padding="10dp">
+
+                        <com.rkonline.android.latobold
+                            android:id="@+id/balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="600"
+                            android:textColor="#fff"
+                            android:textSize="17sp" />
+
+                        <ImageView
+                            android:id="@+id/coin"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/coin" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/lang_switch"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/ic_baseline_language_24"
+                        android:backgroundTint="@color/primary_dark"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"/>
+
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_below="@id/toolbar"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#11000000"
+                        />
+
+                    <com.rkonline.android.latonormal
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/font"
+                        android:id="@+id/hometext"
+                        android:textSize="15sp"
+                        android:gravity="center"
+                        android:text="@string/playnwin"
+                        />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="#11000000"
+                        />
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:stretchColumns="2">
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                app:cardCornerRadius="8dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="15dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/ghanta_bajar"
+                                app:cardElevation="10dp"
+                                app:cardBackgroundColor="@color/colorAccent"
+                                >
+
+
+                                <com.rkonline.android.latobold
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:layout_margin="15dp"
+                                    android:text="Ghanta Bazaar"
+                                    android:textColor="@color/md_white_1000"
+                                    android:textSize="16sp"
+                                    />
+
+
+                            </androidx.cardview.widget.CardView>
+                        </TableRow>
+<!--                        <TableRow-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent">-->
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:id="@+id/single"-->
+<!--                                android:layout_marginTop="10dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent">-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:padding="15dp"-->
+<!--                                    android:text="@string/playsingle"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:id="@+id/jodi"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:layout_marginTop="10dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:padding="15dp"-->
+<!--                                    android:text="@string/playjodi"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+<!--                        </TableRow>-->
+
+<!--                        <TableRow-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
+
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:id="@+id/singlepatti"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:layout_marginTop="10dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:layout_margin="15dp"-->
+<!--                                    android:text="@string/singlepanna"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:id="@+id/doublepatti"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:layout_marginTop="10dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:layout_margin="15dp"-->
+<!--                                    android:text="@string/doublepanna"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+
+<!--                        </TableRow>-->
+<!--                        <TableRow-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:id="@+id/tripepatti"-->
+<!--                                android:layout_marginTop="10dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:layout_margin="15dp"-->
+<!--                                    android:text="@string/triplepanna"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:id="@+id/halfsangam"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:layout_marginTop="10dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:layout_margin="15dp"-->
+<!--                                    android:text="Half Sangam"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+
+<!--                        </TableRow>-->
+<!--                        <TableRow-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:layout_marginTop="15dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:id="@+id/fullsangam"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:layout_margin="15dp"-->
+<!--                                    android:text="Full Sangam"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                app:cardCornerRadius="8dp"-->
+<!--                                android:layout_marginRight="20dp"-->
+<!--                                android:layout_marginLeft="20dp"-->
+<!--                                android:id="@+id/crossing"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:layout_marginTop="15dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                app:cardElevation="10dp"-->
+<!--                                app:cardBackgroundColor="@color/colorAccent"-->
+<!--                                >-->
+
+
+<!--                                <com.rkonline.android.latobold-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:layout_margin="15dp"-->
+<!--                                    android:text="Jodi Crossing"-->
+<!--                                    android:textColor="@color/md_white_1000"-->
+<!--                                    android:textSize="16sp"-->
+<!--                                    />-->
+
+
+<!--                            </androidx.cardview.widget.CardView>-->
+<!--                        </TableRow>-->
+
+
+                    </TableLayout>
+
+
+                    <com.rkonline.android.latobold
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Market"
+                        android:textColor="@color/font"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="left"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="17sp"
+                        />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/toolbar"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/recyclerviewMarket"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        />
+
+
+                    <com.rkonline.android.latobold
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Live Results"
+                        android:textColor="@color/font"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="left"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="17sp"
+                        />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/recyclerview"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        />
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="wrap_content">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            app:cardCornerRadius="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1"
+                            android:id="@+id/exit"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="wrap_content"
+                            app:cardElevation="3dp"
+                            android:layout_marginBottom="5dp"
+                            >
+
+
+                            <com.rkonline.android.latobold
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:text="EXIT"
+                                android:textColor="@color/font"
+                                android:textSize="14sp"
+                                />
+
+
+                        </androidx.cardview.widget.CardView>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            app:cardCornerRadius="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:id="@+id/logout"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="wrap_content"
+                            app:cardElevation="3dp"
+                            android:layout_marginBottom="5dp"
+                            >
+
+
+                            <com.rkonline.android.latobold
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:text="LOGOUT"
+                                android:textColor="@color/font"
+                                android:textSize="14sp"
+                                />
+
+
+                        </androidx.cardview.widget.CardView>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            app:cardCornerRadius="5dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:id="@+id/refresh"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="wrap_content"
+                            app:cardElevation="3dp"
+                            android:layout_marginBottom="5dp"
+                            >
+
+
+                            <com.rkonline.android.latobold
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:text="REFRESH"
+                                android:textColor="@color/font"
+                                android:textSize="14sp"
+                                />
+
+
+                        </androidx.cardview.widget.CardView>
+
+
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        app:cardCornerRadius="5dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:id="@+id/support"
+                        android:layout_weight="1"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="wrap_content"
+                        app:cardElevation="3dp"
+                        >
+
+
+                        <com.rkonline.android.latobold
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:text="Contact us"
+                            android:id="@+id/supportno"
+                            android:textColor="@color/font"
+                            android:textSize="15sp"
+                            />
+
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+
+</RelativeLayout>

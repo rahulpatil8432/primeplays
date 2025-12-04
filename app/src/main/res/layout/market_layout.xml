@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="10dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="4dp"
+                >
+
+
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Market Name"
+                    android:lines="1"
+                    android:layout_gravity="center"
+                    android:id="@+id/name"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:background="@color/md_orange_600"
+                    />
+
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
+                    android:text="Open Time"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    />
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="50dp"
+                    android:text="XX:XX"
+                    android:id="@+id/openTime"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    />
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
+                    android:text="Close Time"
+                    android:textColor="#fff"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="XX:XX"
+                    android:id="@+id/closeTime"
+                    android:textColor="#fff"
+                    android:paddingTop="50dp"
+                    android:textSize="12sp"
+                    />
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_baseline_play_circle_filled_24"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/playImage"
+                    android:layout_marginTop="50dp"
+
+                    android:layout_marginEnd="17dp"
+                    android:layout_alignEnd="@+id/closeTime"
+                    >
+
+                </ImageView>
+
+                <com.rkonline.android.latobold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="55dp"
+                    android:text="Play"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_alignParentEnd="true"
+                    />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -1,0 +1,64 @@
+<project version="4">
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/drawable/betedittext2.xml" value="0.147" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/drawable/button.xml" value="0.147" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/drawable/edittext.xml" value="0.147" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/drawable/edittext2.xml" value="0.147" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/drawable/wallet_out.xml" value="0.147" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_bazar.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_betting.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_chart_menu.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_charts.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_crossing.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_deposit_money.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_earn.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_fullsangam.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_halfsangam.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_howot.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_ledger.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_played.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_profile.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_rate.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_signup.xml" value="0.18" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_splash.xml" value="0.22" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_thankyou.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_transactions.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/activity_webview.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/betlayout.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/chart_layout.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/header.xml" value="0.25" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/market_layout.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/played.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/progress.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/result_layout.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/simple_list_item_1.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/layout/transaction.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/menu/lang_menu.xml" value="0.2" />
+        <entry key="..\:/Android Projects/Betplay_v1.2_with_addon/v1.1 - fresh install/android_app/android_app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.125" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.2492626953125" />
+      </ProjectState>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <color name="colorPrimary">#03A9F4</color>
+    <color name="colorPrimaryDark">#262933</color>
+    <color name="colorAccent">#03A9F4</color>
+    <color name="background">#C92B2B2B</color>
+    <color name="font">#ffffff</color>
+    <color name="lightfont">#C9262933</color>
+    <color name="lighter">#C92B2B2B</color>
+    <color name="back">#C92B2B2B</color>
+    <color name="green">#4CAF50</color>-->
+
+<!--    <color name="colorPrimary">#D32F2F</color>
+    <color name="colorPrimaryDark">#E64A19</color>
+    <color name="colorAccent">#F57C00</color>
+    <color name="background">#fff</color>
+    <color name="font">#262933</color>
+    <color name="lightfont">#C9262933</color>
+    &lt;!&ndash;    <color name="back">#f8f8f8</color>&ndash;&gt;
+    <color name="back">#5BD8E4EA</color>
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>-->
+
+
+    <color name="colorPrimary">#1565C0</color>          <!-- Strong Blue -->
+    <color name="colorPrimaryDark">#0D47A1</color>      <!-- Deep Blue -->
+    <color name="colorAccent">#42A5F5</color>           <!-- Light Blue Accent -->
+
+    <!-- App Background -->
+    <color name="background">#FFFFFF</color>            <!-- White background -->
+
+    <!-- Text Colors -->
+    <color name="font">#0A2540</color>                  <!-- Dark Navy -->
+    <color name="lightfont">#7089A9</color>             <!-- Soft Greyish Blue -->
+
+    <!-- Misc Colors -->
+    <color name="back">#E3F2FD</color>                  <!-- Light Blue Background -->
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="splash_bg">#2196F3</color>
+    <color name="white_translucent">#33FFFFFF</color>
+</resources>

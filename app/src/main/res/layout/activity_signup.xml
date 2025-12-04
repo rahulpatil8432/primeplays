@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".signup">
+
+    <!-- Back Button -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/back"
+            app:tint="@color/font" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Main Content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/back"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
+
+        <!-- Title -->
+        <com.rkonline.android.latobold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign up"
+            android:textColor="@color/font"
+            android:textSize="32sp" />
+
+        <com.rkonline.android.latonormal
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/lightfont"
+            android:text="Enter your personal details to continue" />
+
+        <!-- Mobile -->
+        <EditText
+            android:id="@+id/mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edittext"
+            android:hint="Enter Mobile number"
+            android:inputType="number"
+            android:textSize="13sp" />
+
+        <!-- Name -->
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext"
+            android:hint="Enter Name"
+            android:inputType="text"
+            android:textSize="13sp" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext"
+            android:hint="Enter Email"
+            android:inputType="textEmailAddress"
+            android:textSize="13sp" />
+
+        <!-- Referral Code -->
+        <EditText
+            android:id="@+id/refcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext"
+            android:hint="Referral Code ( Optional )"
+            android:inputType="text"
+            android:textSize="13sp" />
+
+        <!-- Submit (Send OTP) -->
+        <com.rkonline.android.latobold
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button"
+            android:gravity="center_horizontal"
+            android:text="Send OTP"
+            android:textColor="#fff" />
+
+        <!-- OTP Field (Initially Hidden) -->
+        <EditText
+            android:id="@+id/otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edittext"
+            android:hint="Enter OTP"
+            android:inputType="number"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <!-- Verify OTP Button (Initially Hidden) -->
+        <com.rkonline.android.latobold
+            android:id="@+id/verifyOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button"
+            android:gravity="center_horizontal"
+            android:text="Verify OTP"
+            android:textColor="#fff"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</RelativeLayout>

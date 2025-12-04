@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/back"
+    tools:context=".deposit_money">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:background="@color/background">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/back"
+                    android:layout_margin="15dp"
+                    app:cardElevation="5dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        app:tint="@color/font"
+                        android:src="@drawable/back"
+                        android:layout_margin="10dp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <com.rkonline.android.latobold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Deposit Money" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext2"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/amount"
+                    android:hint="Enter amount"
+                    android:inputType="number"
+                    android:textSize="13sp" />
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:src="@drawable/splash_logo"-->
+<!--                    android:paddingLeft="10dp"-->
+<!--                    android:id="@+id/QRCode"-->
+<!--                    android:paddingRight="10dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    >-->
+
+<!--                </ImageView>-->
+
+<!--                <WebView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:id="@+id/webview">-->
+
+<!--                </WebView>-->
+
+
+
+                <!-- FIXED 2-TAB GATEWAY SWITCH -->
+<!--                <com.google.android.material.button.MaterialButtonToggleGroup-->
+<!--                    android:id="@+id/switchmultibutton"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:padding="12dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:singleSelection="true"-->
+<!--                    app:selectionRequired="true">-->
+
+<!--                    <com.google.android.material.button.MaterialButton-->
+<!--                        android:id="@+id/tab_paytm"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="Paytm" />-->
+
+<!--                    <com.google.android.material.button.MaterialButton-->
+<!--                        android:id="@+id/tab_razorpay"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="Razorpay" />-->
+
+<!--                </com.google.android.material.button.MaterialButtonToggleGroup>-->
+
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pay Using PhonePe"
+                    android:background="@drawable/button"
+                    android:id="@+id/submit"
+                    android:textColor="#fff"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="16sp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:background="@drawable/round_btn"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:paddingLeft="20dp"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:id="@+id/whatsapp"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:src="@drawable/whatsapp" />-->
+
+<!--        <com.rkonline.android.latobold-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Direct Deposit"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textColor="@color/font" />-->
+
+<!--    </LinearLayout>-->
+
+</RelativeLayout>

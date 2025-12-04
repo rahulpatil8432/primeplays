@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".login">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
+
+            <!-- LOGO HEADER -->
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/round_btn" />
+
+            <!-- BIG LOGO -->
+            <ImageView
+                android:id="@+id/draw"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_below="@id/logo"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/splash_logo" />
+
+            <!-- FORM -->
+            <LinearLayout
+                android:id="@+id/form_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/draw"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical">
+
+                <!-- Heading -->
+                <com.rkonline.android.latobold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign in"
+                    android:textColor="@color/font"
+                    android:textSize="27sp" />
+
+                <com.rkonline.android.latonormal
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/lightfont"
+                    android:text="Enter your mobile number to continue" />
+
+                <!-- Mobile -->
+                <EditText
+                    android:id="@+id/mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/edittext"
+                    android:hint="Enter Mobile Number"
+                    android:inputType="number"
+                    android:textSize="13sp" />
+
+                <!-- OTP FIELD (Hidden Initially) -->
+                <EditText
+                    android:id="@+id/otp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/edittext"
+                    android:hint="Enter OTP"
+                    android:inputType="number"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <!-- Send OTP Button -->
+                <com.rkonline.android.latobold
+                    android:id="@+id/submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/button"
+                    android:gravity="center_horizontal"
+                    android:text="Send OTP"
+                    android:textColor="#ffffff"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <!-- Verify OTP Button (Hidden Initially) -->
+                <com.rkonline.android.latobold
+                    android:id="@+id/verifyOtp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button"
+                    android:gravity="center_horizontal"
+                    android:text="Verify OTP"
+                    android:textColor="#ffffff"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <!-- Create Account -->
+                <com.rkonline.android.latobold
+                    android:id="@+id/create"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/lightfont"
+                    android:text="Don't have an account? Create"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

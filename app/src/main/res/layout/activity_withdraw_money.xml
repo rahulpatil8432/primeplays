@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/back"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/back"
+            app:tint="@color/font" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/back"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Enter Amount"
+            android:inputType="number"
+            android:padding="10dp"
+            android:background="@drawable/edit_bg"/>
+
+        <EditText
+            android:id="@+id/upi"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Enter UPI ID"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edit_bg"/>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Submit Withdrawal"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white_translucent"
+            android:layout_marginTop="25dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "949030607334",
+    "firebase_url": "https://rkonline-63b1c-default-rtdb.firebaseio.com",
+    "project_id": "rkonline-63b1c",
+    "storage_bucket": "rkonline-63b1c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949030607334:android:8fe91de301d2a19d025e27",
+        "android_client_info": {
+          "package_name": "com.rkonline.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_E1vlhAUE_l4USZ0dPkqsSGcE-E9cdAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

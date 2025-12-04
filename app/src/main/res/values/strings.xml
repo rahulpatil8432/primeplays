@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name" translatable="false">PrimePlays</string>
+
+    <!--APIs-->
+    <string name="market_api" translatable="false">market.php</string>
+    <string name="market_list" translatable="false">market_list.php</string>
+    <string name="bet" translatable="false">bet.php</string>
+    <string name="charts" translatable="false">charts.php</string>
+    <string name="sangam" translatable="false">sangam.php</string>
+    <string name="content" translatable="false">content.php</string>
+    <string name="ledger" translatable="false">gameledger.php</string>
+    <string name="login" translatable="false">login.php</string>
+    <string name="home" translatable="false">home.php</string>
+    <string name="games" translatable="false">games.php</string>
+    <string name="profile" translatable="false">profile.php</string>
+    <string name="password" translatable="false">password.php</string>
+    <string name="rate" translatable="false">rate.php</string>
+    <string name="register" translatable="false">register.php</string>
+    <string name="transaction" translatable="false">transaction.php</string>
+    <string name="get_gateway" translatable="false">get_gateway.php</string>
+    <string name="signin">Sign in</string>
+    <string name="enter_number">Enter your mobile number to continue</string>
+    <string name="enter_mobile">Enter Mobile number</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="forgot">Forgot password ?</string>
+    <string name="submit">Submit</string>
+    <string name="do_signup">I\'m new user, Sign Up</string>
+    <string name="lang_en">English</string>
+    <string name="lang_hi">हिंदी</string>
+    <string name="lang_mr">मराठी</string>
+    <string name="playnwin">Play and win</string>
+    <string name="playsingle">Play Single</string>
+    <string name="playjodi">Play Jodi</string>
+    <string name="singlepanna">Single Panna</string>
+    <string name="doublepanna">Double Panna</string>
+    <string name="triplepanna">Triple Panna</string>
+
+
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rkonline.android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi"/>
+        </intent>
+    </queries>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.rkonline.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".GhantaBet"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".GhantaMenuActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".GhantaListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".deposit_money" android:exported="true" />
+        <activity android:name=".chart_menu" />
+        <activity android:name=".charts" />
+        <activity android:name=".crossing" />
+        <activity android:name=".earn" />
+        <activity android:name=".fullsangam" />
+        <activity android:name=".halfsangam" />
+        <activity android:name=".betting" />
+        <activity
+            android:name=".splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ledger" />
+        <activity android:name=".transactions" />
+        <activity android:name=".played" />
+        <activity android:name=".howto" />
+        <activity android:name=".thankyou" />
+        <activity android:name=".bazar" />
+        <activity android:name=".notice" />
+        <activity android:name=".rate" />
+        <activity android:name=".profile" />
+        <activity android:name=".signup" />
+        <activity android:name=".login" />
+        <activity android:name=".withdraw_money" />
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>
