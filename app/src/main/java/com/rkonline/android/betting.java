@@ -173,6 +173,7 @@ public class betting extends AppCompatActivity {
             db.collection("played")
                     .add(betData)
                     .addOnSuccessListener(docRef -> {
+                        Toast.makeText(betting.this, "Success: " +"Bet Placed", Toast.LENGTH_SHORT).show();
                         if (finalI == fillnumber.size() - 1) {
                             progressDialog.hideDialog();
                             goThankYou();
