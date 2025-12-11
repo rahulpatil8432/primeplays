@@ -53,8 +53,8 @@ public class charts extends AppCompatActivity {
                     chartList.clear();
                     for (DocumentSnapshot doc : snap.getDocuments()) {
                         ChartModel m = new ChartModel();
-                        m.openResult = doc.getString("openResult");
-                        m.closeResult = doc.getString("closeResult");
+                        m.openResult = doc.getString("open");
+                        m.closeResult = doc.getString("close");
                         m.date = doc.getString("date");
                         chartList.add(m);
                     }

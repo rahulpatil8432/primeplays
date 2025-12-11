@@ -20,14 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -248,11 +253,59 @@ public class MainActivity extends AppCompatActivity {
 
     private void apicall() {
         String mobile = preferences.getString("mobile", null);
-        db.collection("users").document(mobile).get().addOnSuccessListener(documentSnapshot -> {
-            try {
-                Map<String, Object> userMap = documentSnapshot.getData();
+//        db.collection("users").document(mobile).get().addOnSuccessListener(documentSnapshot -> {
+//            try {
+//                Map<String, Object> userMap = documentSnapshot.getData();
+//
+//                JSONObject jsonObject1 = new JSONObject(userMap);
+//                if (jsonObject1.optString("active").equals("0")) {
+//                    Toast.makeText(MainActivity.this, "Your account temporarily disabled by admin", Toast.LENGTH_SHORT).show();
+//
+//                    preferences.edit().clear().apply();
+//                    Intent in = new Intent(getApplicationContext(), login.class);
+//                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(in);
+//                    finish();
+//                }
+//                if (!jsonObject1.optString("session").equals(getSharedPreferences(constant.prefs, MODE_PRIVATE).getString("session", null))) {
+//                    Toast.makeText(MainActivity.this, "Session expired ! Please login again", Toast.LENGTH_SHORT).show();
+//
+//                    preferences.edit().clear().apply();
+//                    Intent in = new Intent(getApplicationContext(), login.class);
+//                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(in);
+//                    finish();
+//                }
+//                balance.setText(jsonObject1.optString("wallet"));
+//
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putString("wallet", jsonObject1.optString("wallet")).apply();
+//                }catch (Exception e){
+//                e.printStackTrace();
+//                Toast.makeText(MainActivity.this, "Something went wrong !", Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnFailureListener(documentSnapshot ->{
+//            Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+//        });
 
-                JSONObject jsonObject1 = new JSONObject(userMap);
+        DocumentReference docRef  = db.collection("users").document(mobile);
+
+        ListenerRegistration registration =  docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("Firestore", "Listen failed.", error);
+                    return;
+                }
+
+                if (value != null && value.exists()) {
+                    Log.d("Firestore", "Current data: " + value.getData());
+                    Map<String, Object> userMap = value.getData();
+
+                    assert userMap != null;
+                    JSONObject jsonObject1 = new JSONObject(userMap);
                 if (jsonObject1.optString("active").equals("0")) {
                     Toast.makeText(MainActivity.this, "Your account temporarily disabled by admin", Toast.LENGTH_SHORT).show();
 
@@ -277,14 +330,11 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("wallet", jsonObject1.optString("wallet")).apply();
-                }catch (Exception e){
-                e.printStackTrace();
-                Toast.makeText(MainActivity.this, "Something went wrong !", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("Firestore", "Document does not exist.");
+                }
             }
-        }).addOnFailureListener(documentSnapshot ->{
-            Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
         });
-
         loadResults();
         loadHomeLine();
         loadMarkets();
@@ -302,12 +352,12 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> closeTimeArray = new ArrayList<>();
                     ArrayList<String> number = new ArrayList<>();
                     for (DocumentSnapshot doc : query) {
-                        String marketName = doc.getString("name");
-                        String openTime = doc.getString("openTime");
-                        String closeTime = doc.getString("closeTime");
+                        String marketName = doc.getString("market_name");
+                        String openTime = doc.getString("open_time_formatted");
+                        String closeTime = doc.getString("close_time_formatted");
 
-                        Boolean openNow = doc.getBoolean("isOpenMarket");
-                        Boolean closeNow = doc.getBoolean("isCloseMarket");
+                        Boolean openNow = doc.getBoolean("isOpenNow");
+                        Boolean closeNow = doc.getBoolean("isNotOpened");
 
                         if (marketName == null) continue;
 

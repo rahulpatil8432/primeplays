@@ -61,9 +61,9 @@ public class chart_menu extends AppCompatActivity {
                         MarketModel m = new MarketModel();
 
                         m.marketId    = doc.getId();
-                        m.name        = doc.getString("name");
-                        m.openResult  = doc.getString("openResult");
-                        m.closeResult = doc.getString("closeResult");
+                        m.name        = doc.getString("market_name");
+                        m.openResult  = doc.getString("aankdo_open");
+                        m.closeResult = doc.getString("aankdo_close");
 
                         if (m.openResult == null)  m.openResult = "-";
                         if (m.closeResult == null) m.closeResult = "-";
