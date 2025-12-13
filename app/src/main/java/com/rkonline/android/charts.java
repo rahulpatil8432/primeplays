@@ -1,6 +1,7 @@
 package com.rkonline.android;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,10 +47,11 @@ public class charts extends AppCompatActivity {
     private void loadChartData() {
         db.collection("markets")
                 .document(marketId)
-                .collection("winning_chart")
+                .collection("winning_charts")
                 .orderBy("date")
                 .get()
                 .addOnSuccessListener(snap -> {
+                    Log.d("winning list",marketId + snap.getDocuments());
                     chartList.clear();
                     for (DocumentSnapshot doc : snap.getDocuments()) {
                         ChartModel m = new ChartModel();
