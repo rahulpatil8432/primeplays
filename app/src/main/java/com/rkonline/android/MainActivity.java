@@ -352,14 +352,18 @@ public class MainActivity extends AppCompatActivity {
                 .addOnSuccessListener(query -> {
 
                     ArrayList<String> names = new ArrayList<>();
-                    ArrayList<Boolean> isOpen = new ArrayList<>();
                     ArrayList<String> openTimeArray = new ArrayList<>();
                     ArrayList<String> closeTimeArray = new ArrayList<>();
                     ArrayList<Integer> marketStatus = new ArrayList<>();
+                    ArrayList<String> marketResults = new ArrayList<>();
                     for (DocumentSnapshot doc : query) {
                         String marketName = doc.getString("market_name");
                         String openTime = doc.getString("open_time_formatted");
                         String closeTime = doc.getString("close_time_formatted");
+                        String aankdo_open = doc.getString("aankdo_open");
+                        String aankdo_close = doc.getString("aankdo_close");
+                        String jodi = doc.getString("jodi");
+                        String figure_open = doc.getString("figure_open");
 
                         Boolean openNow = doc.getBoolean("isOpenNow");
                         Boolean notOpen = doc.getBoolean("isNotOpened");
@@ -367,24 +371,25 @@ public class MainActivity extends AppCompatActivity {
                         if (marketName == null) continue;
 
                         names.add(marketName);
-                        isOpen.add(openNow != null && openNow);
                         openTimeArray.add(openTime);
                         closeTimeArray.add(closeTime);
 
                         int status;
                         if (Boolean.TRUE.equals(openNow)) {
                             status = MARKET_OPEN;
+                            marketResults.add(aankdo_open+"-"+figure_open+"*-***");
                         } else if (Boolean.TRUE.equals(notOpen)) {
                             status = MARKET_YET_TO_OPEN;
+                            marketResults.add("***-**-***");
                         } else {
                             status = MARKET_CLOSED;
+                            marketResults.add(aankdo_open+"-"+jodi+"-"+aankdo_close);
                         }
                         marketStatus.add(status);
-
                     }
 
                     adapter_market rc =
-                            new adapter_market(MainActivity.this,"", names, isOpen,openTimeArray,closeTimeArray, marketStatus);
+                            new adapter_market(MainActivity.this, names, openTimeArray, closeTimeArray, marketStatus, marketResults);
 
                     recyclerviewMarket.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     recyclerviewMarket.setAdapter(rc);

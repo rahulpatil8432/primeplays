@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,26 +18,29 @@ import java.util.ArrayList;
 
 class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
 
+    public static final int MARKET_OPEN = 1;
+    public static final int MARKET_YET_TO_OPEN = 2;
+
     Context context;
     ArrayList<String> names;
-    ArrayList<Boolean> isOpen;
     ArrayList<String> openTimeArray;
     ArrayList<String> closeTimeArray;
     ArrayList<Integer> marketStatus;
+    ArrayList<String> marketResults;
 
-    public adapter_market(Context context, String game,
+    public adapter_market(Context context,
                           ArrayList<String> names,
-                          ArrayList<Boolean> isOpen,
                           ArrayList<String> openTimeArray,
                           ArrayList<String> closeTimeArray,
-                          ArrayList<Integer> marketStatus) {
+                          ArrayList<Integer> marketStatus,
+                          ArrayList<String> marketResults) {
 
         this.context = context;
         this.names = names;
-        this.isOpen = isOpen;
         this.openTimeArray = openTimeArray;
         this.closeTimeArray = closeTimeArray;
         this.marketStatus = marketStatus;
+        this.marketResults = marketResults;
     }
 
     @NonNull
@@ -44,7 +48,6 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.market_layout, parent, false);
-
         return new ViewHolder(v);
     }
 
@@ -58,16 +61,22 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
         int status = marketStatus.get(position);
         int bgColor;
         switch (status) {
-            case 1:
+            case MARKET_OPEN:
                 bgColor = ContextCompat.getColor(context, R.color.green);
+                holder.marketResult.setText(marketResults.get(position));
                 break;
-            case 2:
+
+            case MARKET_YET_TO_OPEN:
                 bgColor = ContextCompat.getColor(context, R.color.md_blue_100);
+                holder.marketResult.setText(marketResults.get(position));
                 break;
+
             default:
                 bgColor = ContextCompat.getColor(context, R.color.md_blue_grey_500);
+                holder.marketResult.setText(marketResults.get(position));
                 break;
         }
+
         holder.layout.setBackgroundColor(bgColor);
 
         holder.layout.setOnClickListener(v -> {
@@ -75,14 +84,14 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
             int pos = holder.getAdapterPosition();
             if (pos == RecyclerView.NO_POSITION) return;
 
-            if (marketStatus.get(pos) == 1) { // OPEN
+            if (marketStatus.get(pos) == MARKET_OPEN) {
 
                 Intent go = new Intent(context, rate.class);
                 go.putExtra("header", "Select Game");
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
-            } else if (marketStatus.get(pos) == 2) {
+            } else if (marketStatus.get(pos) == MARKET_YET_TO_OPEN) {
 
                 Toast.makeText(context,
                         "Market not opened yet",
@@ -102,10 +111,9 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
         return names.size();
     }
 
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView name, openTime,closeTime;
+        TextView name, openTime, closeTime, marketResult;
         RelativeLayout layout;
 
         public ViewHolder(@NonNull View view) {
@@ -113,6 +121,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
             name = view.findViewById(R.id.name);
             openTime = view.findViewById(R.id.openTime);
             closeTime = view.findViewById(R.id.closeTime);
+            marketResult = view.findViewById(R.id.marketResult);
             layout = view.findViewById(R.id.layout);
         }
     }
