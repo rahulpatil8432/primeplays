@@ -20,19 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -48,16 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected ScrollView scrollView;
     protected TextView balance;
-//    protected CardView single;
-//    protected CardView jodi;
-//    protected CardView singlepatti;
-//    protected CardView doublepatti;
-//    protected CardView tripepatti;
-//    protected CardView halfsangam;
-//    protected CardView fullsangam;
-    protected CardView ghantab;
     protected latonormal hometext;
-//    protected CardView crossing;
     protected CardView exit;
     protected CardView logout;
     protected CardView refresh;
@@ -74,13 +60,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
         db = FirebaseFirestore.getInstance();
-        lang_img =(Button) findViewById(R.id.lang_switch);
-        lang_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.this.openOptionsMenu();
-            }
-        });
+        lang_img =   findViewById(R.id.lang_switch);
+        lang_img.setOnClickListener(v -> MainActivity.this.openOptionsMenu());
 
 
         initViews();
@@ -124,35 +105,7 @@ public class MainActivity extends AppCompatActivity {
             hometext.setText("Loading...");
         }
 
-
-//        single.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "single").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-//
-//        jodi.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "jodi").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-//
-//        crossing.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "crossing").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-//
-//        singlepatti.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "singlepatti").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-//
-//        doublepatti.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "doublepatti").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-//
-//        tripepatti.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "tripepatti").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-
-        /*ghantab =(CardView)findViewById(R.id.ghanta_bajar);
-        ghantab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, GhantaListActivity.class);
-                startActivity(i);
-            }
-        });*/
-
-//        halfsangam.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "halfsangam").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-//
-//        fullsangam.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, bazar.class).putExtra("game", "fullsangam").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
-
-
         Typeface face = Typeface.createFromAsset(getAssets(), "Oxygen-Bold.ttf");
-
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withName("Home").withIcon(R.drawable.house).withIdentifier(999).withTypeface(face);
         PrimaryDrawerItem account = new PrimaryDrawerItem().withName("My Profile").withIcon(R.drawable.user_icon).withIdentifier(1).withTypeface(face);
@@ -234,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                         if (drawerItem.equals(9)) {
                             startActivity(new Intent(MainActivity.this, played.class));
                         }
-
                         return false;
                     }
                 })
@@ -253,59 +205,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void apicall() {
         String mobile = preferences.getString("mobile", null);
-//        db.collection("users").document(mobile).get().addOnSuccessListener(documentSnapshot -> {
-//            try {
-//                Map<String, Object> userMap = documentSnapshot.getData();
-//
-//                JSONObject jsonObject1 = new JSONObject(userMap);
-//                if (jsonObject1.optString("active").equals("0")) {
-//                    Toast.makeText(MainActivity.this, "Your account temporarily disabled by admin", Toast.LENGTH_SHORT).show();
-//
-//                    preferences.edit().clear().apply();
-//                    Intent in = new Intent(getApplicationContext(), login.class);
-//                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(in);
-//                    finish();
-//                }
-//                if (!jsonObject1.optString("session").equals(getSharedPreferences(constant.prefs, MODE_PRIVATE).getString("session", null))) {
-//                    Toast.makeText(MainActivity.this, "Session expired ! Please login again", Toast.LENGTH_SHORT).show();
-//
-//                    preferences.edit().clear().apply();
-//                    Intent in = new Intent(getApplicationContext(), login.class);
-//                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(in);
-//                    finish();
-//                }
-//                balance.setText(jsonObject1.optString("wallet"));
-//
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.putString("wallet", jsonObject1.optString("wallet")).apply();
-//                }catch (Exception e){
-//                e.printStackTrace();
-//                Toast.makeText(MainActivity.this, "Something went wrong !", Toast.LENGTH_SHORT).show();
-//            }
-//        }).addOnFailureListener(documentSnapshot ->{
-//            Toast.makeText(MainActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-//        });
-
         DocumentReference docRef  = db.collection("users").document(mobile);
 
-        ListenerRegistration registration =  docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.w("Firestore", "Listen failed.", error);
-                    return;
-                }
+        docRef.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.w("Firestore", "Listen failed.", error);
+                return;
+            }
 
-                if (value != null && value.exists()) {
-                    Log.d("Firestore", "Current data: " + value.getData());
-                    Map<String, Object> userMap = value.getData();
+            if (value != null && value.exists()) {
+                Log.d("Firestore", "Current data: " + value.getData());
+                Map<String, Object> userMap = value.getData();
 
-                    assert userMap != null;
-                    JSONObject jsonObject1 = new JSONObject(userMap);
+                assert userMap != null;
+                JSONObject jsonObject1 = new JSONObject(userMap);
                 if (jsonObject1.optString("active").equals("0")) {
                     Toast.makeText(MainActivity.this, "Your account temporarily disabled by admin", Toast.LENGTH_SHORT).show();
 
@@ -330,9 +243,8 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("wallet", jsonObject1.optString("wallet")).apply();
-                } else {
-                    Log.d("Firestore", "Document does not exist.");
-                }
+            } else {
+                Log.d("Firestore", "Document does not exist.");
             }
         });
         loadHomeLine();
@@ -451,14 +363,6 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         balance = findViewById(R.id.balance);
         hometext = findViewById(R.id.hometext);
-//        single = findViewById(R.id.single);
-//        jodi = findViewById(R.id.jodi);
-//        crossing = findViewById(R.id.crossing);
-//        singlepatti = findViewById(R.id.singlepatti);
-//        doublepatti = findViewById(R.id.doublepatti);
-//        tripepatti = findViewById(R.id.tripepatti);
-//        halfsangam = findViewById(R.id.halfsangam);
-//        fullsangam = findViewById(R.id.fullsangam);
         exit = findViewById(R.id.exit);
         logout = findViewById(R.id.logout);
         refresh = findViewById(R.id.refresh);
