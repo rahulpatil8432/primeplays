@@ -335,7 +335,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        loadResults();
         loadHomeLine();
         loadMarkets();
 
@@ -397,40 +396,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(MainActivity.this, "Failed to load markets: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-    }
-    private void loadResults() {
-        db.collection("results")
-                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
-                .limit(20)   // load latest 20 results
-                .get()
-                .addOnSuccessListener(resultSnap -> {
-
-                    ArrayList<String> name = new ArrayList<>();
-                    ArrayList<String> result = new ArrayList<>();
-
-                    for (DocumentSnapshot doc : resultSnap) {
-                        String market = doc.getString("market");
-                        String res = doc.getString("result");
-
-                        if (market != null && res != null) {
-                            name.add(market);
-                            result.add(res);
-                        }
-                    }
-
-                    if (name.isEmpty()) {
-                        name.add("No Data");
-                        result.add("---");
-                    }
-
-                    adapter_result rc = new adapter_result(MainActivity.this, name, result);
-                    recyclerview.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                    recyclerview.setAdapter(rc);
-                    rc.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(MainActivity.this, "Failed to load results", Toast.LENGTH_SHORT).show()
-                );
     }
     private void loadHomeLine() {
 
