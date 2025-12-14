@@ -349,15 +349,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openWhatsApp() {
-        try {
-            String url = constant.whatsapplink;
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            i.setPackage("com.whatsapp");
-            startActivity(i);
-        } catch (Exception e) {
-            Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
-        }
+        db.collection("app_config")
+                .document("whatsapp")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+
+                    if (!documentSnapshot.exists()) {
+                        Toast.makeText(this, "Config not found", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String phone = documentSnapshot.getString("phone");
+                    String message = documentSnapshot.getString("message");
+
+                    if (phone == null || message == null) {
+                        Toast.makeText(this, "Support service is temporarily unavailable.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String url = "https://wa.me/" + phone +
+                            "?text=" + Uri.encode(message);
+
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        intent.setPackage("com.whatsapp");
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Support service is temporarily unavailable.", Toast.LENGTH_SHORT).show()
+                );
     }
 
     private void initViews() {

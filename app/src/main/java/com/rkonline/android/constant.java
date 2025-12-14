@@ -6,8 +6,6 @@ public class constant {
 
     static String link = "https://primeplays.app/download";
 
-    static String whatsapplink = "https://wa.me/918484807839?text=Hello%20PrimePlays%20Support%2C%20I%20need%20help.";
-
     // MIN AMOUNT ALLOWED IN TOTAL FOR BETTING
     static int min_total = 10;
 
