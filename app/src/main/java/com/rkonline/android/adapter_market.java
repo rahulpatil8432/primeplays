@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -17,27 +18,25 @@ import java.util.ArrayList;
 class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
 
     Context context;
-//    String game;
     ArrayList<String> names;
     ArrayList<Boolean> isOpen;
     ArrayList<String> openTimeArray;
     ArrayList<String> closeTimeArray;
-//    ArrayList<String> numbers;
+    ArrayList<Integer> marketStatus;
 
     public adapter_market(Context context, String game,
                           ArrayList<String> names,
                           ArrayList<Boolean> isOpen,
                           ArrayList<String> openTimeArray,
                           ArrayList<String> closeTimeArray,
-                          ArrayList<String> numbers) {
+                          ArrayList<Integer> marketStatus) {
 
         this.context = context;
-//        this.game = game;
         this.names = names;
         this.isOpen = isOpen;
         this.openTimeArray = openTimeArray;
         this.closeTimeArray = closeTimeArray;
-//        this.numbers = numbers;
+        this.marketStatus = marketStatus;
     }
 
     @NonNull
@@ -56,54 +55,46 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
         holder.openTime.setText(openTimeArray.get(position));
         holder.closeTime.setText(closeTimeArray.get(position));
 
-        boolean marketIsOpen = isOpen.get(position);
-
-        if (marketIsOpen) {
-            holder.layout.setBackgroundColor(
-                    context.getResources().getColor(R.color.green)
-            );
-
-            holder.layout.setOnClickListener(v -> {
-
-                Intent go;
-
-//                switch (game) {
-//                    case "halfsangam":
-//                        go = new Intent(context, halfsangam.class);
-//                        break;
-//
-//                    case "fullsangam":
-//                        go = new Intent(context, fullsangam.class);
-//                        break;
-//
-//                    case "crossing":
-//                        go = new Intent(context, crossing.class);
-//                        break;
-//
-//                    default:
-//                        go = new Intent(context, betting.class);
-//                        break;
-//                }
-go =  new Intent(context,rate.class);
-                go.putExtra("header", "Select Game");
-//                go.putExtra("list", numbers);
-//                go.putExtra("game", game);
-                go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                context.startActivity(go);
-            });
-
-        } else {
-            holder.layout.setBackgroundColor(
-                    context.getResources().getColor(R.color.md_blue_grey_500)
-            );
-
-            holder.layout.setOnClickListener(v ->
-                    Toast.makeText(context, "Market is closed", Toast.LENGTH_SHORT).show()
-            );
+        int status = marketStatus.get(position);
+        int bgColor;
+        switch (status) {
+            case 1:
+                bgColor = ContextCompat.getColor(context, R.color.green);
+                break;
+            case 2:
+                bgColor = ContextCompat.getColor(context, R.color.md_blue_100);
+                break;
+            default:
+                bgColor = ContextCompat.getColor(context, R.color.md_blue_grey_500);
+                break;
         }
+        holder.layout.setBackgroundColor(bgColor);
 
-        holder.setIsRecyclable(false);
+        holder.layout.setOnClickListener(v -> {
+
+            int pos = holder.getAdapterPosition();
+            if (pos == RecyclerView.NO_POSITION) return;
+
+            if (marketStatus.get(pos) == 1) { // OPEN
+
+                Intent go = new Intent(context, rate.class);
+                go.putExtra("header", "Select Game");
+                go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(go);
+
+            } else if (marketStatus.get(pos) == 2) {
+
+                Toast.makeText(context,
+                        "Market not opened yet",
+                        Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                Toast.makeText(context,
+                        "Market is closed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

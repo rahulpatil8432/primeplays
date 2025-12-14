@@ -77,6 +77,7 @@ public class bazar extends AppCompatActivity {
                     ArrayList<Boolean> isOpen = new ArrayList<>();
                     ArrayList<String> openTimeArray = new ArrayList<>();
                     ArrayList<String> closeTimeArray = new ArrayList<>();
+                    ArrayList<Integer> marketStatus = new ArrayList<>();
 
                     for (DocumentSnapshot doc : query) {
                         String marketName = doc.getString("name");
@@ -95,7 +96,7 @@ public class bazar extends AppCompatActivity {
                     }
 
                     adapter_market rc =
-                            new adapter_market(bazar.this, game, names, isOpen,openTimeArray,closeTimeArray, number);
+                            new adapter_market(bazar.this, game, names, isOpen,openTimeArray,closeTimeArray, marketStatus);
 
                     recyclerview.setLayoutManager(new LinearLayoutManager(bazar.this));
                     recyclerview.setAdapter(rc);

@@ -342,6 +342,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMarkets() {
+
+        final int MARKET_CLOSED = 0;
+        final int MARKET_OPEN = 1;
+        final int MARKET_YET_TO_OPEN = 2;
+
         db.collection("markets")
                 .get()
                 .addOnSuccessListener(query -> {
@@ -350,14 +355,14 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<Boolean> isOpen = new ArrayList<>();
                     ArrayList<String> openTimeArray = new ArrayList<>();
                     ArrayList<String> closeTimeArray = new ArrayList<>();
-                    ArrayList<String> number = new ArrayList<>();
+                    ArrayList<Integer> marketStatus = new ArrayList<>();
                     for (DocumentSnapshot doc : query) {
                         String marketName = doc.getString("market_name");
                         String openTime = doc.getString("open_time_formatted");
                         String closeTime = doc.getString("close_time_formatted");
 
                         Boolean openNow = doc.getBoolean("isOpenNow");
-                        Boolean closeNow = doc.getBoolean("isNotOpened");
+                        Boolean notOpen = doc.getBoolean("isNotOpened");
 
                         if (marketName == null) continue;
 
@@ -365,10 +370,21 @@ public class MainActivity extends AppCompatActivity {
                         isOpen.add(openNow != null && openNow);
                         openTimeArray.add(openTime);
                         closeTimeArray.add(closeTime);
+
+                        int status;
+                        if (Boolean.TRUE.equals(openNow)) {
+                            status = MARKET_OPEN;
+                        } else if (Boolean.TRUE.equals(notOpen)) {
+                            status = MARKET_YET_TO_OPEN;
+                        } else {
+                            status = MARKET_CLOSED;
+                        }
+                        marketStatus.add(status);
+
                     }
 
                     adapter_market rc =
-                            new adapter_market(MainActivity.this,"", names, isOpen,openTimeArray,closeTimeArray,number);
+                            new adapter_market(MainActivity.this,"", names, isOpen,openTimeArray,closeTimeArray, marketStatus);
 
                     recyclerviewMarket.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     recyclerviewMarket.setAdapter(rc);
