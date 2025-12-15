@@ -29,6 +29,7 @@ public class login extends AppCompatActivity {
     private EditText mobile, edtOtp;
     private latobold submit, verifyOtp;
     private TextView create;
+    private boolean isSigningIn = false;
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -132,8 +133,13 @@ public class login extends AppCompatActivity {
 
                 @Override
                 public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
+
+                    edtOtp.setVisibility(View.GONE);
+                    verifyOtp.setVisibility(View.GONE);
+
                     signInWithPhoneAuthCredential(credential);
                 }
+
 
                 @Override
                 public void onVerificationFailed(@NonNull FirebaseException e) {
@@ -158,14 +164,26 @@ public class login extends AppCompatActivity {
 
     // Step 3 → Enter OTP
     private void verifyCode(String code) {
+
+        if (storedVerificationId == null || storedVerificationId.isEmpty()) {
+            Toast.makeText(this,
+                    "OTP not ready yet. Please wait.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         PhoneAuthCredential credential =
                 PhoneAuthProvider.getCredential(storedVerificationId, code);
 
         signInWithPhoneAuthCredential(credential);
     }
 
+
     // Step 4 → Firebase signs in user
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+
+        if (isSigningIn) return;
+        isSigningIn = true;
 
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
@@ -173,6 +191,7 @@ public class login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         fetchUserDataAndLogin();
                     } else {
+                        isSigningIn = false;
                         Toast.makeText(login.this,
                                 "Invalid OTP: " + task.getException().getMessage(),
                                 Toast.LENGTH_LONG).show();

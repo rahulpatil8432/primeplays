@@ -16,5 +16,8 @@
     <files-path
         name="files"
         path="." />
+    <external-path
+        name="downloads"
+        path="Download/" />
     I
 </paths>

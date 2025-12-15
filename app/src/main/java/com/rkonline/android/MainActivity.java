@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,13 +53,14 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerview;
     RecyclerView recyclerviewMarket;
     SharedPreferences preferences;
-    Button lang_img;
+    ImageButton lang_img;
     FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
+        AppUpdateManager.checkForUpdate(this);
         db = FirebaseFirestore.getInstance();
         lang_img =   findViewById(R.id.lang_switch);
         lang_img.setOnClickListener(v -> MainActivity.this.openOptionsMenu());
@@ -442,6 +444,9 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        AppUpdateManager.onActivityResult(this, requestCode);
+    }
 
 }
