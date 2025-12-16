@@ -14,12 +14,13 @@ public class NotificationListenerService {
 
     private DatabaseReference reference;
     private Context context;
-
+    private String mobile;
     public NotificationListenerService(Context context,String mobile) {
         this.context = context;
         reference = FirebaseDatabase.getInstance()
-                .getReference("notifications")
-                .child("user_1"); // Change user ID
+                .getReference("notifications");
+        this.mobile = mobile;
+//                .child(mobile); // Change user ID
         Log.d("MobileNumber", "mobile"+mobile);
     }
 
@@ -27,13 +28,19 @@ public class NotificationListenerService {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
+                boolean admin = snapshot.child("admin").child("title").getValue(String.class) != null;
+                String refRemove = admin ? "admin":mobile;
                 if (snapshot.exists()) {
-                    String title = snapshot.child("title").getValue(String.class);
-                    String message = snapshot.child("message").getValue(String.class);
+                    String title = snapshot.child(refRemove).child("title").getValue(String.class);
+                    String message = snapshot.child(refRemove).child("message").getValue(String.class);
 
                     if (title != null && message != null) {
                         NotificationHelper.showNotification(context, title, message);
+//                        reference.removeValue();
+                        DatabaseReference dbRef =
+                                FirebaseDatabase.getInstance().getReference("notifications").child(refRemove);
+
+                        dbRef.removeValue();
                     }
                 }
             }
