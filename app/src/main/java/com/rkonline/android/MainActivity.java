@@ -1,7 +1,9 @@
 package com.rkonline.android;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -23,6 +25,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +37,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.rkonline.android.notification.NotificationListenerService;
 
 import org.json.JSONObject;
 
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
     ImageButton lang_img;
     FirebaseFirestore db;
+    NotificationListenerService service;
+
+    private static final int NOTIFICATION_PERMISSION_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(constant.prefs, MODE_PRIVATE);
         apicall();
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkNotificationPermission();
+        } else {
+            startNotificationListener();
+        }
         if (preferences.getString("wallet", null) != null) {
             balance.setText(preferences.getString("wallet", null));
         } else {
@@ -205,6 +217,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void checkNotificationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED) {
+
+            startNotificationListener();
+
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    NOTIFICATION_PERMISSION_CODE
+            );
+        }
+    }
+    private void startNotificationListener() {
+        service = new NotificationListenerService(this,preferences.getString("mobile", null));
+        service.startListening();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == NOTIFICATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                startNotificationListener();
+
+            } else {
+                // Permission denied
+                // You can show a message or disable notification feature
+                Toast.makeText(this, "Notification Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     private void apicall() {
         String mobile = preferences.getString("mobile", null);
         DocumentReference docRef  = db.collection("users").document(mobile);
