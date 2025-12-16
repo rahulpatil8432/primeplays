@@ -22,20 +22,14 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.rkonline.android.fileprovider"
+            android:authorities="com.rkonline.android.provider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-<!--        <receiver-->
-<!--            android:name=".DownloadCompleteReceiver"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
 
 
 

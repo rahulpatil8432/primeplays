@@ -3,17 +3,19 @@ package com.rkonline.android;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -25,14 +27,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+
 public class AppUpdateManager {
 
     private static final int INSTALL_PERMISSION_REQUEST_CODE = 1234;
-    private static AlertDialog progressDialog;
-    private static String APK_URL;
 
-    private static final BroadcastReceiver downloadReceiver =
-            new DownloadCompleteReceiver();
+    private static ProgressDialog progressDialog;
+    private static ProgressBar progressBar;
+
+    private static String APK_URL;
+    private static long downloadId = -1;
+
+    private static final Handler handler = new Handler();
+
 
     /* ================= CHECK UPDATE ================= */
 
@@ -44,6 +51,7 @@ public class AppUpdateManager {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 Integer latestVersion =
                         snapshot.child("latest_version_code")
                                 .getValue(Integer.class);
@@ -56,13 +64,13 @@ public class AppUpdateManager {
                         snapshot.child("apk_url")
                                 .getValue(String.class);
 
-                if (latestVersion == null || forceUpdate == null || APK_URL == null)
+                if (latestVersion == null ||
+                        forceUpdate == null ||
+                        APK_URL == null)
                     return;
 
-                int currentVersion = getCurrentVersionCode(activity);
-
-                Log.d("UPDATE", "Current=" + currentVersion +
-                        " Latest=" + latestVersion);
+                int currentVersion =
+                        getCurrentVersionCode(activity);
 
                 if (forceUpdate && latestVersion > currentVersion) {
                     showForceUpdateDialog(activity);
@@ -70,9 +78,7 @@ public class AppUpdateManager {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
@@ -92,22 +98,36 @@ public class AppUpdateManager {
 
         new AlertDialog.Builder(activity)
                 .setTitle("Update Required")
-                .setMessage("A new version is available. Update to continue.")
+                .setMessage("New version available. Update to continue.")
                 .setCancelable(false)
                 .setPositiveButton("UPDATE", (d, w) -> {
-                    showBlockingProgress(activity);
+                    showProgressDialog(activity);
                     checkInstallPermission(activity);
                 })
                 .show();
     }
 
-    private static void showBlockingProgress(Activity activity) {
+    private static void showProgressDialog(Activity activity) {
 
-        progressDialog = new AlertDialog.Builder(activity)
-                .setTitle("Updating App")
-                .setMessage("Please check notification and install new version.")
-                .setCancelable(false)
-                .create();
+        progressBar = new ProgressBar(
+                activity,
+                null,
+                android.R.attr.progressBarStyleHorizontal
+        );
+        progressBar.setMax(100);
+        progressBar.setProgress(0);
+
+        progressDialog = new ProgressDialog(activity);
+        progressDialog  .setMessage("Please wait...");
+        progressDialog .setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog   .setIndeterminate(false);
+        progressDialog .setMax(100);
+        progressDialog.setCancelable(false);
+        progressDialog .setProgress(0);
+        progressDialog   .setTitle("Downloading Update");
+        progressDialog   .setView(progressBar);
+        progressDialog    .setCancelable(false);
+        progressDialog    .create();
 
         progressDialog.show();
     }
@@ -117,7 +137,8 @@ public class AppUpdateManager {
     private static void checkInstallPermission(Activity activity) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                !activity.getPackageManager().canRequestPackageInstalls()) {
+                !activity.getPackageManager()
+                        .canRequestPackageInstalls()) {
 
             Intent intent = new Intent(
                     Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
@@ -125,7 +146,9 @@ public class AppUpdateManager {
             );
 
             activity.startActivityForResult(
-                    intent, INSTALL_PERMISSION_REQUEST_CODE);
+                    intent,
+                    INSTALL_PERMISSION_REQUEST_CODE
+            );
             return;
         }
 
@@ -144,46 +167,127 @@ public class AppUpdateManager {
         request.setTitle("Downloading Update");
         request.setDescription("Please wait...");
         request.setNotificationVisibility(
-                DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                DownloadManager.Request
+                        .VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
         request.setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
-                "app_update.apk");
+                "app_update.apk"
+        );
 
         DownloadManager dm =
-                (DownloadManager) appContext.getSystemService(
-                        Context.DOWNLOAD_SERVICE);
+                (DownloadManager) appContext
+                        .getSystemService(Context.DOWNLOAD_SERVICE);
 
-        IntentFilter filter =
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        downloadId = dm.enqueue(request);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            appContext.registerReceiver(
-                    downloadReceiver,
-                    filter,
-                    Context.RECEIVER_NOT_EXPORTED
-            );
-        } else {
-            appContext.registerReceiver(downloadReceiver, filter);
-        }
+        trackDownloadProgress(activity, dm);
+    }
 
-        Log.d("RECEIVER", "Receiver registered");
+    /* ================= PROGRESS TRACK ================= */
 
-        long id = dm.enqueue(request);
-        Log.d("DOWNLOAD", "Started id=" + id);
+    private static void trackDownloadProgress(
+            Activity activity,
+            DownloadManager dm
+    ) {
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                DownloadManager.Query query =
+                        new DownloadManager.Query();
+                query.setFilterById(downloadId);
+
+                Cursor cursor = dm.query(query);
+
+                if (cursor != null && cursor.moveToFirst()) {
+
+                    int downloaded =
+                            cursor.getInt(
+                                    cursor.getColumnIndexOrThrow(
+                                            DownloadManager
+                                                    .COLUMN_BYTES_DOWNLOADED_SO_FAR));
+
+                    int total =
+                            cursor.getInt(
+                                    cursor.getColumnIndexOrThrow(
+                                            DownloadManager
+                                                    .COLUMN_TOTAL_SIZE_BYTES));
+
+                    int status =
+                            cursor.getInt(
+                                    cursor.getColumnIndexOrThrow(
+                                            DownloadManager
+                                                    .COLUMN_STATUS));
+
+                    if (total > 0) {
+                        int progress =
+                                (int) ((downloaded * 100L) / total);
+                        progressBar.setProgress(progress);
+                        Log.e("progress",progress+"");
+                        progressDialog.setProgress(progress);
+                        if(progress==100){
+                            String localUri = cursor.getString(
+                                    cursor.getColumnIndexOrThrow(
+                                            DownloadManager.COLUMN_LOCAL_URI));
+
+                            File apkFile = new File(Uri.parse(localUri).getPath());
+
+                            Uri apkUri;
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                apkUri = FileProvider.getUriForFile(
+                                        activity,
+                                        "com.rkonline.android.provider",
+                                        apkFile
+                                );
+                            } else {
+                                apkUri = Uri.fromFile(apkFile);
+                            }
+
+                            Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                            installIntent.setDataAndType(
+                                    apkUri,
+                                    "application/vnd.android.package-archive");
+                            installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                            activity.startActivity(installIntent);
+                        }
+                    }
+
+                    if (status ==
+                            DownloadManager.STATUS_SUCCESSFUL ||
+                            status ==
+                                    DownloadManager.STATUS_FAILED) {
+
+                        cursor.close();
+                        return;
+                    }
+
+                    cursor.close();
+                }
+
+                handler.postDelayed(this, 500);
+            }
+        }, 500);
     }
 
     /* ================= ACTIVITY RESULT ================= */
 
     public static void onActivityResult(
-            Activity activity, int requestCode) {
+            Activity activity,
+            int requestCode
+    ) {
 
-        if (requestCode == INSTALL_PERMISSION_REQUEST_CODE) {
+        if (requestCode ==
+                INSTALL_PERMISSION_REQUEST_CODE) {
 
             if (activity.getPackageManager()
                     .canRequestPackageInstalls()) {
 
-                showBlockingProgress(activity);
+                showProgressDialog(activity);
                 downloadApk(activity);
 
             } else {
@@ -191,4 +295,5 @@ public class AppUpdateManager {
             }
         }
     }
+
 }
