@@ -29,17 +29,15 @@ public class NotificationListenerService {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 boolean admin = snapshot.child("admin").child("title").getValue(String.class) != null;
-                String refRemove = admin ? "admin":mobile;
+                String refRemove = admin ? "admin" : mobile;
                 if (snapshot.exists()) {
                     String title = snapshot.child(refRemove).child("title").getValue(String.class);
                     String message = snapshot.child(refRemove).child("message").getValue(String.class);
 
                     if (title != null && message != null) {
                         NotificationHelper.showNotification(context, title, message);
-//                        reference.removeValue();
                         DatabaseReference dbRef =
                                 FirebaseDatabase.getInstance().getReference("notifications").child(refRemove);
-
                         dbRef.removeValue();
                     }
                 }
