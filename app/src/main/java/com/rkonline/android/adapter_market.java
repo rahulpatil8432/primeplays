@@ -62,17 +62,17 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
         int bgColor;
         switch (status) {
             case MARKET_OPEN:
-                bgColor = ContextCompat.getColor(context, R.color.md_green_500);
+                bgColor = ContextCompat.getColor(context, R.color.market_open_green);
                 holder.marketResult.setText(marketResults.get(position));
                 break;
 
             case MARKET_YET_TO_OPEN:
-                bgColor = ContextCompat.getColor(context, R.color.md_blue_100);
+                bgColor = ContextCompat.getColor(context, R.color.market_upcoming_blue);
                 holder.marketResult.setText(marketResults.get(position));
                 break;
 
             default:
-                bgColor = ContextCompat.getColor(context, R.color.md_blue_grey_400);
+                bgColor = ContextCompat.getColor(context, R.color.market_closed_grey);
                 holder.marketResult.setText(marketResults.get(position));
                 break;
         }
@@ -94,8 +94,13 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
             } else if (marketStatus.get(pos) == MARKET_YET_TO_OPEN) {
 
                 Toast.makeText(context,
-                        "Market not opened yet",
+                        "Market not open yet. Betting is open.",
                         Toast.LENGTH_SHORT).show();
+
+                Intent go = new Intent(context, rate.class);
+                go.putExtra("header", "Select Game");
+                go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(go);
 
             } else {
 

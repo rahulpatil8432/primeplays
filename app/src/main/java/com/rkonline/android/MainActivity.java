@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -315,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
         final int MARKET_YET_TO_OPEN = 2;
 
         db.collection("markets")
+                .orderBy("open_time")
                 .get()
                 .addOnSuccessListener(query -> {
 
@@ -327,13 +329,17 @@ public class MainActivity extends AppCompatActivity {
                         String marketName = doc.getString("market_name");
                         String openTime = doc.getString("open_time_formatted");
                         String closeTime = doc.getString("close_time_formatted");
-                        String aankdo_open = doc.getString("aankdo_open");
-                        String aankdo_close = doc.getString("aankdo_close");
-                        String jodi = doc.getString("jodi");
-                        String figure_open = doc.getString("figure_open");
+                        String aankdo_open = doc.getString("aankdo_open") == null ? "***" : doc.getString("aankdo_open");
+                        String aankdo_close = doc.getString("aankdo_close") == null ? "***" : doc.getString("aankdo_close");
+                        String jodi = doc.getString("jodi") == null ? "**" : doc.getString("jodi");
+                        String figure_open = doc.getString("figure_open") == null ? "*" : doc.getString("figure_open");
+                        boolean bettingOpen = Boolean.TRUE.equals(doc.getBoolean("betting_open"));
+                        boolean is_approved = Boolean.TRUE.equals(doc.getBoolean("is_approved"));
+                        if(!is_approved)
+                            continue;
 
-                        Boolean openNow = doc.getBoolean("isOpenNow");
-                        Boolean notOpen = doc.getBoolean("isNotOpened");
+                        boolean openNow = Objects.requireNonNull(doc.getString("status")).equalsIgnoreCase("open");
+                        boolean notOpen = Objects.requireNonNull(doc.getString("status")).equalsIgnoreCase("not_opened");
 
                         if (marketName == null) continue;
 
@@ -342,15 +348,15 @@ public class MainActivity extends AppCompatActivity {
                         closeTimeArray.add(closeTime);
 
                         int status;
-                        if (Boolean.TRUE.equals(openNow)) {
-                            status = MARKET_OPEN;
-                            marketResults.add(aankdo_open+"-"+figure_open+"*-***");
-                        } else if (Boolean.TRUE.equals(notOpen)) {
+                        if (bettingOpen) {
                             status = MARKET_YET_TO_OPEN;
                             marketResults.add("***-**-***");
+                        } else if (openNow) {
+                            status = MARKET_OPEN;
+                            marketResults.add(aankdo_open + "-" + figure_open + "*-***");
                         } else {
                             status = MARKET_CLOSED;
-                            marketResults.add(aankdo_open+"-"+jodi+"-"+aankdo_close);
+                            marketResults.add(aankdo_open + "-" + jodi + "-" + aankdo_close);
                         }
                         marketStatus.add(status);
                     }
