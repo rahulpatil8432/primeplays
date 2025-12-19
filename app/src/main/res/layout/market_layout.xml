@@ -4,68 +4,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="2dp">
+    android:layout_margin="1dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="10dp"
+        android:background="@android:color/white">
 
         <!-- Market Name -->
         <com.rkonline.android.latobold
             android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@color/md_orange_600"
             android:gravity="center"
-            android:lines="1"
             android:text="MARKET NAME"
             android:textColor="@android:color/white"
-            android:textSize="15sp"/>
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
-        <!-- Single Line: Open | Result | Close -->
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/name"
+            android:layout_marginTop="10dp"
+            android:background="#DDDDDD"/>
+
+        <!-- Open | Result | Close -->
         <LinearLayout
             android:id="@+id/infoRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="18dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <!-- Open Time -->
-            <com.rkonline.android.latobold
-                android:id="@+id/openTime"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="09:05 PM"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:orientation="vertical">
+
+                <com.rkonline.android.latobold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OPEN"
+                    android:textColor="#ffffff"
+                    android:textSize="11sp"/>
+
+                <com.rkonline.android.latobold
+                    android:id="@+id/openTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="09:05 PM"
+                    android:textColor="#ffffff"
+                    android:textSize="13sp"/>
+            </LinearLayout>
 
             <!-- Result -->
             <com.rkonline.android.latobold
                 android:id="@+id/marketResult"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/result_bg"
                 android:text="256-31-399"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <!-- Close Time -->
-            <com.rkonline.android.latobold
-                android:id="@+id/closeTime"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="11:05 PM"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:orientation="vertical">
+
+                <com.rkonline.android.latobold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CLOSE"
+                    android:textColor="#ffff"
+                    android:textSize="11sp"/>
+
+                <com.rkonline.android.latobold
+                    android:id="@+id/closeTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11:05 PM"
+                    android:textColor="#fff"
+                    android:textSize="13sp"/>
+            </LinearLayout>
 
         </LinearLayout>
 

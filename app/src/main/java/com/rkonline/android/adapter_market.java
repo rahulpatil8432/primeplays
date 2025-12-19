@@ -62,7 +62,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
         int bgColor;
         switch (status) {
             case MARKET_OPEN:
-                bgColor = ContextCompat.getColor(context, R.color.green);
+                bgColor = ContextCompat.getColor(context, R.color.md_green_500);
                 holder.marketResult.setText(marketResults.get(position));
                 break;
 
@@ -72,7 +72,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 break;
 
             default:
-                bgColor = ContextCompat.getColor(context, R.color.md_blue_grey_500);
+                bgColor = ContextCompat.getColor(context, R.color.md_blue_grey_400);
                 holder.marketResult.setText(marketResults.get(position));
                 break;
         }
