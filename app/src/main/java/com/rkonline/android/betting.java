@@ -74,17 +74,6 @@ public class betting extends AppCompatActivity {
                     }
                 });
 
-//        BroadcastReceiver mReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//
-//
-//            }
-//        };
-
-//        IntentFilter intentFilter = new IntentFilter("android.intent.action.MAIN");
-//        registerReceiver(mReceiver, intentFilter);
-
         recyclerview.setLayoutManager(new GridLayoutManager(betting.this, 4));
         recyclerview.setAdapter(adapterbetting);
 
@@ -145,45 +134,73 @@ public class betting extends AppCompatActivity {
 
         progressDialog = new ViewDialog(betting.this);
         progressDialog.showDialog();
+        submit.setEnabled(false);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         String mobile = prefs.getString("mobile", null);
+        int wallet = Integer.parseInt(prefs.getString("wallet", "0"));
+        int newWallet = wallet - total;
 
         long timestamp = System.currentTimeMillis();
         String date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
         String time = new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date());
 
-        for (int i = 0; i < fillnumber.size(); i++) {
+        db.runBatch(batch -> {
 
-            String betNum = fillnumber.get(i);
-            String betAmount = fillamount.get(i);
+            // 1️⃣ Save each bet
+            for (int i = 0; i < fillnumber.size(); i++) {
 
-            Map<String, Object> betData = new HashMap<>();
-            betData.put("mobile", mobile);
-            betData.put("bazar", market);
-            betData.put("game", game);
-            betData.put("bet", betNum);
-            betData.put("amount", betAmount);
-            betData.put("date", date);
-            betData.put("time", time);
-            betData.put("timestamp", timestamp);
+                Map<String, Object> betData = new HashMap<>();
+                betData.put("mobile", mobile);
+                betData.put("bazar", market);
+                betData.put("game", game);
+                betData.put("bet", fillnumber.get(i));
+                betData.put("amount", fillamount.get(i));
+                betData.put("date", date);
+                betData.put("time", time);
+                betData.put("timestamp", timestamp);
 
-            int finalI = i;
-            db.collection("played")
-                    .add(betData)
-                    .addOnSuccessListener(docRef -> {
-                        Toast.makeText(betting.this, "Success: " +"Bet Placed", Toast.LENGTH_SHORT).show();
-                        if (finalI == fillnumber.size() - 1) {
-                            progressDialog.hideDialog();
-                            goThankYou();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        progressDialog.hideDialog();
-                        Toast.makeText(betting.this, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        }
+                batch.set(
+                        db.collection("played").document(),
+                        betData
+                );
+            }
+
+            // 2️⃣ Wallet transaction
+            Map<String, Object> txn = new HashMap<>();
+            txn.put("mobile", mobile);
+            txn.put("amount", total);
+            txn.put("type", "DEBIT");
+            txn.put("remark", "Bet placed - " + market);
+            txn.put("timestamp", timestamp);
+
+            batch.set(
+                    db.collection("transactions").document(),
+                    txn
+            );
+
+            // 3️⃣ Update user wallet
+            batch.update(
+                    db.collection("users").document(mobile),
+                    "wallet", newWallet
+            );
+
+        }).addOnSuccessListener(unused -> {
+
+            // Update local wallet
+            prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+
+            progressDialog.hideDialog();
+            Toast.makeText(betting.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
+            goThankYou();
+
+        }).addOnFailureListener(e -> {
+
+            submit.setEnabled(true);
+            progressDialog.hideDialog();
+            Toast.makeText(betting.this, "Bet failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void goThankYou() {

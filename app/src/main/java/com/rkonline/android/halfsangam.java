@@ -155,50 +155,88 @@ public class halfsangam extends AppCompatActivity {
 
     private void apicall() {
 
+        int amount = Integer.parseInt(totalamount.getText().toString());
+
+        if (amount < constant.min_single || amount > constant.max_single) {
+            Toast.makeText(this, "Bet amount must be between 10 and 10000", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog = new ViewDialog(halfsangam.this);
         progressDialog.showDialog();
+        submit.setEnabled(false);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         String mobile = prefs.getString("mobile", null);
-        String bazarName = market;
-        String gameType = game;
+        int wallet = Integer.parseInt(prefs.getString("wallet", "0"));
+        int newWallet = wallet - amount;
 
         String selectedFirst = first.getSelectedItem().toString();
         String selectedSecond = second.getSelectedItem().toString();
-
         String betNumber = selectedFirst + " - " + selectedSecond;
-        String betAmount = totalamount.getText().toString();
 
         long timestamp = System.currentTimeMillis();
         String date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
         String time = new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date());
 
-        Map<String, Object> betData = new HashMap<>();
-        betData.put("mobile", mobile);
-        betData.put("bazar", bazarName);
-        betData.put("game", gameType);
-        betData.put("bet", betNumber);
-        betData.put("amount", betAmount);
-        betData.put("date", date);
-        betData.put("time", time);
-        betData.put("timestamp", timestamp);
+        db.runBatch(batch -> {
 
-        db.collection("played")
-                .add(betData)
-                .addOnSuccessListener(docRef -> {
-                    progressDialog.hideDialog();
-                    Intent in = new Intent(getApplicationContext(), thankyou.class);
-                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(in);
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.hideDialog();
-                    Toast.makeText(halfsangam.this,
-                            "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+            // 1️⃣ Played entry
+            Map<String, Object> betData = new HashMap<>();
+            betData.put("mobile", mobile);
+            betData.put("bazar", market);
+            betData.put("game", game);
+            betData.put("bet", betNumber);
+            betData.put("amount", String.valueOf(amount));
+            betData.put("date", date);
+            betData.put("time", time);
+            betData.put("timestamp", timestamp);
+
+            batch.set(
+                    db.collection("played").document(),
+                    betData
+            );
+
+            // 2️⃣ Wallet transaction
+            Map<String, Object> txn = new HashMap<>();
+            txn.put("mobile", mobile);
+            txn.put("amount", amount);
+            txn.put("type", "DEBIT");
+            txn.put("remark", "Half Sangam Bet - " + market);
+            txn.put("timestamp", timestamp);
+
+            batch.set(
+                    db.collection("transactions").document(),
+                    txn
+            );
+
+            // 3️⃣ Wallet update
+            batch.update(
+                    db.collection("users").document(mobile),
+                    "wallet", newWallet
+            );
+
+        }).addOnSuccessListener(unused -> {
+
+            prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+
+            progressDialog.hideDialog();
+            Toast.makeText(halfsangam.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
+
+            Intent in = new Intent(getApplicationContext(), thankyou.class);
+            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(in);
+            finish();
+
+        }).addOnFailureListener(e -> {
+
+            submit.setEnabled(true);
+            progressDialog.hideDialog();
+            Toast.makeText(halfsangam.this, "Bet failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
+
 
 
     public ArrayList<String> getpatti() {
