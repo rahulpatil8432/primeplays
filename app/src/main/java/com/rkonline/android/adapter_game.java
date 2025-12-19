@@ -3,7 +3,6 @@ package com.rkonline.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import android.widget.ImageView;
+
 
 class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
@@ -43,30 +44,85 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-        holder.name.setText(name.get(position));
-        if(!this.rate.isEmpty()){
+        String gameName = name.get(position);
+        holder.name.setText(gameName);
+        if (!rate.isEmpty()) {
             holder.rate.setText(rate.get(position));
+            holder.rate.setVisibility(View.VISIBLE);
+        } else {
+            holder.rate.setVisibility(View.GONE);
         }
+        switch (gameName) {
+
+            case "Single Ank":
+                holder.gameIcon.setImageResource(R.drawable.ic_single_digit);
+                break;
+
+            case "Single Ank Bulk":
+                holder.gameIcon.setImageResource(R.drawable.ic_single_digit_bulk);
+                break;
+
+            case "Jodi":
+                holder.gameIcon.setImageResource(R.drawable.ic_jodi);
+                break;
+
+            case "Jodi Bulk":
+                holder.gameIcon.setImageResource(R.drawable.ic_jodi_bulk);
+                break;
+
+            case "Single Pana":
+                holder.gameIcon.setImageResource(R.drawable.ic_single_pana);
+                break;
+
+            case "Double Pana":
+                holder.gameIcon.setImageResource(R.drawable.ic_double_pana);
+                break;
+
+            case "Triple Pana":
+                holder.gameIcon.setImageResource(R.drawable.ic_triple_pana);
+                break;
+
+            case "Half Sangam":
+                holder.gameIcon.setImageResource(R.drawable.ic_half_sangam);
+                break;
+
+            case "Full Sangam":
+                holder.gameIcon.setImageResource(R.drawable.ic_full_sangam);
+                break;
+
+            default:
+                holder.gameIcon.setImageResource(R.drawable.ic_single_digit);
+                break;
+        }
+
+        /* ---------------- CLICK LOGIC ONLY ---------------- */
+
         holder.layout.setOnClickListener(v -> {
 
             number = new ArrayList<>();
-            switch (name.get(position)) {
+
+            switch (gameName) {
                 case "Single Ank":
                     single();
                     break;
+
                 case "Jodi":
                 case "crossing":
                     jodi();
                     break;
+
                 case "Single Pana":
                     singlepatti();
                     break;
+
                 case "Double Pana":
                     doublepatti();
                     break;
+
                 case "Triple Pana":
                     triplepatti();
                     break;
+
                 default:
                     triplepatti();
                     break;
@@ -74,27 +130,27 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
             Intent go;
 
-                switch (name.get(position)) {
-                    case "Half Sangam":
-                        go = new Intent(context, halfsangam.class);
-                        break;
+            switch (gameName) {
+                case "Half Sangam":
+                    go = new Intent(context, halfsangam.class);
+                    break;
 
-                    case "Full Sangam":
-                        go = new Intent(context, fullsangam.class);
-                        break;
+                case "Full Sangam":
+                    go = new Intent(context, fullsangam.class);
+                    break;
 
-                    case "crossing":
-                        go = new Intent(context, crossing.class);
-                        break;
+                case "crossing":
+                    go = new Intent(context, crossing.class);
+                    break;
 
-                    default:
-                        go = new Intent(context, betting.class);
-                        break;
-                }
-                         go.putExtra("list", number);
-              go.putExtra("game", name.get(position));
+                default:
+                    go = new Intent(context, betting.class);
+                    break;
+            }
+
+            go.putExtra("list", number);
+            go.putExtra("game", gameName);
             go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
             context.startActivity(go);
         });
     }
@@ -107,13 +163,16 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name,rate;
-LinearLayout layout;
+        TextView name, rate;
+        LinearLayout layout;
+        ImageView gameIcon;
+
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.gameName);
             rate = view.findViewById(R.id.rate);
             layout = view.findViewById(R.id.layout);
+            gameIcon = view.findViewById(R.id.gameIcon);
         }
     }
 

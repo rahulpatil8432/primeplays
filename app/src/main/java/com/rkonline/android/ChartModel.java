@@ -2,14 +2,16 @@ package com.rkonline.android;
 
 public class ChartModel {
     public String date;
-    public String openResult;
-    public String closeResult;
+    public String aankdoOpen;
+    public String aankdoClose;
+    public String jodi;
 
     public ChartModel() {}
 
-    public ChartModel(String date, String openResult, String closeResult) {
+    public ChartModel(String date, String aankdoOpen, String aankdoClose, String jodi) {
         this.date = date;
-        this.openResult = openResult;
-        this.closeResult = closeResult;
+        this.aankdoOpen = aankdoOpen;
+        this.aankdoClose = aankdoClose;
+        this.jodi = jodi;
     }
 }

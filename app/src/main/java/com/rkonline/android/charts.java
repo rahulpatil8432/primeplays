@@ -1,8 +1,8 @@
 package com.rkonline.android;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,15 @@ public class charts extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     String marketId;
+    TextView emptyView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
 
+        emptyView = findViewById(R.id.emptyView);
         chartRecycler = findViewById(R.id.chartRecycler);
         chartRecycler.setLayoutManager(new LinearLayoutManager(this));
 
@@ -48,22 +52,24 @@ public class charts extends AppCompatActivity {
         db.collection("markets")
                 .document(marketId)
                 .collection("winning_charts")
-                .orderBy("date")
+                .orderBy("date",    Query.Direction.DESCENDING)
+                .limit(7)
                 .get()
                 .addOnSuccessListener(snap -> {
-                    Log.d("winning list",marketId + snap.getDocuments());
                     chartList.clear();
                     for (DocumentSnapshot doc : snap.getDocuments()) {
+
                         ChartModel m = new ChartModel();
-                        m.openResult = doc.getString("open");
-                        m.closeResult = doc.getString("close");
                         m.date = doc.getString("date");
+                        m.aankdoOpen = doc.getString("aankdo_open");
+                        m.aankdoClose = doc.getString("aankdo_close");
+                        m.jodi = doc.getString("jodi");
+
                         chartList.add(m);
                     }
                     adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load chart", Toast.LENGTH_SHORT).show()
-                );
+                    emptyView.setVisibility(chartList.isEmpty() ? View.VISIBLE : View.GONE);
+                    chartRecycler.setVisibility(chartList.isEmpty() ? View.GONE : View.VISIBLE);
+                });
     }
 }

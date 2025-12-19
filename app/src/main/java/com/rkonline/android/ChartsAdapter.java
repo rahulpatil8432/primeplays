@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ViewHolder> {
+public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.VH> {
 
     Context context;
     List<ChartModel> list;
@@ -23,19 +23,20 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ViewHolder
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_chart_row, parent, false);
-        return new ViewHolder(v);
+    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context)
+                .inflate(R.layout.item_chart, parent, false);
+        return new VH(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VH h, int pos) {
+        ChartModel m = list.get(pos);
 
-        ChartModel model = list.get(position);
-
-        holder.date.setText(model.date != null ? model.date : "-");
-        holder.open.setText(model.openResult != null ? model.openResult : "-");
-        holder.close.setText(model.closeResult != null ? model.closeResult : "-");
+        h.date.setText(m.date);
+        h.open.setText(m.aankdoOpen != null ? m.aankdoOpen : "-");
+        h.close.setText(m.aankdoClose != null ? m.aankdoClose : "-");
+        h.jodi.setText(m.jodi != null ? m.jodi : "-");
     }
 
     @Override
@@ -43,16 +44,16 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ViewHolder
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class VH extends RecyclerView.ViewHolder {
+        TextView date, open, close, jodi;
 
-        TextView date, open, close;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            date = itemView.findViewById(R.id.chart_date);
-            open = itemView.findViewById(R.id.chart_open);
-            close = itemView.findViewById(R.id.chart_close);
+        VH(View v) {
+            super(v);
+            date = v.findViewById(R.id.txtDate);
+            open = v.findViewById(R.id.txtOpen);
+            close = v.findViewById(R.id.txtClose);
+            jodi = v.findViewById(R.id.txtJodi);
         }
     }
 }
+
