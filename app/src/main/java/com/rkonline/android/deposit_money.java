@@ -86,13 +86,13 @@ public class deposit_money extends AppCompatActivity {
         String upiUri = "";
         switch (method){
             case "phonePe":
-                upiUri = "phonepe://pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR";
+                upiUri = "phonepe://pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR&tr=TXN12345";
                 break;
             case "paytm":
-                upiUri = "paytmmp://pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR";
+                upiUri = "paytmmp://pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR&tr=TXN12345";
                 break;
             case "gpay":
-                upiUri = "tez://upi/pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR";
+                upiUri = "tez://upi/pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR&tr=TXN12345";
                 break;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
