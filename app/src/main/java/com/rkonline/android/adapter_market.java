@@ -60,24 +60,29 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
 
         int status = marketStatus.get(position);
         int bgColor;
+        int headerColor;
         switch (status) {
             case MARKET_OPEN:
-                bgColor = ContextCompat.getColor(context, R.color.md_green_500);
-                holder.marketResult.setText(marketResults.get(position));
+                headerColor =  ContextCompat.getColor(context, R.color.md_green_800);
+                bgColor = ContextCompat.getColor(context, R.color.md_green_600);
+                holder.layout.setAlpha(0.9f);
                 break;
 
             case MARKET_YET_TO_OPEN:
-                bgColor = ContextCompat.getColor(context, R.color.market_upcoming_blue);
-                holder.marketResult.setText(marketResults.get(position));
+                bgColor = ContextCompat.getColor(context, R.color.md_blue_400);
+                holder.layout.setAlpha(0.9f);
+                headerColor = ContextCompat.getColor(context, R.color.md_blue_800);
                 break;
 
             default:
-                bgColor = ContextCompat.getColor(context, R.color.market_closed_grey);
-                holder.marketResult.setText(marketResults.get(position));
+                bgColor = ContextCompat.getColor(context, R.color.md_grey_800);
+                headerColor = ContextCompat.getColor(context, R.color.md_grey_900);
+                holder.layout.setAlpha(0.5f);
                 break;
         }
-
+        holder.marketResult.setText(marketResults.get(position));
         holder.layout.setBackgroundColor(bgColor);
+        holder.name.setBackgroundColor(headerColor);
 
         holder.layout.setOnClickListener(v -> {
 
