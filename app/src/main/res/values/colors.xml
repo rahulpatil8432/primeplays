@@ -40,7 +40,6 @@
     <color name="splash_bg">#2196F3</color>
     <color name="white_translucent">#33FFFFFF</color>
 
-    <color name="market_open_green">#2E7D32</color>
     <color name="market_upcoming_blue">#1565C0</color>
     <color name="market_closed_grey">#78909C</color>
 </resources>
