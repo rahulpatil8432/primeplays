@@ -23,8 +23,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,7 +46,7 @@ public class deposit_money extends AppCompatActivity {
     String userMobile;
 
     // ⚠ UPI ID MUST BE VALID FORMAT
-    String UPI_ID = "8551071322@ybl";
+    String UPI_ID = "";
     String UPI_NAME = "Ketan";
 
     private static final int UPI_PAYMENT = 2025;
@@ -54,72 +57,25 @@ public class deposit_money extends AppCompatActivity {
         setContentView(R.layout.activity_deposit_money);
 
         amountInput = findViewById(R.id.amount);
-//        QrCode = findViewById(R.id.QRCode);
-//        webView = findViewById(R.id.webview);
-
-//        webView.getSettings().setJavaScriptEnabled(true);
-//        webView.getSettings().setDomStorageEnabled(true);
-//        webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
-//        webView.setWebChromeClient(new WebChromeClient());
-//        webView.setWebViewClient(new WebViewClient() {
-//
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                return handleUrl(view, url);
-//            }
-//
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                return handleUrl(view, request.getUrl().toString());
-//            }
-//
-//            private boolean handleUrl(WebView view, String url) {
-//
-//                // Convert &amp; → &
-//                url = url.replace("&amp;", "&");
-//                Log.d("UPI_DEBUG", "URL = " + url);
-//                if (url.startsWith("upi:") ||
-//                        url.startsWith("phonepe:") ||
-//                        url.startsWith("tez:") ||
-//                        url.startsWith("paytmmp:")) {
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setData(Uri.parse(url));
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    intent.setPackage(null);
-//                    try {
-//                        view.getContext().startActivity(intent);
-//                    } catch (Exception e) {
-//                        Toast.makeText(view.getContext(), "No UPI app found", Toast.LENGTH_LONG).show();
-//                    }
-//                    return true; // WebView should NOT load this
-//                }
-//
-//                return false; // Normal URLs allowed
-//            }
-//        });
-//
-//        webView.loadUrl("https://slateblue-mole-815921.hostingersite.com/");
-//
-
-
-//        BitmapDrawable bitmapDrawable = (BitmapDrawable)QrCode.getDrawable();
-//        Bitmap bitmap = bitmapDrawable.getBitmap();
-
         db = FirebaseFirestore.getInstance();
-
+        db.collection("app_config").document("upiDetails").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                 UPI_ID = value.getString("UPI_ID");
+            }
+        });
         userMobile = getSharedPreferences(constant.prefs, MODE_PRIVATE)
                 .getString("mobile", null);
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
 
-        findViewById(R.id.submit).setOnClickListener(v -> startUPIPayment());
+        findViewById(R.id.phonepe).setOnClickListener(v -> startUPIPayment("phonePe"));
+        findViewById(R.id.paytm).setOnClickListener(v -> startUPIPayment("paytm"));
+        findViewById(R.id.gpay).setOnClickListener(v -> startUPIPayment("gpay"));
     }
 
     // 🔵 STEP 1: Start UPI Intent
-    private void startUPIPayment() {
-
-
-
+    private void startUPIPayment(String method) {
 
         String amount = amountInput.getText().toString().trim();
 
@@ -127,31 +83,28 @@ public class deposit_money extends AppCompatActivity {
             amountInput.setError("Enter valid amount");
             return;
         }
-//        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//        shareIntent.setType("image/*");
-//        Uri bmpUri = saveImage(bitmap,getApplicationContext());
-//        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        shareIntent.putExtra(Intent.EXTRA_STREAM,bmpUri);
-//        shareIntent.putExtra(Intent.EXTRA_SUBJECT,"New App");
-//        shareIntent.setPackage("com.google.android.apps.nbu.paisa.user");
-//        shareIntent.setPackage("com.phonepe.app");
-//        shareIntent.setPackage("net.one97.paytm");
-//        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        startActivity(Intent.createChooser(shareIntent,"Share Content"));
-//
-
-        String upiUri = "phonepe://pay?pa=test@upi&pn=Testing&am=1&cu=INR";
-
+        String upiUri = "";
+        switch (method){
+            case "phonePe":
+                upiUri = "phonepe://pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR";
+                break;
+            case "paytm":
+                upiUri = "paytmmp://pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR";
+                break;
+            case "gpay":
+                upiUri = "tez://upi/pay?pa="+UPI_ID+"&pn=Testing&am=1&cu=INR";
+                break;
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(upiUri));
-
         Intent chooser = Intent.createChooser(intent, "Pay Using UPI");
-
         try {
             startActivityForResult(chooser, UPI_PAYMENT);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "No UPI app found!", Toast.LENGTH_LONG).show();
         }
+
+
     }
 
     private static Uri saveImage (Bitmap bitmap, Context context){

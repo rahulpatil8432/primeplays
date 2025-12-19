@@ -125,7 +125,25 @@
                     android:layout_height="wrap_content"
                     android:text="Pay Using PhonePe"
                     android:background="@drawable/button"
-                    android:id="@+id/submit"
+                    android:id="@+id/phonepe"
+                    android:textColor="#fff"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="16sp" />
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pay Using G-Pay"
+                    android:background="@drawable/button"
+                    android:id="@+id/gpay"
+                    android:textColor="#fff"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="16sp" />
+                <com.rkonline.android.latobold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pay Using Paytm"
+                    android:background="@drawable/button"
+                    android:id="@+id/paytm"
                     android:textColor="#fff"
                     android:gravity="center_horizontal"
                     android:layout_marginTop="16sp" />
