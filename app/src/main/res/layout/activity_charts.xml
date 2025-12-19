@@ -1,69 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/back"
     tools:context=".charts">
 
-
-
+    <!-- Toolbar -->
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/background"
-        >
+        app:cardElevation="6dp"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:paddingEnd="16dp">
 
+            <!-- Back button -->
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
                 android:id="@+id/back"
-                android:layout_margin="15dp"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="10dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                >
+                android:layout_margin="14dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="10dp">
 
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    app:tint="@color/font"
-                    android:src="@drawable/back"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_margin="10dp"
-                    />
-
+                    android:src="@drawable/back"
+                    app:tint="@color/font" />
             </androidx.cardview.widget.CardView>
 
-
+            <!-- Title -->
             <com.rkonline.android.latobold
+                android:id="@+id/header_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/md_black_1000"
-                android:layout_centerHorizontal="true"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
                 android:text="Chart"
-                />
-
-
+                android:textSize="20sp"
+                android:textColor="@color/md_black_1000" />
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
+    <!-- Charts list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chartRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:padding="10dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_chart"/>
 
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No chart data available"
+        android:textColor="@color/md_grey_600"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
