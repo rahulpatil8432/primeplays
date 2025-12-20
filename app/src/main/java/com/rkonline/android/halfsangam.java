@@ -201,7 +201,7 @@ public class halfsangam extends AppCompatActivity {
             // 2️⃣ Wallet transaction
             Map<String, Object> txn = new HashMap<>();
             txn.put("mobile", mobile);
-            txn.put("amount", amount);
+            txn.put("amount", String.valueOf(amount));
             txn.put("type", "DEBIT");
             txn.put("remark", "Half Sangam Bet - " + market);
             txn.put("timestamp", timestamp);
