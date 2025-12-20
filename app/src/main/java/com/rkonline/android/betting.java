@@ -167,7 +167,7 @@ public class betting extends AppCompatActivity {
             // 2️⃣ Wallet transaction
             Map<String, Object> txn = new HashMap<>();
             txn.put("mobile", mobile);
-            txn.put("amount", total);
+            txn.put("amount",  String.valueOf(total));
             txn.put("type", "DEBIT");
             txn.put("remark", "Bet placed - " + market);
             txn.put("timestamp", timestamp);

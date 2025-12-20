@@ -86,7 +86,7 @@ public class ledger extends AppCompatActivity {
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                         // Safe parsing: use getString and defaults
                         String sDate = defaultString(doc.getString("date"), "");
-                        String bazar = defaultString(doc.getString("bazar"), "");
+                        String bazar = defaultString(doc.getString("market"), "");
                         String bet = defaultString(doc.getString("bet"), "");
                         String sAmount = defaultString(doc.getString("amount"), "0");
                         String sWin = defaultString(doc.getString("win"), "0");

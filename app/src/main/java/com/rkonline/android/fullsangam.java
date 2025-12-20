@@ -132,7 +132,7 @@ public class fullsangam extends AppCompatActivity {
             Map<String, Object> betData = new HashMap<>();
             betData.put("mobile", mobile);
             betData.put("market", market);
-            betData.put("game", game); // fullsangam
+            betData.put("game", game);
             betData.put("bet", betNumber);
             betData.put("amount", String.valueOf(amount));
             betData.put("date", date);
