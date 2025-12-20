@@ -8,17 +8,21 @@ public class MarketModel {
     public String closeResult;
     public String marketId;
 
-    // Required empty constructor
+    public String jodi;
+
     public MarketModel() {
     }
 
     public String getName() { return name; }
     public String getOpenResult() { return openResult; }
     public String getCloseResult() { return closeResult; }
+    public String getJodi() { return jodi; }
+
     public String getMarketId() { return marketId; }
 
     public void setName(String name) { this.name = name; }
     public void setOpenResult(String openResult) { this.openResult = openResult; }
     public void setCloseResult(String closeResult) { this.closeResult = closeResult; }
     public void setMarketId(String marketId) { this.marketId = marketId; }
+    public void setJodi(String jodi) { this.jodi = jodi; }
 }

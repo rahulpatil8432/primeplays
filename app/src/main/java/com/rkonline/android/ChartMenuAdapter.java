@@ -38,7 +38,7 @@ public class ChartMenuAdapter extends RecyclerView.Adapter<ChartMenuAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
         MarketModel m = list.get(pos);
         holder.name.setText(m.name);
-        holder.result.setText(m.openResult + " - " + m.closeResult);
+        holder.result.setText(m.openResult + "-" + m.jodi + "-" + m.closeResult);
 
         holder.itemView.setOnClickListener(v -> listener.onClick(m));
     }

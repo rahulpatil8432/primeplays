@@ -154,7 +154,9 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
             go.putExtra("game", gameName);
             go.putExtra("market", market);
             go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(go);
+            if(!market.isEmpty()){
+                context.startActivity(go);
+            }
         });
     }
 

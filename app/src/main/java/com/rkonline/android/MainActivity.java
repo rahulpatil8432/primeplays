@@ -318,10 +318,10 @@ public class MainActivity extends AppCompatActivity {
                         String marketName = doc.getString("market_name");
                         String openTime = doc.getString("open_time_formatted");
                         String closeTime = doc.getString("close_time_formatted");
-                        String aankdo_open = doc.getString("aankdo_open") == null ? "***" : doc.getString("aankdo_open");
-                        String aankdo_close = doc.getString("aankdo_close") == null ? "***" : doc.getString("aankdo_close");
-                        String jodi = doc.getString("jodi") == null ? "**" : doc.getString("jodi");
-                        String figure_open = doc.getString("figure_open") == null ? "*" : doc.getString("figure_open");
+                        String aankdo_open = Objects.requireNonNull(doc.getString("aankdo_open")).isEmpty() ? "***" : doc.getString("aankdo_open");
+                        String aankdo_close = Objects.requireNonNull(doc.getString("aankdo_close")).isEmpty() ? "***" : doc.getString("aankdo_close");
+                        String figure_open = Objects.requireNonNull(doc.getString("figure_open")).isEmpty() ? "*" : doc.getString("figure_open");
+                        String figure_close = Objects.requireNonNull(doc.getString("figure_close")).isEmpty() ? "*" : doc.getString("figure_close");
                         boolean isApproved = Boolean.TRUE.equals(doc.getBoolean("is_approved"));
                         String statusStr = doc.getString("status");
 
@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
                             closeTime = "00:00";
                         } else {
                             status = MARKET_CLOSED;
-                            displayResult = aankdo_open + "-" + jodi + "-" + aankdo_close;
+                            displayResult = aankdo_open + "-" + figure_open+figure_close + "-" + aankdo_close;
                         }
 
                         names.add(marketName);

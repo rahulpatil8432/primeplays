@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class chart_menu extends AppCompatActivity {
 
@@ -59,15 +60,17 @@ public class chart_menu extends AppCompatActivity {
                     marketList.clear();
                     for (DocumentSnapshot doc : snap.getDocuments()) {
                         MarketModel m = new MarketModel();
-
+                        String jodi = (!Objects.equals(doc.getString("figure_open"), "") ? doc.getString("figure_open") : "*") +
+                                (!Objects.equals(doc.getString("figure_close"), "") ? doc.getString("figure_close") : "*");
                         m.marketId    = doc.getId();
                         m.name        = doc.getString("market_name");
                         m.openResult  = doc.getString("aankdo_open");
                         m.closeResult = doc.getString("aankdo_close");
+                        m.jodi = jodi;
 
-                        if (m.openResult == null)  m.openResult = "-";
-                        if (m.closeResult == null) m.closeResult = "-";
-                        if (m.name == null)        m.name = "";
+                        if (m.openResult == null || m.openResult.isEmpty())  m.openResult = "***";
+                        if (m.closeResult == null || m.closeResult.isEmpty()) m.closeResult = "***";
+                        if (m.name == null || m.name.isEmpty())        m.name = "";
 
                         marketList.add(m);
                     }
