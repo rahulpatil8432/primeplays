@@ -17,59 +17,77 @@ import java.util.List;
 
 public class charts extends AppCompatActivity {
 
-    RecyclerView chartRecycler;
-    ChartsAdapter adapter;
-    List<ChartModel> chartList = new ArrayList<>();
+    private RecyclerView chartRecycler;
+    private ChartsAdapter adapter;
+    private TextView emptyView;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final List<DocumentSnapshot> chartList = new ArrayList<>();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    String marketId;
-    TextView emptyView;
-
+    private String marketId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
 
-        emptyView = findViewById(R.id.emptyView);
         chartRecycler = findViewById(R.id.chartRecycler);
-        chartRecycler.setLayoutManager(new LinearLayoutManager(this));
+        emptyView = findViewById(R.id.emptyView);
 
-        adapter = new ChartsAdapter(this, chartList);
+        chartRecycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ChartsAdapter(chartList);
         chartRecycler.setAdapter(adapter);
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
 
-        marketId = getIntent().getStringExtra("href")
-                .replace(".php", "")
-                .trim();
+        // marketId passed like: "MILAN NIGHT.php"
+        marketId = getIntent().getStringExtra("href");
+        if (marketId != null) {
+            marketId = marketId.replace(".php", "").trim();
+        }
 
         loadChartData();
     }
 
     private void loadChartData() {
+
+        if (marketId == null || marketId.isEmpty()) {
+            showEmpty();
+            return;
+        }
+
         db.collection("markets")
                 .document(marketId)
                 .collection("winning_charts")
-                .orderBy("date",    Query.Direction.DESCENDING)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .limit(7)
                 .get()
-                .addOnSuccessListener(snap -> {
+                .addOnSuccessListener(snapshot -> {
+
                     chartList.clear();
-                    for (DocumentSnapshot doc : snap.getDocuments()) {
 
-                        ChartModel m = new ChartModel();
-                        m.date = doc.getString("date");
-                        m.aankdoOpen = doc.getString("aankdo_open");
-                        m.aankdoClose = doc.getString("aankdo_close");
-                        m.jodi = doc.getString("jodi");
-
-                        chartList.add(m);
+                    if (!snapshot.isEmpty()) {
+                        chartList.addAll(snapshot.getDocuments());
                     }
+
                     adapter.notifyDataSetChanged();
-                    emptyView.setVisibility(chartList.isEmpty() ? View.VISIBLE : View.GONE);
-                    chartRecycler.setVisibility(chartList.isEmpty() ? View.GONE : View.VISIBLE);
-                });
+
+                    if (chartList.isEmpty()) {
+                        showEmpty();
+                    } else {
+                        showList();
+                    }
+                })
+                .addOnFailureListener(e -> showEmpty());
+    }
+
+    private void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+        chartRecycler.setVisibility(View.GONE);
+    }
+
+    private void showList() {
+        emptyView.setVisibility(View.GONE);
+        chartRecycler.setVisibility(View.VISIBLE);
     }
 }
