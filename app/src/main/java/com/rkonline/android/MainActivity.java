@@ -82,16 +82,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         logout.setOnClickListener(v -> {
-            FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(Objects.requireNonNull(preferences.getString("mobile", null)))
-                    .update("fcmToken", FieldValue.delete());
-            preferences.edit().clear().apply();
-            Intent in = new Intent(getApplicationContext(), login.class);
-            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(in);
-            finish();
+            onLogoutClick();
         });
 
         refresh.setOnClickListener(v -> {
@@ -218,6 +209,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void onLogoutClick(){
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(Objects.requireNonNull(preferences.getString("mobile", null)))
+                .update("fcmToken", FieldValue.delete());
+        preferences.edit().clear().apply();
+        Intent in = new Intent(getApplicationContext(), login.class);
+        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(in);
+        finish();
+    }
     private void checkNotificationPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -273,21 +276,13 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Your account temporarily disabled by admin", Toast.LENGTH_SHORT).show();
 
                     preferences.edit().clear().apply();
-                    Intent in = new Intent(getApplicationContext(), login.class);
-                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(in);
-                    finish();
+                    onLogoutClick();
                 }
                 if (!jsonObject1.optString("session").equals(getSharedPreferences(constant.prefs, MODE_PRIVATE).getString("session", null))) {
                     Toast.makeText(MainActivity.this, "Session expired ! Please login again", Toast.LENGTH_SHORT).show();
 
                     preferences.edit().clear().apply();
-                    Intent in = new Intent(getApplicationContext(), login.class);
-                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(in);
-                    finish();
+                    onLogoutClick();
                 }
                 balance.setText(jsonObject1.optString("wallet"));
 
