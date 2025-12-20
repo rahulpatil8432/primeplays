@@ -131,7 +131,7 @@ public class fullsangam extends AppCompatActivity {
             // 1️⃣ Played entry
             Map<String, Object> betData = new HashMap<>();
             betData.put("mobile", mobile);
-            betData.put("bazar", market);
+            betData.put("market", market);
             betData.put("game", game); // fullsangam
             betData.put("bet", betNumber);
             betData.put("amount", String.valueOf(amount));
@@ -151,6 +151,7 @@ public class fullsangam extends AppCompatActivity {
             txn.put("type", "DEBIT");
             txn.put("remark", "Full Sangam Bet - " + market);
             txn.put("timestamp", timestamp);
+            txn.put("date", date);
 
             batch.set(
                     db.collection("transactions").document(),

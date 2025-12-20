@@ -70,7 +70,7 @@ public class played extends AppCompatActivity {
                     for (DocumentSnapshot doc : querySnapshot) {
 
                         String d = doc.getString("date");
-                        String b = doc.getString("bazar");
+                        String b = doc.getString("market");
                         String a = doc.getString("amount");
                         String bt = doc.getString("bet");
 

@@ -155,7 +155,7 @@ public class crossing extends AppCompatActivity {
 
             Map<String, Object> betData = new HashMap<>();
             betData.put("mobile", mobile);
-            betData.put("bazar", bazarName);
+            betData.put("market", bazarName);
             betData.put("game", gameType);
             betData.put("bet", betNum);
             betData.put("amount", betAmount);

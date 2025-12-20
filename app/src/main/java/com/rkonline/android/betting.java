@@ -60,18 +60,15 @@ public class betting extends AppCompatActivity {
         number = getIntent().getStringArrayListExtra("list");
 
         adapterbetting = new adapterbetting(betting.this, number,
-                new adapterbetting.AmountChangeListener() {
-                    @Override
-                    public void onAmountChanged(ArrayList<String> updatedList) {
-                        list = adapterbetting.getNumber();
-                        total = 0;
+                updatedList -> {
+                    list = adapterbetting.getNumber();
+                    total = 0;
 
-                        for (int a = 0; a < list.size(); a++) {
-                            total = total + Integer.parseInt(list.get(a));
-                        }
-
-                        totalamount.setText(String.valueOf(total));
+                    for (int a = 0; a < list.size(); a++) {
+                        total = total + Integer.parseInt(list.get(a));
                     }
+
+                    totalamount.setText(String.valueOf(total));
                 });
 
         recyclerview.setLayoutManager(new GridLayoutManager(betting.this, 4));
@@ -153,7 +150,7 @@ public class betting extends AppCompatActivity {
 
                 Map<String, Object> betData = new HashMap<>();
                 betData.put("mobile", mobile);
-                betData.put("bazar", market);
+                betData.put("market", market);
                 betData.put("game", game);
                 betData.put("bet", fillnumber.get(i));
                 betData.put("amount", fillamount.get(i));
@@ -174,6 +171,7 @@ public class betting extends AppCompatActivity {
             txn.put("type", "DEBIT");
             txn.put("remark", "Bet placed - " + market);
             txn.put("timestamp", timestamp);
+            txn.put("date", date);
 
             batch.set(
                     db.collection("transactions").document(),

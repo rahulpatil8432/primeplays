@@ -45,7 +45,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.date.setText(date.get(position));
         holder.bazar.setText(bazar.get(position));
-        holder.amount.setText(amount.get(position) + " 📀");
+        holder.amount.setText(amount.get(position));
         holder.bet.setText(bet.get(position));
     }
 

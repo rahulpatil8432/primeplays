@@ -22,12 +22,14 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> rate = new ArrayList<>();
     ArrayList<String> number = new ArrayList<>();
+    String market;
 
 
-    public adapter_game(Context context,  ArrayList<String> name, ArrayList<String> rate) {
+    public adapter_game(Context context,  ArrayList<String> name, ArrayList<String> rate, String market) {
         this.context = context;
         this.name = name;
         this.rate = rate;
+        this.market = market;
     }
 
     @NonNull
@@ -150,6 +152,7 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
             go.putExtra("list", number);
             go.putExtra("game", gameName);
+            go.putExtra("market", market);
             go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(go);
         });
