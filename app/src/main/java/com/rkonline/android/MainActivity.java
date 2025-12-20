@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
         final int MARKET_CLOSED = 0;
         final int MARKET_OPEN = 1;
         final int MARKET_YET_TO_OPEN = 2;
+        final int MARKET_CLOSE_TODAY = 3;
 
         db.collection("markets")
                 .orderBy("open_time")
@@ -334,31 +335,35 @@ public class MainActivity extends AppCompatActivity {
                         String jodi = doc.getString("jodi") == null ? "**" : doc.getString("jodi");
                         String figure_open = doc.getString("figure_open") == null ? "*" : doc.getString("figure_open");
                         boolean bettingOpen = Boolean.TRUE.equals(doc.getBoolean("betting_open"));
-                        boolean is_approved = Boolean.TRUE.equals(doc.getBoolean("is_approved"));
-                        if(!is_approved)
-                            continue;
+                        boolean isApproved = Boolean.TRUE.equals(doc.getBoolean("is_approved"));
+                        String statusStr = doc.getString("status");
 
-                        boolean openNow = Objects.requireNonNull(doc.getString("status")).equalsIgnoreCase("open");
-                        boolean notOpen = Objects.requireNonNull(doc.getString("status")).equalsIgnoreCase("not_opened");
+                        if (!isApproved || marketName == null || statusStr == null) continue;
 
-                        if (marketName == null) continue;
+                        int status;
+                        String displayResult;
+
+                        if ("open".equalsIgnoreCase(statusStr)) {
+                            status = MARKET_OPEN;
+                            displayResult = aankdo_open + "-" + figure_open + "*-***";
+                        } else if ("not_opened".equalsIgnoreCase(statusStr)) {
+                            status = MARKET_YET_TO_OPEN;
+                            displayResult = "***-**-***";
+                        }else if ("market_close_today".equalsIgnoreCase(statusStr)) {
+                            status = MARKET_CLOSE_TODAY;
+                            displayResult = "***-**-***";
+                            openTime = "00:00";
+                            closeTime = "00:00";
+                        } else {
+                            status = MARKET_CLOSED;
+                            displayResult = aankdo_open + "-" + jodi + "-" + aankdo_close;
+                        }
 
                         names.add(marketName);
                         openTimeArray.add(openTime);
                         closeTimeArray.add(closeTime);
-
-                        int status;
-                        if (bettingOpen) {
-                            status = MARKET_YET_TO_OPEN;
-                            marketResults.add("***-**-***");
-                        } else if (openNow) {
-                            status = MARKET_OPEN;
-                            marketResults.add(aankdo_open + "-" + figure_open + "*-***");
-                        } else {
-                            status = MARKET_CLOSED;
-                            marketResults.add(aankdo_open + "-" + jodi + "-" + aankdo_close);
-                        }
                         marketStatus.add(status);
+                        marketResults.add(displayResult);
                     }
 
                     adapter_market rc =

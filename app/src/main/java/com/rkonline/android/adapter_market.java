@@ -20,6 +20,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
 
     public static final int MARKET_OPEN = 1;
     public static final int MARKET_YET_TO_OPEN = 2;
+    public static final int MARKET_CLOSE_TODAY = 3;
 
     Context context;
     ArrayList<String> names;
@@ -107,6 +108,11 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
+            } else if(marketStatus.get(pos) == MARKET_CLOSE_TODAY) {
+
+                Toast.makeText(context,
+                        "Today is the weekly off for this market. Betting will start tomorrow.",
+                        Toast.LENGTH_SHORT).show();
             } else {
 
                 Toast.makeText(context,
