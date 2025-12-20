@@ -334,7 +334,6 @@ public class MainActivity extends AppCompatActivity {
                         String aankdo_close = doc.getString("aankdo_close") == null ? "***" : doc.getString("aankdo_close");
                         String jodi = doc.getString("jodi") == null ? "**" : doc.getString("jodi");
                         String figure_open = doc.getString("figure_open") == null ? "*" : doc.getString("figure_open");
-                        boolean bettingOpen = Boolean.TRUE.equals(doc.getBoolean("betting_open"));
                         boolean isApproved = Boolean.TRUE.equals(doc.getBoolean("is_approved"));
                         String statusStr = doc.getString("status");
 
