@@ -1,6 +1,9 @@
 package com.rkonline.android;
 
-import android.content.Context;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,51 +12,93 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.List;
 
-public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.VH> {
+public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {
 
-    Context context;
-    List<ChartModel> list;
+    private final List<DocumentSnapshot> chartList;
 
-    public ChartsAdapter(Context context, List<ChartModel> list) {
-        this.context = context;
-        this.list = list;
+    public ChartsAdapter(List<DocumentSnapshot> chartList) {
+        this.chartList = chartList;
     }
 
     @NonNull
     @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context)
+    public ChartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_chart, parent, false);
-        return new VH(v);
+        return new ChartViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH h, int pos) {
-        ChartModel m = list.get(pos);
+    public void onBindViewHolder(@NonNull ChartViewHolder holder, int position) {
 
-        h.date.setText(m.date);
-        h.open.setText(m.aankdoOpen != null ? m.aankdoOpen : "-");
-        h.close.setText(m.aankdoClose != null ? m.aankdoClose : "-");
-        h.jodi.setText(m.jodi != null ? m.jodi : "-");
+        DocumentSnapshot doc = chartList.get(position);
+
+        String date = doc.getString("date");
+        String open = doc.getString("aankdo_open");
+        String jodi = doc.getString("jodi");
+        String close = doc.getString("aankdo_close");
+
+        holder.txtDate.setText(date != null ? date : "");
+
+        // If result incomplete
+        if (open == null || jodi == null || close == null ||
+                open.isEmpty() || jodi.isEmpty() || close.isEmpty()) {
+
+            holder.txtResult.setText("---");
+            holder.txtResult.setTextColor(Color.GRAY);
+            return;
+        }
+
+        String result = open + " - " + jodi + " - " + close;
+        SpannableString spannable = new SpannableString(result);
+
+        // OPEN (Green)
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.parseColor("#2E7D32")),
+                0,
+                open.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        // JODI (Blue)
+        int jodiStart = open.length() + 3;
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.parseColor("#1565C0")),
+                jodiStart,
+                jodiStart + jodi.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        // CLOSE (Red)
+        int closeStart = jodiStart + jodi.length() + 3;
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.parseColor("#C62828")),
+                closeStart,
+                result.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        holder.txtResult.setText(spannable);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return chartList == null ? 0 : chartList.size();
     }
 
-    static class VH extends RecyclerView.ViewHolder {
-        TextView date, open, close, jodi;
+    static class ChartViewHolder extends RecyclerView.ViewHolder {
 
-        VH(View v) {
-            super(v);
-            date = v.findViewById(R.id.txtDate);
-            open = v.findViewById(R.id.txtOpen);
-            close = v.findViewById(R.id.txtClose);
-            jodi = v.findViewById(R.id.txtJodi);
+        TextView txtDate;
+        TextView txtResult;
+
+        public ChartViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtDate = itemView.findViewById(R.id.txtDate);
+            txtResult = itemView.findViewById(R.id.txtResult);
         }
     }
 }
-
