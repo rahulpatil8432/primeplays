@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,12 +31,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.rkonline.android.notification.NotificationListenerService;
 
 import org.json.JSONObject;
 
@@ -61,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
     ImageButton lang_img;
     FirebaseFirestore db;
-    NotificationListenerService service;
 
     private static final int NOTIFICATION_PERMISSION_CODE = 1001;
 
@@ -84,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         logout.setOnClickListener(v -> {
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(Objects.requireNonNull(preferences.getString("mobile", null)))
+                    .update("fcmToken", FieldValue.delete());
             preferences.edit().clear().apply();
             Intent in = new Intent(getApplicationContext(), login.class);
             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -101,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
         apicall();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission();
-        } else {
-            startNotificationListener();
         }
         if (preferences.getString("wallet", null) != null) {
             balance.setText(preferences.getString("wallet", null));
@@ -222,21 +222,14 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED) {
-
-            startNotificationListener();
-
-        } else {
+        ) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.POST_NOTIFICATIONS},
                     NOTIFICATION_PERMISSION_CODE
             );
+
         }
-    }
-    private void startNotificationListener() {
-        service = new NotificationListenerService(this,preferences.getString("mobile", null));
-        service.startListening();
     }
 
     @Override
@@ -251,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                startNotificationListener();
+                Toast.makeText(this, "Notification Permission Granted", Toast.LENGTH_SHORT).show();
 
             } else {
                 // Permission denied

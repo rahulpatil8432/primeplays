@@ -2,7 +2,7 @@ package com.rkonline.android;
 
 public class constant {
     // DO NOT EDIT
-    static String prefs = "codegente";
+    public static String prefs = "codegente";
 
     static String link = "https://primeplays.app/download";
 
