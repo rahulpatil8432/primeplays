@@ -115,39 +115,32 @@ public class halfsangam extends AppCompatActivity {
             }
         });
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (first.getSelectedItem().toString().contains("Line") || second.getSelectedItem().toString().contains("Line"))
-                {
-                    Toast.makeText(halfsangam.this, "Please select A valid number", Toast.LENGTH_SHORT).show();
-                }
-                else if (Integer.parseInt(totalamount.getText().toString()) < Integer.parseInt(prefs.getString("wallet",null))) {
-                    apicall();
-                }
-                else
-                {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(halfsangam.this);
-                    builder1.setMessage("You don't have enough wallet balance to place this bet, Recharge your wallet to play");
-                    builder1.setCancelable(true);
-                    builder1.setPositiveButton(
-                            "Recharge",
-                            (dialog, id) -> {
-                                startActivity(new Intent(halfsangam.this, deposit_money.class));
-                                dialog.dismiss();
-                            });
+        submit.setOnClickListener(v -> {
+            if (first.getSelectedItem().toString().contains("Line") || second.getSelectedItem().toString().contains("Line"))
+            {
+                Toast.makeText(halfsangam.this, "Please select A valid number", Toast.LENGTH_SHORT).show();
+            }
+            else if (Integer.parseInt(totalamount.getText().toString()) < Integer.parseInt(prefs.getString("wallet",null))) {
+                apicall();
+            }
+            else
+            {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(halfsangam.this);
+                builder1.setMessage("You don't have enough wallet balance to place this bet, Recharge your wallet to play");
+                builder1.setCancelable(true);
+                builder1.setPositiveButton(
+                        "Recharge",
+                        (dialog, id) -> {
+                            startActivity(new Intent(halfsangam.this, deposit_money.class));
+                            dialog.dismiss();
+                        });
 
-                    builder1.setNegativeButton(
-                            "Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
+                builder1.setNegativeButton(
+                        "Cancel",
+                        (dialog, id) -> dialog.cancel());
 
-                    AlertDialog alert11 = builder1.create();
-                    alert11.show();
-                }
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
             }
         });
     }

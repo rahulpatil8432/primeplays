@@ -95,6 +95,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 Intent go = new Intent(context, rate.class);
                 go.putExtra("header", "Select Game");
                 go.putExtra("market", names.get(position));
+                go.putExtra("isMarketOpen", true);
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
@@ -107,6 +108,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 Intent go = new Intent(context, rate.class);
                 go.putExtra("header", "Select Game");
                 go.putExtra("market", names.get(position));
+                go.putExtra("isMarketOpen", false);
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 

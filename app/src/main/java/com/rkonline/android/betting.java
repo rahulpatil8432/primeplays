@@ -1,16 +1,17 @@
 package com.rkonline.android;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,12 +46,18 @@ public class betting extends AppCompatActivity {
 
     String numb, amou;
 
+    protected Spinner type;
+    ArrayList<String> typeof = new ArrayList<>();
+    String selectedGameType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_betting);
         initView();
 
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(betting.this, R.layout.simple_list_item_1, typeof);
+        type.setAdapter(arrayAdapter);
         prefs = getSharedPreferences(constant.prefs, MODE_PRIVATE);
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
@@ -58,6 +65,13 @@ public class betting extends AppCompatActivity {
         game = getIntent().getStringExtra("game");
         market = getIntent().getStringExtra("market");
         number = getIntent().getStringArrayListExtra("list");
+
+        if(getIntent().getBooleanExtra("isMarketOpen", false)){
+            typeof.add("Close");
+        }else{
+            typeof.add("Open");
+            typeof.add("Close");
+        }
 
         adapterbetting = new adapterbetting(betting.this, number,
                 updatedList -> {
@@ -73,6 +87,21 @@ public class betting extends AppCompatActivity {
 
         recyclerview.setLayoutManager(new GridLayoutManager(betting.this, 4));
         recyclerview.setAdapter(adapterbetting);
+
+        type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i==0){
+                    selectedGameType = "Open";
+                }else{
+                    selectedGameType = "Close";
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         submit.setOnClickListener(v -> handleBetSubmit());
     }
@@ -157,6 +186,7 @@ public class betting extends AppCompatActivity {
                 betData.put("date", date);
                 betData.put("time", time);
                 betData.put("timestamp", timestamp);
+                betData.put("gameType", selectedGameType);
 
                 batch.set(
                         db.collection("played").document(),
@@ -220,5 +250,6 @@ public class betting extends AppCompatActivity {
         recyclerview = findViewById(R.id.recyclerview);
         submit = findViewById(R.id.submit);
         totalamount = findViewById(R.id.totalamount);
+        type = findViewById(R.id.type);
     }
 }

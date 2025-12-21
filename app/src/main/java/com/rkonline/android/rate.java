@@ -63,11 +63,15 @@ public class rate extends AppCompatActivity {
                 adapter_game rc;
                 Log.e("header",headerTitle.getText().toString());
                 if(headerTitle.getText().toString().equalsIgnoreCase("Game Rate")){
-                   rc = new adapter_game(rate.this,name,rate,"");
+                   rc = new adapter_game(rate.this,name,rate,"", false);
                     recyclerview.setLayoutManager(new LinearLayoutManager(rate.this));
 
                 }else{
-                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market);
+                    boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen",false);
+                    if(isMarketOpen){
+                        name.remove("Jodi");
+                    }
+                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));
 
                 }
