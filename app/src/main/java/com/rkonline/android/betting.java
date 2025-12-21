@@ -56,9 +56,6 @@ public class betting extends AppCompatActivity {
         setContentView(R.layout.activity_betting);
         initView();
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(betting.this, R.layout.simple_list_item_1, typeof);
-        type.setAdapter(arrayAdapter);
-        prefs = getSharedPreferences(constant.prefs, MODE_PRIVATE);
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
 
@@ -73,6 +70,9 @@ public class betting extends AppCompatActivity {
             typeof.add("Close");
         }
 
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(betting.this, R.layout.simple_list_item_1, typeof);
+        type.setAdapter(arrayAdapter);
+        prefs = getSharedPreferences(constant.prefs, MODE_PRIVATE);
         adapterbetting = new adapterbetting(betting.this, number,
                 updatedList -> {
                     list = adapterbetting.getNumber();
