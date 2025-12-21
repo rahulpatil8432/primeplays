@@ -28,8 +28,9 @@
                 android:id="@+id/gameIcon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:tint="@android:color/white"
-                android:src="@drawable/ic_single_digit" />
+                android:layout_gravity="center"
+                android:src="@drawable/ic_single_digit"
+                android:tint="@android:color/white" />
         </FrameLayout>
 
         <!-- Game name -->
