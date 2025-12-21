@@ -1,9 +1,11 @@
 package com.rkonline.android;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +22,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
     private final ArrayList<String> amount;
     private final ArrayList<String> bet;
     private final ArrayList<String> gameName;
-    private final ArrayList<String> gameType;
+    private final ArrayList<String> gameType ,result,playedTime;
 
     public adapterplayed(Context context,
                          ArrayList<String> date,
@@ -28,7 +30,11 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
                          ArrayList<String> amount,
                          ArrayList<String> bet,
                          ArrayList<String> gameName,
-                         ArrayList<String> gameType
+                         ArrayList<String> gameType,
+                         ArrayList<String> result,
+                         ArrayList<String> playedTime
+
+
 
     ) {
 
@@ -39,6 +45,8 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         this.bet = bet != null ? bet : new ArrayList<>();
         this.gameName = gameName != null ? gameName : new ArrayList<>();
         this.gameType = gameType != null ? gameType : new ArrayList<>();
+        this.result = result != null ? result : new ArrayList<>();
+        this.playedTime = playedTime != null ? playedTime : new ArrayList<>();
     }
 
     @NonNull
@@ -57,6 +65,30 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         holder.bet.setText(bet.get(position));
         holder.gameName.setText(gameName.get(position));
         holder.gameType.setText(gameType.get(position));
+        holder.playedTime.setText(playedTime.get(position));
+        if(result.get(position).equals("WIN")){
+//            holder.result.setBackgroundResource(R.drawable.bg_result_won);
+            holder.resultMessage.setText("Congratulations!!");
+//            ColorStateList color = holder.itemView.getContext().getColorStateList(R.color.md_green_900);
+//            holder.resultMessage.setTextColor(color);
+            holder.card.setSelected(true);      // green background
+            holder.card.setActivated(false);
+        }else if(result.get(position).equals("LOSE")){
+//            holder.result.setBackgroundResource(R.drawable.bg_result_loss);
+//            ColorStateList color = holder.itemView.getContext().getColorStateList(R.color.md_red_900);
+//            holder.resultMessage.setTextColor(color);
+            holder.resultMessage.setText("Better Luck Next Time");
+            holder.card.setActivated(true);     // red background
+            holder.card.setSelected(false);
+        }else{
+            holder.result.setVisibility(View.GONE);
+//            ColorStateList color = holder.itemView.getContext().getColorStateList(R.color.md_black_1000);
+//            holder.resultMessage.setTextColor(color);
+            holder.resultMessage.setText("All the best");
+            holder.card.setSelected(false);
+            holder.card.setActivated(false);
+        }
+        holder.result.setText(result.get(position));
     }
 
     @Override
@@ -66,8 +98,8 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView date, bazar, amount, bet,gameName,gameType;
-
+        TextView date, bazar, amount, bet,gameName,gameType,result,resultMessage,playedTime;
+LinearLayout card;
         public ViewHolder(View view) {
             super(view);
 
@@ -77,6 +109,11 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
             bet = view.findViewById(R.id.bet);
             gameName = view.findViewById(R.id.gameName);
             gameType = view.findViewById(R.id.gameType);
+            gameType = view.findViewById(R.id.gameType);
+            result = view.findViewById(R.id.result);
+            resultMessage = view.findViewById(R.id.resultMessage);
+            playedTime = view.findViewById(R.id.playedTime);
+            card = view.findViewById(R.id.playedCard);
 
         }
     }

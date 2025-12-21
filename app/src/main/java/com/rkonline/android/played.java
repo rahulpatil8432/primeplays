@@ -38,6 +38,8 @@ public class played extends AppCompatActivity {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -70,6 +72,8 @@ public class played extends AppCompatActivity {
                     ArrayList<String> bet = new ArrayList<>();
                     ArrayList<String> gameName = new ArrayList<>();
                     ArrayList<String> gameType = new ArrayList<>();
+                    ArrayList<String> result = new ArrayList<>();
+                    ArrayList<String> playedTime = new ArrayList<>();
 
                     for (DocumentSnapshot doc : querySnapshot) {
 
@@ -79,6 +83,9 @@ public class played extends AppCompatActivity {
                         String bt = doc.getString("bet");
                         String gameN = doc.getString("game");
                         String gameT = doc.getString("gameType");
+                        String resultT = doc.getString("result");
+                        String playT = doc.getString("time");
+
 
                         date.add(d != null ? d : "-");
                         bazar.add(b != null ? b : "-");
@@ -86,11 +93,13 @@ public class played extends AppCompatActivity {
                         bet.add(bt != null ? bt : "-");
                         gameName.add(gameN != null ? gameN : "-");
                         gameType.add(gameT != null ? gameT : "-");
+                        result.add(resultT != null ? resultT : "-");
+                        playedTime.add(playT != null ? playT : "-");
 
                     }
 
                     // 🔥 Update the existing adapter (no warning)
-                    rc = new adapterplayed(played.this, date, bazar, amount, bet, gameName,gameType);
+                    rc = new adapterplayed(played.this, date, bazar, amount, bet, gameName,gameType,result,playedTime);
                     recyclerview.setAdapter(rc);
                 })
                 .addOnFailureListener(e -> {

@@ -3,47 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="14dp"
     android:layout_margin="12dp"
-    android:background="@drawable/bg_gradient_card"
-    android:elevation="6dp"
-    android:clipToPadding="false">
+    android:id="@+id/playedCard"
+    android:background="@drawable/bg_card_ripple"
+    android:stateListAnimator="@animator/card_press_anim"
+    android:clickable="true"
+    android:focusable="true"
+    android:elevation="6dp">
 
-    <!-- Top Row: Date & Bazar -->
+    <!-- ================= ROW 1 : DATE | BAZAR | AMOUNT ================= -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="12"
         android:orientation="horizontal"
-        android:layout_marginBottom="12dp">
 
-        <!-- Date & Bazar -->
+        android:gravity="center_vertical">
+
+        <!-- Date + Bazar -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.rkonline.android.latobold
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:tint="@android:color/white"
-                    android:layout_marginEnd="4dp"/>
-
-                <com.rkonline.android.latobold
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2 Nov 2019"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                android:text="2 Nov 2019"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:alpha="0.85"/>
 
             <com.rkonline.android.latonormal
                 android:id="@+id/bazar"
@@ -51,155 +42,130 @@
                 android:layout_height="wrap_content"
                 android:text="Kalyan Open"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:layout_marginTop="4dp"/>
-
-        </LinearLayout>
-
-        <!-- Bet -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-
-            <com.rkonline.android.latobold
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bet"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="2dp">
-
-
-                <com.rkonline.android.latonormal
-                    android:id="@+id/bet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="123"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <!-- Amount -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:orientation="vertical"
-            android:gravity="end">
-
-            <com.rkonline.android.latobold
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amount"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="end"
-                android:layout_marginTop="2dp">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:tint="@android:color/white"
-                    android:layout_marginEnd="4dp"/>
-
-                <com.rkonline.android.latonormal
-                    android:id="@+id/amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10000 🤑"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
+            android:text="₹10000"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
     </LinearLayout>
 
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/white"
-        android:alpha="0.2"
-        android:layout_marginVertical="8dp"/>
-
-    <!-- Bottom Row: Game Name & Game Type -->
+    <!-- ================= ROW 2 : BET | GAME TYPE | RESULT ================= -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="12">
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp">
+
+        <!-- Bet --><TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bet: "
+        android:textColor="@android:color/white"
+        android:textSize="13sp"/>
+        <TextView
+            android:id="@+id/bet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"/>
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <!-- Game Type Chip -->
+        <TextView
+            android:id="@+id/gameType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OPEN"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:background="@drawable/bg_badge"/>
+
+        <!-- Small gap -->
+        <View
+            android:layout_width="6dp"
+            android:layout_height="1dp"/>
+
+        <!-- Result Chip -->
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WON"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+           />
+    </LinearLayout>
+
+    <!-- ================= ROW 3 : GAME NAME | TIME | MESSAGE ================= -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp">
 
         <!-- Game Name -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/gameName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:orientation="vertical">
+            android:text="Lucky Seven"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
 
-            <com.rkonline.android.latobold
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Game Name"
-                android:textColor="@android:color/black"
-                android:textSize="12sp"/>
-
-            <com.rkonline.android.latonormal
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lucky Seven"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:id="@+id/gameName"
-                android:layout_marginTop="2dp"/>
-
-        </LinearLayout>
-
-        <!-- Game Type Badge -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <!-- Dot Separator -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:orientation="vertical"
-            android:gravity="end">
+            android:text=" • "
+            android:textColor="@android:color/white"
+            android:alpha="0.7"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Game Type"
-                android:textColor="@android:color/black"
-                android:textSize="12sp"/>
+        <!-- Played Time -->
+        <TextView
+            android:id="@+id/playedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:45 PM"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:alpha="0.8"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open"
-                android:id="@+id/gameType"
-                android:textColor="@android:color/white"
-                android:background="@drawable/bg_badge"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp"/>
+        <!-- Spacer -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
 
-        </LinearLayout>
-
+        <!-- Result Message -->
+        <TextView
+            android:id="@+id/resultMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All the best"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:alpha="0.85"/>
     </LinearLayout>
 
 </LinearLayout>

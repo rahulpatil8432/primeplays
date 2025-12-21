@@ -1,0 +1,31 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pressed -->
+    <item android:state_pressed="true">
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueTo="0.97"
+                android:duration="120"/>
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueTo="0.97"
+                android:duration="120"/>
+        </set>
+    </item>
+
+    <!-- Normal -->
+    <item>
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueTo="1"
+                android:duration="120"/>
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueTo="1"
+                android:duration="120"/>
+        </set>
+    </item>
+
+</selector>
