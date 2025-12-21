@@ -108,7 +108,6 @@ public class withdraw_money extends AppCompatActivity {
 
         String amountStr = amountInput.getText().toString().trim();
 
-        // 🔹 AMOUNT VALIDATION
         if (TextUtils.isEmpty(amountStr)) {
             amountInput.setError("Enter amount");
             isValid = false;
@@ -125,7 +124,6 @@ public class withdraw_money extends AppCompatActivity {
                 amountInput.setError(null);
             }
 
-            // 🔹 Decide UPI or BANK
             if (amount > 50000) {
 
                 upiInput.setVisibility(View.GONE);
@@ -140,7 +138,6 @@ public class withdraw_money extends AppCompatActivity {
                     accNoInput.setError(null);
                 }
 
-                // IFSC
                 if (TextUtils.isEmpty(IFSCcodeInput.getText().toString().trim())) {
                     IFSCcodeInput.setError("Enter IFSC code");
                     isValid = false;
@@ -154,7 +151,6 @@ public class withdraw_money extends AppCompatActivity {
                 accNoInput.setVisibility(View.GONE);
                 IFSCcodeInput.setVisibility(View.GONE);
 
-                // UPI
                 String upi = upiInput.getText().toString().trim();
                 if (TextUtils.isEmpty(upi)) {
                     upiInput.setError("Enter UPI ID");
