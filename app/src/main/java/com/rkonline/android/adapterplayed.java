@@ -19,18 +19,26 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
     private final ArrayList<String> bazar;
     private final ArrayList<String> amount;
     private final ArrayList<String> bet;
+    private final ArrayList<String> gameName;
+    private final ArrayList<String> gameType;
 
     public adapterplayed(Context context,
                          ArrayList<String> date,
                          ArrayList<String> bazar,
                          ArrayList<String> amount,
-                         ArrayList<String> bet) {
+                         ArrayList<String> bet,
+                         ArrayList<String> gameName,
+                         ArrayList<String> gameType
+
+    ) {
 
         this.context = context;
         this.date = date != null ? date : new ArrayList<>();
         this.bazar = bazar != null ? bazar : new ArrayList<>();
         this.amount = amount != null ? amount : new ArrayList<>();
         this.bet = bet != null ? bet : new ArrayList<>();
+        this.gameName = gameName != null ? gameName : new ArrayList<>();
+        this.gameType = gameType != null ? gameType : new ArrayList<>();
     }
 
     @NonNull
@@ -47,6 +55,8 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         holder.bazar.setText(bazar.get(position));
         holder.amount.setText(amount.get(position));
         holder.bet.setText(bet.get(position));
+        holder.gameName.setText(gameName.get(position));
+        holder.gameType.setText(gameType.get(position));
     }
 
     @Override
@@ -56,7 +66,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView date, bazar, amount, bet;
+        TextView date, bazar, amount, bet,gameName,gameType;
 
         public ViewHolder(View view) {
             super(view);
@@ -65,6 +75,9 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
             bazar = view.findViewById(R.id.bazar);
             amount = view.findViewById(R.id.amount);
             bet = view.findViewById(R.id.bet);
+            gameName = view.findViewById(R.id.gameName);
+            gameType = view.findViewById(R.id.gameType);
+
         }
     }
 }
