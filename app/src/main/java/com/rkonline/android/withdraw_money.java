@@ -156,15 +156,6 @@ public class withdraw_money extends AppCompatActivity {
 
                 // UPI
                 String upi = upiInput.getText().toString().trim();
-//                if (TextUtils.isEmpty(upi)) {
-//                    upiInput.setError("Enter UPI ID");
-//                    isValid = false;
-//                } else if (!upi.contains("@")) {
-//                    upiInput.setError("Invalid UPI ID");
-//                    isValid = false;
-//                } else {
-//                    upiInput.setError(null);
-//                }
                 if (TextUtils.isEmpty(upi)) {
                     upiInput.setError("Enter UPI ID");
                     isValid = false;
