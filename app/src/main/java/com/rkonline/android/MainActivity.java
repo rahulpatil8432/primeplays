@@ -77,8 +77,10 @@ public class MainActivity extends AppCompatActivity {
         support.setOnClickListener(v -> openWhatsApp());
 
         exit.setOnClickListener(v -> {
+            finishAffinity();
             Process.killProcess(Process.myPid());
             System.exit(1);
+            finish();
         });
 
         logout.setOnClickListener(v -> {

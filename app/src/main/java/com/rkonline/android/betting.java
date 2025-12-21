@@ -232,7 +232,7 @@ public class betting extends AppCompatActivity {
     }
 
     private void goThankYou() {
-        Intent in = new Intent(getApplicationContext(), thankyou.class);
+        Intent in = new Intent(betting.this, thankyou.class);
         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(in);
         finish();
