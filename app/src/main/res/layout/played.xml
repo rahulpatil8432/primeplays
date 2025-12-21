@@ -44,16 +44,29 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp"/>
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/gameType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:text="OPEN"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
         <!-- Amount -->
         <TextView
             android:id="@+id/amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+
             android:text="₹10000"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="16sp"/>
+
+
     </LinearLayout>
 
     <!-- ================= ROW 2 : BET | GAME TYPE | RESULT ================= -->
@@ -85,16 +98,6 @@
             android:layout_weight="1"/>
 
         <!-- Game Type Chip -->
-        <TextView
-            android:id="@+id/gameType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OPEN"
-            android:textColor="@android:color/black"
-            android:textSize="12sp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="4dp"
-            android:background="@drawable/bg_badge"/>
 
         <!-- Small gap -->
         <View
@@ -110,7 +113,6 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="12sp"
-            android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
            />
     </LinearLayout>

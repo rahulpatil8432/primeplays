@@ -40,6 +40,7 @@ public class played extends AppCompatActivity {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -74,6 +75,7 @@ public class played extends AppCompatActivity {
                     ArrayList<String> gameType = new ArrayList<>();
                     ArrayList<String> result = new ArrayList<>();
                     ArrayList<String> playedTime = new ArrayList<>();
+                    ArrayList<String> winAmount = new ArrayList<>();
 
                     for (DocumentSnapshot doc : querySnapshot) {
 
@@ -85,6 +87,7 @@ public class played extends AppCompatActivity {
                         String gameT = doc.getString("gameType");
                         String resultT = doc.getString("result");
                         String playT = doc.getString("time");
+                        String winA = doc.getString("win_amount");
 
 
                         date.add(d != null ? d : "-");
@@ -95,11 +98,12 @@ public class played extends AppCompatActivity {
                         gameType.add(gameT != null ? gameT : "-");
                         result.add(resultT != null ? resultT : "-");
                         playedTime.add(playT != null ? playT : "-");
+                        winAmount.add(winA != null ? winA : "-");
 
                     }
 
                     // 🔥 Update the existing adapter (no warning)
-                    rc = new adapterplayed(played.this, date, bazar, amount, bet, gameName,gameType,result,playedTime);
+                    rc = new adapterplayed(played.this, date, bazar, amount, bet, gameName,gameType,result,playedTime,winAmount);
                     recyclerview.setAdapter(rc);
                 })
                 .addOnFailureListener(e -> {

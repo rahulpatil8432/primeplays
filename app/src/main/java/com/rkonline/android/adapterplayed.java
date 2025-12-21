@@ -22,7 +22,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
     private final ArrayList<String> amount;
     private final ArrayList<String> bet;
     private final ArrayList<String> gameName;
-    private final ArrayList<String> gameType ,result,playedTime;
+    private final ArrayList<String> gameType ,result,playedTime,winAmount;
 
     public adapterplayed(Context context,
                          ArrayList<String> date,
@@ -32,7 +32,9 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
                          ArrayList<String> gameName,
                          ArrayList<String> gameType,
                          ArrayList<String> result,
-                         ArrayList<String> playedTime
+                         ArrayList<String> playedTime,
+                         ArrayList<String> winAmount
+
 
 
 
@@ -47,6 +49,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         this.gameType = gameType != null ? gameType : new ArrayList<>();
         this.result = result != null ? result : new ArrayList<>();
         this.playedTime = playedTime != null ? playedTime : new ArrayList<>();
+        this.winAmount = winAmount != null ? winAmount : new ArrayList<>();
     }
 
     @NonNull
@@ -67,28 +70,22 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         holder.gameType.setText(gameType.get(position));
         holder.playedTime.setText(playedTime.get(position));
         if(result.get(position).equals("WIN")){
-//            holder.result.setBackgroundResource(R.drawable.bg_result_won);
             holder.resultMessage.setText("Congratulations!!");
-//            ColorStateList color = holder.itemView.getContext().getColorStateList(R.color.md_green_900);
-//            holder.resultMessage.setTextColor(color);
             holder.card.setSelected(true);      // green background
             holder.card.setActivated(false);
+            holder.result.setText(result.get(position) + " (" + winAmount.get(position) + ")");
+
         }else if(result.get(position).equals("LOSE")){
-//            holder.result.setBackgroundResource(R.drawable.bg_result_loss);
-//            ColorStateList color = holder.itemView.getContext().getColorStateList(R.color.md_red_900);
-//            holder.resultMessage.setTextColor(color);
             holder.resultMessage.setText("Better Luck Next Time");
             holder.card.setActivated(true);     // red background
             holder.card.setSelected(false);
+            holder.result.setText(result.get(position));
         }else{
             holder.result.setVisibility(View.GONE);
-//            ColorStateList color = holder.itemView.getContext().getColorStateList(R.color.md_black_1000);
-//            holder.resultMessage.setTextColor(color);
             holder.resultMessage.setText("All the best");
             holder.card.setSelected(false);
             holder.card.setActivated(false);
         }
-        holder.result.setText(result.get(position));
     }
 
     @Override

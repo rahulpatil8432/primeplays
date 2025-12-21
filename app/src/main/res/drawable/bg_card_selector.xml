@@ -4,7 +4,7 @@
     <item android:state_selected="true">
         <shape>
             <gradient
-                android:startColor="@color/primary"
+                android:startColor="#2E7D32"
                 android:endColor="#66BB6A"
                 android:angle="45"/>
             <corners android:radius="16dp"/>
@@ -15,8 +15,8 @@
     <item android:state_activated="true">
         <shape>
             <gradient
-                android:startColor="#B71C1C"
-                android:endColor="#EF5350"
+                android:startColor="#E57373"
+                android:endColor="#E57373"
                 android:angle="45"/>
             <corners android:radius="16dp"/>
         </shape>
