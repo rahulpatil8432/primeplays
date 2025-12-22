@@ -1,5 +1,6 @@
 package com.rkonline.android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -62,10 +63,12 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         return new ViewHolder(v);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.date.setText(date.get(position));
-        holder.bazar.setText(bazar.get(position) + " (" + market_result.get(position) + ")");
+        String nameResult = bazar.get(position) + " (" + market_result.get(position) + ")";
+        holder.bazar.setText(nameResult);
         holder.amount.setText(amount.get(position));
         holder.bet.setText(bet.get(position));
         holder.gameName.setText(gameName.get(position));
@@ -83,7 +86,8 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
             holder.card.setSelected(false);
             holder.result.setText(result.get(position));
         }else{
-            holder.result.setVisibility(View.GONE);
+//            holder.result.setVisibility(View.GONE);
+            holder.result.setText(result.get(position));
             holder.resultMessage.setText("All the best");
             holder.card.setSelected(false);
             holder.card.setActivated(false);
