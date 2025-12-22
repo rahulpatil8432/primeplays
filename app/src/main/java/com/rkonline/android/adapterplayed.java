@@ -22,7 +22,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
     private final ArrayList<String> amount;
     private final ArrayList<String> bet;
     private final ArrayList<String> gameName;
-    private final ArrayList<String> gameType ,result,playedTime,winAmount;
+    private final ArrayList<String> gameType ,result,playedTime,winAmount,market_result;
 
     public adapterplayed(Context context,
                          ArrayList<String> date,
@@ -33,7 +33,8 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
                          ArrayList<String> gameType,
                          ArrayList<String> result,
                          ArrayList<String> playedTime,
-                         ArrayList<String> winAmount
+                         ArrayList<String> winAmount,
+                         ArrayList<String> market_result
 
 
 
@@ -50,6 +51,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
         this.result = result != null ? result : new ArrayList<>();
         this.playedTime = playedTime != null ? playedTime : new ArrayList<>();
         this.winAmount = winAmount != null ? winAmount : new ArrayList<>();
+        this.market_result = market_result != null ? market_result : new ArrayList<>();
     }
 
     @NonNull
@@ -63,7 +65,7 @@ public class adapterplayed extends RecyclerView.Adapter<adapterplayed.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.date.setText(date.get(position));
-        holder.bazar.setText(bazar.get(position));
+        holder.bazar.setText(bazar.get(position) + " (" + market_result.get(position) + ")");
         holder.amount.setText(amount.get(position));
         holder.bet.setText(bet.get(position));
         holder.gameName.setText(gameName.get(position));
