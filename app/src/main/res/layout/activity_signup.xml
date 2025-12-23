@@ -128,6 +128,19 @@
             android:textColor="#fff"
             android:visibility="gone" />
 
+        <com.rkonline.android.latobold
+            android:id="@+id/resendOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Resend OTP"
+            android:textColor="@color/lightfont"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true" />
+
     </LinearLayout>
 
 </RelativeLayout>

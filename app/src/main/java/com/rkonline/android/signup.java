@@ -3,39 +3,34 @@ package com.rkonline.android;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rkonline.android.utils.OtpHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class signup extends AppCompatActivity {
 
-    EditText name, email, mobile, edtOtp;
-    latobold submit, verifyOtp;
+    private EditText name, email, mobile, edtOtp;
+    private latobold submit, verifyOtp, resendOtp;
 
-    FirebaseAuth mAuth;
-    FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
-    String storedVerificationId;
-    PhoneAuthProvider.ForceResendingToken resendToken;
+    private OtpHelper otpHelper;
 
-    private static final String ALLOWED_CHARACTERS = "0123456789abcdefghijklmnopqrstuvwxyz";
+    private static final String ALLOWED_CHARACTERS =
+            "0123456789abcdefghijklmnopqrstuvwxyz";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +41,7 @@ public class signup extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         initViews();
+        initOtpHelper();
 
         submit.setOnClickListener(v -> {
             if (validate()) {
@@ -57,91 +53,70 @@ public class signup extends AppCompatActivity {
             String code = edtOtp.getText().toString().trim();
             if (code.isEmpty()) {
                 edtOtp.setError("Enter OTP");
-            } else {
-                verifyCode(code);
+                return;
+            }
+            otpHelper.verifyOtp(code);
+        });
+
+        // RESEND OTP
+        resendOtp.setOnClickListener(v -> {
+            String mob = mobile.getText().toString().trim();
+            otpHelper.resendOtp(formatPhone(mob));
+        });
+    }
+
+    // 🔹 Init OTP helper
+    private void initOtpHelper() {
+
+        otpHelper = new OtpHelper(this, new OtpHelper.OtpListener() {
+
+            @Override
+            public void onOtpSent(String verificationId,
+                                  com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken token) {
+
+                edtOtp.setVisibility(View.VISIBLE);
+                verifyOtp.setVisibility(View.VISIBLE);
+                resendOtp.setVisibility(View.VISIBLE);
+                submit.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onVerificationSuccess(PhoneAuthCredential credential) {
+                signInWithPhoneAuthCredential(credential);
+            }
+
+            @Override
+            public void onVerificationFailed(String error) {
+                Toast.makeText(signup.this, error, Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    // 🔹 Check if user already exists
     private void checkUserExistsThenSendOtp() {
-        String mob = mobile.getText().toString();
+
+        String mob = mobile.getText().toString().trim();
 
         db.collection("users")
                 .document(mob)
                 .get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
-                        Toast.makeText(signup.this, "Mobile already registered", Toast.LENGTH_SHORT).show();
-                    } else {
-                        sendVerificationCode(mob);
+                        Toast.makeText(this,
+                                "Mobile already registered",
+                                Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    otpHelper.sendOtp(formatPhone(mob));
                 });
     }
 
-    private void sendVerificationCode(String phoneNumber) {
-
-        phoneNumber = formatPhone(phoneNumber);
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(phoneNumber)
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(this)
-                        .setCallbacks(mCallbacks)
-                        .build();
-
-        PhoneAuthProvider.verifyPhoneNumber(options);
-        edtOtp.setVisibility(View.VISIBLE);
-        verifyOtp.setVisibility(View.VISIBLE);
-        Toast.makeText(this, "Verification is in progress.", Toast.LENGTH_SHORT).show();
-    }
-
     private String formatPhone(String mob) {
-        if (!mob.startsWith("+")) {
-            return "+91" + mob;
-        }
-        return mob;
+        return mob.startsWith("+") ? mob : "+91" + mob;
     }
 
-    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks =
-            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-                @Override
-                public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-                    // Auto verification or instant verification
-                    signInWithPhoneAuthCredential(credential);
-                }
-
-                @Override
-                public void onVerificationFailed(@NonNull FirebaseException e) {
-                    Toast.makeText(signup.this,
-                            "Verification Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onCodeSent(@NonNull String verificationId,
-                                       @NonNull PhoneAuthProvider.ForceResendingToken token) {
-
-                    storedVerificationId = verificationId;
-                    resendToken = token;
-
-                    // Show OTP field & verify button
-                    edtOtp.setVisibility(View.VISIBLE);
-                    verifyOtp.setVisibility(View.VISIBLE);
-
-                    // Optional: hide submit button to prevent duplicate OTP sends
-                    submit.setVisibility(View.GONE);
-
-                    Toast.makeText(signup.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                }
-            };
-
-    private void verifyCode(String code) {
-        PhoneAuthCredential credential =
-                PhoneAuthProvider.getCredential(storedVerificationId, code);
-
-        signInWithPhoneAuthCredential(credential);
-    }
-
+    // 🔹 Firebase auth success
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 
         mAuth.signInWithCredential(credential)
@@ -151,25 +126,26 @@ public class signup extends AppCompatActivity {
                         createFirestoreUser();
                     } else {
                         Toast.makeText(this,
-                                "OTP Verification Failed: " +
-                                        task.getException().getMessage(),
+                                "OTP Verification Failed",
                                 Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
+    // 🔹 Create Firestore user
     private void createFirestoreUser() {
 
-        String mob = mobile.getText().toString();
-        String nm = name.getText().toString();
-        String mail = email.getText().toString();
+        String mob = mobile.getText().toString().trim();
+        String nm = name.getText().toString().trim();
+        String mail = email.getText().toString().trim();
+        String session = getRandomString(30);
 
         Map<String, Object> user = new HashMap<>();
         user.put("mobile", mob);
         user.put("name", nm);
         user.put("email", mail);
         user.put("wallet", 0);
-        user.put("session", getRandomString(30));
+        user.put("session", session);
         user.put("active", "1");
 
         db.collection("users")
@@ -184,65 +160,68 @@ public class signup extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
                                     fcmToken = task.getResult();
-
                                     db.collection("users")
                                             .document(mob)
                                             .update("fcmToken", fcmToken);
-                                    Log.d("FCM token", fcmToken);
                                 }
+
                                 SharedPreferences.Editor editor =
-                                        getSharedPreferences(constant.prefs, MODE_PRIVATE).edit();
+                                        getSharedPreferences(constant.prefs,
+                                                MODE_PRIVATE).edit();
+
                                 editor.putString("mobile", mob);
                                 editor.putString("login", "true");
                                 editor.putString("name", nm);
                                 editor.putString("email", mail);
-                                editor.putString("session", user.get("session").toString());
+                                editor.putString("session", session);
                                 editor.putString("fcmToken", fcmToken);
                                 editor.apply();
 
-                                Toast.makeText(signup.this,
-                                        "Signup Successful!", Toast.LENGTH_SHORT).show();
-
-                                startActivity(new Intent(signup.this, MainActivity.class));
+                                startActivity(new Intent(this, MainActivity.class));
                                 finish();
                             });
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(signup.this,
-                                "Signup Failed: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show()
-                );
+                });
     }
 
     private boolean validate() {
-        if (name.getText().toString().isEmpty()) {
+
+        if (name.getText().toString().trim().isEmpty()) {
             name.setError("Enter name");
             return false;
         }
 
-        if (mobile.getText().toString().isEmpty()) {
-            mobile.setError("Enter mobile number");
+        if (mobile.getText().toString().trim().isEmpty()) {
+            mobile.setError("Enter mobile");
             return false;
         }
+
         return true;
     }
 
     private void initViews() {
+
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
         mobile = findViewById(R.id.mobile);
         edtOtp = findViewById(R.id.otp);
         submit = findViewById(R.id.submit);
         verifyOtp = findViewById(R.id.verifyOtp);
+        resendOtp = findViewById(R.id.resendOtp);
+
         edtOtp.setVisibility(View.GONE);
         verifyOtp.setVisibility(View.GONE);
+        resendOtp.setVisibility(View.GONE);
     }
 
-    private static String getRandomString(final int size) {
-        final Random random = new Random();
-        final StringBuilder sb = new StringBuilder(size);
-        for (int i = 0; i < size; i++)
-            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+    private static String getRandomString(int size) {
+
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(size);
+
+        for (int i = 0; i < size; i++) {
+            sb.append(ALLOWED_CHARACTERS.charAt(
+                    random.nextInt(ALLOWED_CHARACTERS.length())));
+        }
         return sb.toString();
     }
 }
