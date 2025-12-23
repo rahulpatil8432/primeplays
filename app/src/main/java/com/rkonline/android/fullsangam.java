@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class fullsangam extends AppCompatActivity {
 
     ArrayList<String> patti = new ArrayList<>();
 
-    String market, game;
+    String market, game, openTime, closeTime;
 
     SharedPreferences prefs;
 
@@ -49,6 +50,8 @@ public class fullsangam extends AppCompatActivity {
 
         game = getIntent().getStringExtra("game");
         market = getIntent().getStringExtra("market");
+        openTime = getIntent().getStringExtra("openTime");
+        closeTime = getIntent().getStringExtra("closeTime");
 
         patti.addAll(getpatti());
 
@@ -59,6 +62,10 @@ public class fullsangam extends AppCompatActivity {
         second.setAdapter(arrayAdapter3);
 
         submit.setOnClickListener(v -> {
+
+            if (CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Full Sangam")) {
+                return;
+            }
             // Validate picks
             String firstSel = first.getSelectedItem().toString();
             String secondSel = second.getSelectedItem().toString();
@@ -152,6 +159,8 @@ public class fullsangam extends AppCompatActivity {
             txn.put("remark", "Full Sangam Bet - " + market);
             txn.put("timestamp", timestamp);
             txn.put("date", date);
+            txn.put("game", game);
+            txn.put("market", market);
 
             batch.set(
                     db.collection("transactions").document(),

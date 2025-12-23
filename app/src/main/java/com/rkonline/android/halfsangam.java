@@ -1,7 +1,6 @@
 package com.rkonline.android;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class halfsangam extends AppCompatActivity {
     ArrayList<String> ank = new ArrayList<>();
     ArrayList<String> patti = new ArrayList<>();
 
-    String market, game;
+    String market, game, openTime, closeTime;
 
     SharedPreferences prefs;
 
@@ -59,6 +59,8 @@ public class halfsangam extends AppCompatActivity {
 
         game = getIntent().getStringExtra("game");
         market = getIntent().getStringExtra("market");
+        openTime = getIntent().getStringExtra("openTime");
+        closeTime = getIntent().getStringExtra("closeTime");
 
         ank.add("0");
         ank.add("1");
@@ -73,8 +75,13 @@ public class halfsangam extends AppCompatActivity {
 
         patti.addAll(getpatti());
 
-        typeof.add("Open Ank Close Patti");
-        typeof.add("Open Patti Close Ank");
+        if (CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Half Sangam")) {
+            typeof.add("Open Ank Close Patti");
+            typeof.add("Open Patti Close Ank");
+
+        } else {
+            submit.setEnabled(false);
+        }
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(halfsangam.this, R.layout.simple_list_item_1, typeof);
         type.setAdapter(arrayAdapter);
@@ -116,6 +123,14 @@ public class halfsangam extends AppCompatActivity {
         });
 
         submit.setOnClickListener(v -> {
+            if (CommonUtils.canPlaceSangamBet(
+                    halfsangam.this,
+                    openTime,
+                    closeTime,
+                    "Half Sangam"
+            )) {
+                return;
+            }
             if (first.getSelectedItem().toString().contains("Line") || second.getSelectedItem().toString().contains("Line"))
             {
                 Toast.makeText(halfsangam.this, "Please select A valid number", Toast.LENGTH_SHORT).show();
@@ -199,6 +214,8 @@ public class halfsangam extends AppCompatActivity {
             txn.put("remark", "Half Sangam Bet - " + market);
             txn.put("timestamp", timestamp);
             txn.put("date", date);
+            txn.put("game", game);
+            txn.put("market", market);
 
             batch.set(
                     db.collection("transactions").document(),

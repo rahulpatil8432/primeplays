@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,6 +95,8 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 go.putExtra("header", "Select Game");
                 go.putExtra("market", names.get(position));
                 go.putExtra("isMarketOpen", true);
+                go.putExtra("openTime", openTimeArray.get(position));
+                go.putExtra("closeTime", closeTimeArray.get(position));
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
@@ -109,6 +110,8 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 go.putExtra("header", "Select Game");
                 go.putExtra("market", names.get(position));
                 go.putExtra("isMarketOpen", false);
+                go.putExtra("openTime", openTimeArray.get(position));
+                go.putExtra("closeTime", closeTimeArray.get(position));
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 

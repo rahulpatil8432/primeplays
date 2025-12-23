@@ -70,6 +70,8 @@ public class rate extends AppCompatActivity {
                     boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen",false);
                     if(isMarketOpen){
                         name.remove("Jodi");
+                        name.remove("Half Sangam");
+                        name.remove("Full Sangam");
                     }
                     rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));

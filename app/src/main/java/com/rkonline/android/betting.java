@@ -1,5 +1,7 @@
 package com.rkonline.android;
 
+import static com.rkonline.android.utils.CommonUtils.canPlaceBet;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,7 +38,7 @@ public class betting extends AppCompatActivity {
     ArrayList<String> number = new ArrayList<>();
     adapterbetting adapterbetting;
 
-    String market, game;
+    String market, game, openTime, closeTime;
 
     ViewDialog progressDialog;
 
@@ -62,15 +64,18 @@ public class betting extends AppCompatActivity {
         game = getIntent().getStringExtra("game");
         market = getIntent().getStringExtra("market");
         number = getIntent().getStringArrayListExtra("list");
-
-        if(getIntent().getBooleanExtra("isMarketOpen", false)){
+        openTime = getIntent().getStringExtra("openTime");
+        closeTime = getIntent().getStringExtra("closeTime");
+        boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen", false);
+        typeof.clear();
+        if (isMarketOpen) {
             typeof.add("Close");
-        }else{
+        } else {
             typeof.add("Open");
             typeof.add("Close");
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(betting.this, R.layout.simple_list_item_1, typeof);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(betting.this, R.layout.simple_list_item_1, typeof);
         type.setAdapter(arrayAdapter);
         prefs = getSharedPreferences(constant.prefs, MODE_PRIVATE);
         adapterbetting = new adapterbetting(betting.this, number,
@@ -99,7 +104,12 @@ public class betting extends AppCompatActivity {
             }
         });
 
-        submit.setOnClickListener(v -> handleBetSubmit());
+        submit.setOnClickListener(v ->{
+            if (!canPlaceBet(betting.this, selectedGameType, openTime, closeTime)) {
+                return;
+            }
+            handleBetSubmit();
+        });
     }
 
     private void handleBetSubmit() {
@@ -198,6 +208,8 @@ public class betting extends AppCompatActivity {
             txn.put("remark", "Bet placed - " + market);
             txn.put("timestamp", timestamp);
             txn.put("date", date);
+            txn.put("game", game);
+            txn.put("market", market);
 
             batch.set(
                     db.collection("transactions").document(),

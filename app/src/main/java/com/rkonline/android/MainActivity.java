@@ -1,5 +1,8 @@
 package com.rkonline.android;
 
+import static com.rkonline.android.utils.CommonUtils.getCurrentISTMillis;
+import static com.rkonline.android.utils.CommonUtils.parseTimeToMillis;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -330,20 +333,31 @@ public class MainActivity extends AppCompatActivity {
                         int status;
                         String displayResult;
 
-                        if ("open".equalsIgnoreCase(statusStr)) {
-                            status = MARKET_OPEN;
-                            displayResult = aankdo_open + "-" + figure_open + "*-***";
-                        } else if ("not_opened".equalsIgnoreCase(statusStr)) {
-                            status = MARKET_YET_TO_OPEN;
-                            displayResult = "***-**-***";
-                        }else if ("market_close_today".equalsIgnoreCase(statusStr)) {
+                        if ("market_close_today".equalsIgnoreCase(statusStr)) {
                             status = MARKET_CLOSE_TODAY;
                             displayResult = "***-**-***";
                             openTime = "00:00";
                             closeTime = "00:00";
-                        } else {
-                            status = MARKET_CLOSED;
-                            displayResult = aankdo_open + "-" + figure_open+figure_close + "-" + aankdo_close;
+                        }else{
+                            long now = getCurrentISTMillis();
+                            long openMillis = parseTimeToMillis(doc.getString("open_time"));
+                            long closeMillis = parseTimeToMillis(doc.getString("close_time"));
+
+                            if (now < openMillis) {
+                                status = MARKET_YET_TO_OPEN;
+                                displayResult = "***-**-***";
+                            }
+                            else if (now >= openMillis && now <= closeMillis) {
+                                status = MARKET_OPEN;
+                                displayResult = aankdo_open + "-" + figure_open + "*-***";
+                            }
+                            else {
+                                status = MARKET_CLOSED;
+                                displayResult =
+                                        aankdo_open + "-" +
+                                                figure_open + figure_close + "-" +
+                                                aankdo_close;
+                            }
                         }
 
                         names.add(marketName);
