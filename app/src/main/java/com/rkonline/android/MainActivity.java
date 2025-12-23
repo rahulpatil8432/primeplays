@@ -277,13 +277,11 @@ public class MainActivity extends AppCompatActivity {
                 if (jsonObject1.optString("active").equals("0")) {
                     Toast.makeText(MainActivity.this, "Your account temporarily disabled by admin", Toast.LENGTH_SHORT).show();
 
-                    preferences.edit().clear().apply();
                     onLogoutClick();
                 }
                 if (!jsonObject1.optString("session").equals(getSharedPreferences(constant.prefs, MODE_PRIVATE).getString("session", null))) {
                     Toast.makeText(MainActivity.this, "Session expired ! Please login again", Toast.LENGTH_SHORT).show();
 
-                    preferences.edit().clear().apply();
                     onLogoutClick();
                 }
                 balance.setText(jsonObject1.optString("wallet"));
