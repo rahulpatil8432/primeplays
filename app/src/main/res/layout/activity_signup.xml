@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/edittext"
-            android:hint="Enter Email"
+            android:hint="Enter Email (Optional)"
             android:inputType="textEmailAddress"
             android:textSize="13sp" />
 
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/edittext"
-            android:hint="Referral Code ( Optional )"
+            android:hint="Referral Code (Optional)"
             android:inputType="text"
             android:textSize="13sp" />
 

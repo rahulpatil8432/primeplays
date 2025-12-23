@@ -3,6 +3,7 @@ package com.rkonline.android;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -90,7 +92,7 @@ public class signup extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
         edtOtp.setVisibility(View.VISIBLE);
         verifyOtp.setVisibility(View.VISIBLE);
-        Toast.makeText(this, "OTP sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Verification is in progress.", Toast.LENGTH_SHORT).show();
     }
 
     private String formatPhone(String mob) {
@@ -175,20 +177,35 @@ public class signup extends AppCompatActivity {
                 .set(user)
                 .addOnSuccessListener(aVoid -> {
 
-                    SharedPreferences.Editor editor =
-                            getSharedPreferences(constant.prefs, MODE_PRIVATE).edit();
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(task -> {
 
-                    editor.putString("mobile", mob);
-                    editor.putString("login", "true");
-                    editor.putString("name", nm);
-                    editor.putString("email", mail);
-                    editor.putString("session", user.get("session").toString());
-                    editor.apply();
+                                String fcmToken = "";
 
-                    Toast.makeText(signup.this, "Signup Successful!", Toast.LENGTH_SHORT).show();
+                                if (task.isSuccessful()) {
+                                    fcmToken = task.getResult();
 
-                    startActivity(new Intent(signup.this, MainActivity.class));
-                    finish();
+                                    db.collection("users")
+                                            .document(mob)
+                                            .update("fcmToken", fcmToken);
+                                    Log.d("FCM token", fcmToken);
+                                }
+                                SharedPreferences.Editor editor =
+                                        getSharedPreferences(constant.prefs, MODE_PRIVATE).edit();
+                                editor.putString("mobile", mob);
+                                editor.putString("login", "true");
+                                editor.putString("name", nm);
+                                editor.putString("email", mail);
+                                editor.putString("session", user.get("session").toString());
+                                editor.putString("fcmToken", fcmToken);
+                                editor.apply();
+
+                                Toast.makeText(signup.this,
+                                        "Signup Successful!", Toast.LENGTH_SHORT).show();
+
+                                startActivity(new Intent(signup.this, MainActivity.class));
+                                finish();
+                            });
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(signup.this,
@@ -202,10 +219,7 @@ public class signup extends AppCompatActivity {
             name.setError("Enter name");
             return false;
         }
-        if (email.getText().toString().isEmpty()) {
-            email.setError("Enter email");
-            return false;
-        }
+
         if (mobile.getText().toString().isEmpty()) {
             mobile.setError("Enter mobile number");
             return false;

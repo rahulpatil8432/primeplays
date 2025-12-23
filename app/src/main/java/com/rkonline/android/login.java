@@ -99,11 +99,6 @@ public class login extends AppCompatActivity {
     // Step 2 → Send OTP
     private void sendVerificationCode(String phoneNumber) {
 
-        // Emulator test number auto-fill
-        if (phoneNumber.equals("+919999999999")) {
-            edtOtp.setText("123456");
-        }
-
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
                         .setPhoneNumber(phoneNumber)
@@ -119,7 +114,7 @@ public class login extends AppCompatActivity {
         verifyOtp.setVisibility(View.VISIBLE);
         submit.setVisibility(View.GONE);
 
-        Toast.makeText(this, "OTP Sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Verification is in progress.", Toast.LENGTH_SHORT).show();
     }
 
     // Phone number formatter
