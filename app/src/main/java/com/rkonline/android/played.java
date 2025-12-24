@@ -1,6 +1,7 @@
 package com.rkonline.android;
 
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -64,7 +65,7 @@ public class played extends AppCompatActivity {
 
         db.collection("played")
                 .whereEqualTo("mobile", mobile)
-                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     progressDialog.hideDialog();
