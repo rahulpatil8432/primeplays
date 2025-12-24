@@ -162,13 +162,10 @@ public class withdraw_money extends AppCompatActivity {
                             accNoInput.removeTextChangedListener(watcher);
                             IFSCcodeInput.removeTextChangedListener(watcher);
                             amountInput.setText("");
-                            upiInput.setText("");
-                            accNoInput.setText("");
-                            IFSCcodeInput.setText("");
                             amountInput.clearFocus();
-                            upiInput.clearFocus();
-                            accNoInput.clearFocus();
-                            IFSCcodeInput.clearFocus();
+                            upiInput.setVisibility(View.GONE);
+                            accNoInput.setVisibility(View.GONE);
+                            IFSCcodeInput.setVisibility(View.GONE);
                             amountInput.addTextChangedListener(watcher);
                             upiInput.addTextChangedListener(watcher);
                             accNoInput.addTextChangedListener(watcher);
