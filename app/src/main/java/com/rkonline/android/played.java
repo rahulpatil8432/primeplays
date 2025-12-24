@@ -1,6 +1,7 @@
 package com.rkonline.android;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,7 +64,7 @@ public class played extends AppCompatActivity {
 
         db.collection("played")
                 .whereEqualTo("mobile", mobile)
-                .orderBy("date", Query.Direction.DESCENDING)
+                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     progressDialog.hideDialog();
@@ -111,6 +112,7 @@ public class played extends AppCompatActivity {
                     recyclerview.setAdapter(rc);
                 })
                 .addOnFailureListener(e -> {
+                    Log.d("On Fail Played",e.getMessage());
                     progressDialog.hideDialog();
                     Toast.makeText(played.this,
                             "Failed to load data: " + e.getMessage(),
