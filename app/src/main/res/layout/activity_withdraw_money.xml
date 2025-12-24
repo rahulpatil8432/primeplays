@@ -1,114 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <!-- SINGLE TOOLBAR -->
     <LinearLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/back">
+        android:padding="15dp"
+        android:gravity="center_vertical">
 
-    <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/back"
+            app:tint="@color/font"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Withdraw Money"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/md_black_1000"/>
+    </LinearLayout>
+
+    <!-- FORM (SCROLLABLE) -->
+    <ScrollView
+        android:id="@+id/formScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        android:background="@color/background">
+        android:layout_below="@id/toolbar"
+        android:padding="20dp"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:id="@+id/back"
-                android:layout_margin="15dp"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="10dp"
-                android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/amount"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Enter Amount"
+                android:inputType="number"
+                android:background="@drawable/edit_bg"
+                android:padding="10dp"/>
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    app:tint="@color/font"
-                    android:src="@drawable/back"
-                    android:layout_margin="10dp" />
+            <EditText
+                android:id="@+id/upi"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Enter UPI ID"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/edit_bg"
+                android:padding="10dp"/>
 
-            </androidx.cardview.widget.CardView>
+            <EditText
+                android:id="@+id/accNo"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Enter Account No"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/edit_bg"
+                android:padding="10dp"/>
 
-            <com.rkonline.android.latobold
+            <EditText
+                android:id="@+id/IFSCcode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Enter IFSC Code"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/edit_bg"
+                android:padding="10dp"/>
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Submit Withdrawal"
+                android:layout_marginTop="25dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/md_white_1000"/>
+
+            <ProgressBar
+                android:id="@+id/loader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/md_black_1000"
-                android:layout_centerHorizontal="true"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:text="Withdraw Money" />
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="15dp"/>
+
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-    </LinearLayout>
+    </ScrollView>
 
-    <LinearLayout
+<!--    &lt;!&ndash; PREVIOUS REQUESTS (PROPER SCROLL) &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/previous_requests_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@id/formScroll"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingHorizontal="12dp"-->
+<!--        android:visibility="visible">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Previous Requests"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:textColor="@color/md_black_1000"-->
+<!--            android:layout_marginVertical="10dp"/>-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/previous_requests_list"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:overScrollMode="never"/>-->
+<!--    </LinearLayout>-->
+
+    <!-- PREVIOUS REQUESTS -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/back"
-        android:orientation="vertical"
-        android:padding="25dp">
+        android:layout_height="match_parent"
+        android:layout_below="@id/formScroll"
+        android:visibility="gone">
 
-        <EditText
-            android:id="@+id/amount"
+        <LinearLayout
+            android:id="@+id/previous_requests_container"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Enter Amount"
-            android:inputType="number"
-            android:padding="10dp"
-            android:background="@drawable/edit_bg"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp">
 
-        <EditText
-            android:id="@+id/upi"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Enter UPI ID"
-            android:inputType="textEmailAddress"
-            android:padding="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/edit_bg"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Previous Requests"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/md_black_1000"
+                android:layout_marginVertical="10dp"/>
 
-        <EditText
-            android:id="@+id/accNo"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Enter Account No."
-            android:inputType="number"
-            android:padding="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/edit_bg"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/previous_requests_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"/>
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/IFSCcode"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Enter IFSC Code"
-            android:inputType="text"
-            android:padding="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/edit_bg"/>
-
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Submit Withdrawal"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/md_white_1000"
-            android:layout_marginTop="25dp"/>
-
-    </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

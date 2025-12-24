@@ -4,72 +4,131 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.rkonline.android.adapter.WithdrawAdapter;
+import com.rkonline.android.model.WithdrawRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class withdraw_money extends AppCompatActivity {
 
-    EditText amountInput, upiInput,accNoInput,IFSCcodeInput;
+    EditText amountInput, upiInput, accNoInput, IFSCcodeInput;
     FirebaseFirestore db;
+    Button submitBtn;
+    ProgressBar loader;
+    SwipeRefreshLayout swipeRefresh;
+    String userMobile, wallet;
 
-    String userMobile,wallet;
-
+    RecyclerView recyclerView;
+    LinearLayout previousContainer;
+    TextWatcher watcher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_money);
-
+        swipeRefresh = findViewById(R.id.swipeRefresh);
         amountInput = findViewById(R.id.amount);
         upiInput = findViewById(R.id.upi);
         accNoInput = findViewById(R.id.accNo);
         IFSCcodeInput = findViewById(R.id.IFSCcode);
+        submitBtn = findViewById(R.id.submit);
+        loader = findViewById(R.id.loader);
+        recyclerView = findViewById(R.id.previous_requests_list);
+        previousContainer = findViewById(R.id.previous_requests_container);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         upiInput.setVisibility(View.GONE);
         accNoInput.setVisibility(View.GONE);
         IFSCcodeInput.setVisibility(View.GONE);
-        userMobile = getSharedPreferences(constant.prefs, MODE_PRIVATE)
-                .getString("mobile", null);
-        wallet =  getSharedPreferences(constant.prefs, MODE_PRIVATE)
-                .getString("wallet", null);
+        submitBtn.setEnabled(false);
+        submitBtn.setAlpha(0.5f);
 
-        findViewById(R.id.submit).setEnabled(false);
-        findViewById(R.id.submit).setAlpha(0.5f);
+        userMobile = getSharedPreferences(constant.prefs, MODE_PRIVATE).getString("mobile", null);
+        wallet = getSharedPreferences(constant.prefs, MODE_PRIVATE).getString("wallet", null);
 
-        TextWatcher watcher = new TextWatcher() {
+        upiInput.setText(getSharedPreferences(constant.prefs,MODE_PRIVATE).getString("upi",""));
+        accNoInput.setText(getSharedPreferences(constant.prefs,MODE_PRIVATE).getString("accountNo",""));
+        IFSCcodeInput.setText(getSharedPreferences(constant.prefs,MODE_PRIVATE).getString("IFSCCode",""));
+
+        db = FirebaseFirestore.getInstance();
+
+         watcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 boolean checkButton = validateInputs();
-                findViewById(R.id.submit).setAlpha(checkButton ? 1.0f : 0.5f);
-                findViewById(R.id.submit).setEnabled(checkButton);
+                submitBtn.setAlpha(checkButton ? 1.0f : 0.5f);
+                submitBtn.setEnabled(checkButton);
             }
             @Override public void afterTextChanged(Editable s) {}
         };
+
         amountInput.addTextChangedListener(watcher);
         upiInput.addTextChangedListener(watcher);
         accNoInput.addTextChangedListener(watcher);
         IFSCcodeInput.addTextChangedListener(watcher);
-        db = FirebaseFirestore.getInstance();
-
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
 
-        findViewById(R.id.submit).setOnClickListener(v -> {
-            if (validateInputs()) {
-                submitWithdrawal();
-            }
+        submitBtn.setOnClickListener(v -> {
+            if (validateInputs()) submitWithdrawal();
         });
+        swipeRefresh.setOnRefreshListener(() -> {
+            fetchPreviousRequests();
+        });
+        fetchPreviousRequests();
     }
 
+    private void fetchPreviousRequests() {
+        loader.setVisibility(View.VISIBLE);
+        db.collection("withdraw_requests")
+                .whereEqualTo("mobile", userMobile)
+                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    loader.setVisibility(View.GONE);
+                    swipeRefresh.setRefreshing(false);
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<WithdrawRequest> requestList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            requestList.add(doc.toObject(WithdrawRequest.class));
+                        }
+                        Log.d("RequestList",requestList.size() + "");
+                        WithdrawAdapter adapter = new WithdrawAdapter(requestList);
+                        recyclerView.setAdapter(adapter);
+                        swipeRefresh.setVisibility(View.VISIBLE);
+                    } else {
+                        swipeRefresh.setVisibility(View.GONE);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    loader.setVisibility(View.GONE);
+                    Log.d("RequestList",e.getMessage());
+                    swipeRefresh.setVisibility(View.GONE);
+                });
+    }
 
-    // 🔵 SUBMIT WITHDRAWAL REQUEST
     private void submitWithdrawal() {
+        submitBtn.setEnabled(false);
+        submitBtn.setAlpha(0.5f);
+        loader.setVisibility(View.VISIBLE);
 
         String amount = amountInput.getText().toString().trim();
         String upi = upiInput.getText().toString().trim();
@@ -79,33 +138,60 @@ public class withdraw_money extends AppCompatActivity {
         Map<String, Object> withdrawData = new HashMap<>();
         withdrawData.put("mobile", userMobile);
         withdrawData.put("amount", Integer.parseInt(amount));
-        withdrawData.put("upi", upi);
-        withdrawData.put("accountNo", accNum);
-        withdrawData.put("IFSCCode", ifscCode);
-        withdrawData.put("status", "pending");       // admin will approve
+
+        if(Integer.parseInt(amount)>50000){
+            withdrawData.put("accountNo", accNum);
+            withdrawData.put("IFSCCode", ifscCode);
+        }
+        else{
+            withdrawData.put("upi", upi);
+        }
+        withdrawData.put("status", "pending");
         withdrawData.put("timestamp", System.currentTimeMillis());
 
         db.collection("withdraw_requests")
                 .add(withdrawData)
-                .addOnSuccessListener(doc -> {
-
-                    Toast.makeText(this,
-                            "Withdrawal Request Submitted!\nAdmin will process shortly.",
-                            Toast.LENGTH_LONG).show();
-
-                    finish();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this,
-                                "Failed! Try again.",
-                                Toast.LENGTH_SHORT).show()
-                );
+                .addOnSuccessListener(doc -> db.collection("users")
+                        .document(userMobile)
+                        .update("upi", upi, "accountNo", accNum, "IFSCCode", ifscCode)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(this, "Withdrawal Request Submitted!\nAdmin will process shortly.", Toast.LENGTH_LONG).show();
+                            fetchPreviousRequests(); // Refresh list
+                            amountInput.removeTextChangedListener(watcher);
+                            upiInput.removeTextChangedListener(watcher);
+                            accNoInput.removeTextChangedListener(watcher);
+                            IFSCcodeInput.removeTextChangedListener(watcher);
+                            amountInput.setText("");
+                            upiInput.setText("");
+                            accNoInput.setText("");
+                            IFSCcodeInput.setText("");
+                            amountInput.clearFocus();
+                            upiInput.clearFocus();
+                            accNoInput.clearFocus();
+                            IFSCcodeInput.clearFocus();
+                            amountInput.addTextChangedListener(watcher);
+                            upiInput.addTextChangedListener(watcher);
+                            accNoInput.addTextChangedListener(watcher);
+                            IFSCcodeInput.addTextChangedListener(watcher);
+                            submitBtn.setEnabled(false);
+                            submitBtn.setAlpha(0.5f);
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Failed to update user info. Try again.", Toast.LENGTH_SHORT).show();
+                            submitBtn.setEnabled(true);
+                            submitBtn.setAlpha(1f);
+                            loader.setVisibility(View.GONE);
+                        }))
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to submit withdrawal. Try again.", Toast.LENGTH_SHORT).show();
+                    submitBtn.setEnabled(true);
+                    submitBtn.setAlpha(1f);
+                    loader.setVisibility(View.GONE);
+                });
     }
 
     private boolean validateInputs() {
-
         boolean isValid = true;
-
         String amountStr = amountInput.getText().toString().trim();
 
         if (TextUtils.isEmpty(amountStr)) {
@@ -117,7 +203,7 @@ public class withdraw_money extends AppCompatActivity {
             if (amount <= 0) {
                 amountInput.setError("Enter valid amount");
                 isValid = false;
-            } else if (amount > Integer.parseInt(wallet)) {
+            } else if (amount > Double.parseDouble(wallet)) {
                 amountInput.setError("Insufficient balance");
                 isValid = false;
             } else {
@@ -125,28 +211,21 @@ public class withdraw_money extends AppCompatActivity {
             }
 
             if (amount > 50000) {
-
                 upiInput.setVisibility(View.GONE);
                 accNoInput.setVisibility(View.VISIBLE);
                 IFSCcodeInput.setVisibility(View.VISIBLE);
 
-                // Account Number
                 if (TextUtils.isEmpty(accNoInput.getText().toString().trim())) {
                     accNoInput.setError("Enter account number");
                     isValid = false;
-                } else {
-                    accNoInput.setError(null);
-                }
+                } else accNoInput.setError(null);
 
                 if (TextUtils.isEmpty(IFSCcodeInput.getText().toString().trim())) {
                     IFSCcodeInput.setError("Enter IFSC code");
                     isValid = false;
-                } else {
-                    IFSCcodeInput.setError(null);
-                }
+                } else IFSCcodeInput.setError(null);
 
             } else {
-
                 upiInput.setVisibility(View.VISIBLE);
                 accNoInput.setVisibility(View.GONE);
                 IFSCcodeInput.setVisibility(View.GONE);
@@ -155,24 +234,17 @@ public class withdraw_money extends AppCompatActivity {
                 if (TextUtils.isEmpty(upi)) {
                     upiInput.setError("Enter UPI ID");
                     isValid = false;
-
                 } else if (!isValidUpi(upi)) {
                     upiInput.setError("Invalid UPI ID");
                     isValid = false;
-
-                } else {
-                    upiInput.setError(null);
-                }
+                } else upiInput.setError(null);
             }
         }
-
         return isValid;
     }
+
     private boolean isValidUpi(String upi) {
         String UPI_REGEX = "^[a-zA-Z0-9._-]{2,256}@[a-zA-Z]{2,64}$";
         return !TextUtils.isEmpty(upi) && upi.matches(UPI_REGEX);
     }
-
-
-
 }

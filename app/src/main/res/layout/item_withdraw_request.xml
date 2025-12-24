@@ -1,0 +1,150 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginBottom="14dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="6dp"
+    android:background="@color/md_white_1000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- STATUS STRIP -->
+        <View
+            android:id="@+id/statusStrip"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary" />
+
+        <!-- CONTENT -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Amount + Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="₹25"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"/>
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="1dp"
+                    android:text="Pending"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_white_1000"
+                    android:background="@drawable/bg_status_pending"/>
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/md_grey_300"/>
+
+            <!-- PAYMENT DETAILS -->
+            <TextView
+                android:id="@+id/upi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UPI: 9630288@rtg"
+                android:textSize="14sp"
+                android:textColor="@color/md_grey_900"/>
+
+            <TextView
+                android:id="@+id/accountNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account: 1234567890"
+                android:textSize="14sp"
+                android:textColor="@color/md_grey_900"
+                android:layout_marginTop="3dp"/>
+
+            <TextView
+                android:id="@+id/IFSCCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IFSC: ABCD0123456"
+                android:textSize="14sp"
+                android:textColor="@color/md_grey_900"
+                android:layout_marginTop="3dp"/>
+
+            <!-- REJECT REMARK -->
+            <LinearLayout
+                android:id="@+id/remarkContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_remark_reject"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reason for Rejection"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#D32F2F"/>
+
+                <TextView
+                    android:id="@+id/remark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Invalid account details"
+                    android:textSize="13sp"
+                    android:textColor="#B71C1C"
+                    android:layout_marginTop="3dp"/>
+            </LinearLayout>
+
+            <!-- Footer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/mobile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="7000559574"
+                    android:textSize="13sp"
+                    android:textColor="@color/md_grey_700"/>
+
+                <TextView
+                    android:id="@+id/timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="24 Dec 2025, 10:30 AM"
+                    android:textSize="12sp"
+                    android:textColor="@color/md_grey_500"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

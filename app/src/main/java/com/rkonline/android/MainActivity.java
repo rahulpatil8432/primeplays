@@ -291,6 +291,9 @@ public class MainActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("wallet", jsonObject1.optString("wallet")).apply();
+                editor.putString("upi", jsonObject1.optString("upi")).apply();
+                editor.putString("accountNo", jsonObject1.optString("accountNo")).apply();
+                editor.putString("IFSCCode", jsonObject1.optString("IFSCCode")).apply();
             } else {
                 Log.d("Firestore", "Document does not exist.");
             }
