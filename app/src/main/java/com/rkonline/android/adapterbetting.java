@@ -78,22 +78,6 @@ class adapterbetting extends RecyclerView.Adapter<adapterbetting.ViewHolder> {
                 }
                 if (listener != null)
                     listener.onAmountChanged(list);
-//
-//                BroadcastReceiver mReceiver = new BroadcastReceiver() { @Override public void onReceive(Context context, Intent intent) { }};
-//
-//                IntentFilter intentFilter = new IntentFilter("android.intent.action.MAIN");
-//                IntentFilter filter = new IntentFilter("your.action.here");
-//
-//                if (Build.VERSION.SDK_INT >= 34) {
-//                    context.registerReceiver(mReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
-//                } else {
-//                    context.registerReceiver(mReceiver, filter);
-//                }
-//
-//                Intent i = new Intent("android.intent.action.MAIN");
-//                context.sendBroadcast(i);
-//
-//                context.unregisterReceiver(mReceiver);
             }
 
             @Override

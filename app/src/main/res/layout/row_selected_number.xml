@@ -1,0 +1,54 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_marginVertical="6dp"
+    android:layout_marginHorizontal="6dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="6dp"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:gravity="center_vertical"
+        android:background="@color/cardRowBackground">
+
+        <!-- Number Column -->
+        <TextView
+            android:id="@+id/numberText"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:gravity="center"
+            android:textColor="@color/textPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Amount Column -->
+        <EditText
+            android:id="@+id/amountEdit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded"
+            android:hint="Amount"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp"
+            android:inputType="number"
+            android:padding="8dp"/>
+
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/deleteBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete_modern"
+            android:background="@drawable/delete_button_bg"
+            android:contentDescription="Delete"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

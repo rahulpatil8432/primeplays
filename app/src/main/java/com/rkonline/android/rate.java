@@ -27,7 +27,7 @@ public class rate extends AppCompatActivity {
     FirebaseFirestore db;
     RecyclerView recyclerview;
     protected TextView headerTitle;
-    String market;
+    String market,openTime,closeTime;
 
 
 
@@ -38,6 +38,8 @@ public class rate extends AppCompatActivity {
         initView();
         headerTitle.setText(getIntent().getStringExtra("header"));
         market = getIntent().getStringExtra("market");
+        openTime = getIntent().getStringExtra("openTime");
+        closeTime = getIntent().getStringExtra("closeTime");
         findViewById(R.id.back).setOnClickListener(v -> finish());
         apicall();
     }
@@ -63,7 +65,7 @@ public class rate extends AppCompatActivity {
                 adapter_game rc;
                 Log.e("header",headerTitle.getText().toString());
                 if(headerTitle.getText().toString().equalsIgnoreCase("Game Rate")){
-                   rc = new adapter_game(rate.this,name,rate,"", false);
+                   rc = new adapter_game(rate.this,name,rate,"", false,"","");
                     recyclerview.setLayoutManager(new LinearLayoutManager(rate.this));
 
                 }else{
@@ -73,7 +75,7 @@ public class rate extends AppCompatActivity {
                         name.remove("Half Sangam");
                         name.remove("Full Sangam");
                     }
-                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen);
+                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen,openTime,closeTime);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));
 
                 }

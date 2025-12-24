@@ -1,7 +1,7 @@
 package com.rkonline.android;
 
 import static com.rkonline.android.utils.CommonUtils.getCurrentISTMillis;
-import static com.rkonline.android.utils.CommonUtils.parseTimeToMillis;
+import static com.rkonline.android.utils.CommonUtils.getTimeInISTMillis;
 
 import android.Manifest;
 import android.content.Intent;
@@ -340,8 +340,8 @@ public class MainActivity extends AppCompatActivity {
                             closeTime = "00:00";
                         }else{
                             long now = getCurrentISTMillis();
-                            long openMillis = parseTimeToMillis(doc.getString("open_time"));
-                            long closeMillis = parseTimeToMillis(doc.getString("close_time"));
+                            long openMillis = getTimeInISTMillis(openTime);
+                            long closeMillis = getTimeInISTMillis(closeTime);
 
                             if (now < openMillis) {
                                 status = MARKET_YET_TO_OPEN;

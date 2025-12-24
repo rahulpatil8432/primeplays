@@ -42,4 +42,9 @@
 
     <color name="market_upcoming_blue">#EF6C00</color>
     <color name="market_closed_grey">#C62828</color>
+
+    <color name="cardRowBackground">#FFFFFF</color>
+    <color name="textPrimary">#212121</color>
+    <color name="accentRed">#E53935</color>
+    <color name="editTextBackground">#F5F5F5</color>
 </resources>

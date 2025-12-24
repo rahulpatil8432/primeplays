@@ -63,7 +63,7 @@ public class fullsangam extends AppCompatActivity {
 
         submit.setOnClickListener(v -> {
 
-            if (CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Full Sangam")) {
+            if (!CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Full Sangam")) {
                 return;
             }
             // Validate picks

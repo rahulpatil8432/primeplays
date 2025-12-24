@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.rkonline.android.utils.CommonUtils.canPlaceSangamBet;
+
 public class halfsangam extends AppCompatActivity {
 
     protected RelativeLayout toolbar;
@@ -75,16 +77,18 @@ public class halfsangam extends AppCompatActivity {
 
         patti.addAll(getpatti());
 
-        if (CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Half Sangam")) {
+        if (canPlaceSangamBet(this, openTime, closeTime, "Half Sangam")) {
             typeof.add("Open Ank Close Patti");
             typeof.add("Open Patti Close Ank");
-
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(halfsangam.this, R.layout.simple_list_item_1, typeof);
+            type.setAdapter(arrayAdapter);
         } else {
             submit.setEnabled(false);
         }
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(halfsangam.this, R.layout.simple_list_item_1, typeof);
         type.setAdapter(arrayAdapter);
+
+
 
         ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(halfsangam.this, R.layout.simple_list_item_1, ank);
         first.setAdapter(arrayAdapter2);
@@ -123,7 +127,7 @@ public class halfsangam extends AppCompatActivity {
         });
 
         submit.setOnClickListener(v -> {
-            if (CommonUtils.canPlaceSangamBet(
+            if (!canPlaceSangamBet(
                     halfsangam.this,
                     openTime,
                     closeTime,
@@ -135,7 +139,8 @@ public class halfsangam extends AppCompatActivity {
             {
                 Toast.makeText(halfsangam.this, "Please select A valid number", Toast.LENGTH_SHORT).show();
             }
-            else if (Integer.parseInt(totalamount.getText().toString()) < Integer.parseInt(prefs.getString("wallet",null))) {
+            else if (Integer.parseInt(totalamount.getText().toString()) < Integer.parseInt(prefs.getString("wallet","0"))) {
+
                 apicall();
             }
             else
