@@ -1,8 +1,14 @@
 package com.rkonline.android.utils;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.rkonline.android.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -100,5 +106,19 @@ Log.d("sangam",openTime +" "+ closeTime + " "+ openMillis +" "+closeMillis + " "
         }
     }
 
+
+    public static void soundPlayAndVibrate(Context context,Vibrator vibrator){
+        if (vibrator != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(1000);
+            }
+        }
+
+        // Play sound
+        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.sound_file); // place your sound in res/raw
+        mediaPlayer.start();
+    }
 
 }

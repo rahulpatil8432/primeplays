@@ -1,10 +1,15 @@
 package com.rkonline.android;
 
 import static com.rkonline.android.utils.CommonUtils.canPlaceBet;
+import static com.rkonline.android.utils.CommonUtils.soundPlayAndVibrate;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -372,6 +377,8 @@ public class betting extends AppCompatActivity {
 
             // Update local wallet
             prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            soundPlayAndVibrate(betting.this,vibrator);
 
             progressDialog.hideDialog();
             Toast.makeText(betting.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();

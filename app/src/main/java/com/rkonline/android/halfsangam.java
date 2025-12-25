@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.rkonline.android.utils.CommonUtils.canPlaceSangamBet;
+import static com.rkonline.android.utils.CommonUtils.soundPlayAndVibrate;
 
 public class halfsangam extends AppCompatActivity {
 
@@ -239,7 +241,8 @@ public class halfsangam extends AppCompatActivity {
 
             progressDialog.hideDialog();
             Toast.makeText(halfsangam.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
-
+            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            soundPlayAndVibrate(halfsangam.this,vibrator);
             Intent in = new Intent(getApplicationContext(), thankyou.class);
             in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);

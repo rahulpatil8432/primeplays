@@ -1,9 +1,12 @@
 package com.rkonline.android;
 
+import static com.rkonline.android.utils.CommonUtils.soundPlayAndVibrate;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -178,6 +181,8 @@ public class fullsangam extends AppCompatActivity {
             prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
 
             progressDialog.hideDialog();
+            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            soundPlayAndVibrate(fullsangam.this,vibrator);
             Toast.makeText(fullsangam.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
 
             Intent in = new Intent(getApplicationContext(), thankyou.class);
