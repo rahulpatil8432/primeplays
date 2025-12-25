@@ -63,7 +63,8 @@ public class AppUpdateManager {
                 APK_URL =
                         snapshot.child("apk_url")
                                 .getValue(String.class);
-
+                constant.link = snapshot.child("apk_url")
+                        .getValue(String.class);
                 if (latestVersion == null ||
                         forceUpdate == null ||
                         APK_URL == null)
