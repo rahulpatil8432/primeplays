@@ -30,6 +30,7 @@ public class thankyou extends AppCompatActivity {
                 Intent intent = new Intent(thankyou.this,MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finishAffinity();
             }
         });
     }
@@ -40,6 +41,7 @@ public class thankyou extends AppCompatActivity {
         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(in);
+        finishAffinity();
         finish();
         super.onBackPressed();
     }
