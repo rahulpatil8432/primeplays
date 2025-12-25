@@ -115,9 +115,7 @@ Log.d("sangam",openTime +" "+ closeTime + " "+ openMillis +" "+closeMillis + " "
                 vibrator.vibrate(1000);
             }
         }
-
-        // Play sound
-        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.sound_file); // place your sound in res/raw
+        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.sound_file);
         mediaPlayer.start();
     }
 
