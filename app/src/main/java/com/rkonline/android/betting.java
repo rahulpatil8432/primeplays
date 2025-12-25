@@ -64,7 +64,9 @@ public class betting extends AppCompatActivity {
         ArrayList<String> types = new ArrayList<>();
         if (isMarketOpen) {
             types.add("Close");
-        } else {
+        } else if(!isMarketOpen && game.equals("Jodi")) {
+            types.add("Open");
+        }else{
             types.add("Open");
             types.add("Close");
         }
