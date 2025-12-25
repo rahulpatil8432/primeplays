@@ -124,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
         PrimaryDrawerItem rate = new PrimaryDrawerItem().withName("Game Rate").withIdentifier(2).withIcon(R.drawable.rupee_icon).withTypeface(face);
         PrimaryDrawerItem earn = new PrimaryDrawerItem().withName("Refer and Earn").withIcon(R.drawable.refer_icon).withIdentifier(21).withTypeface(face);
         PrimaryDrawerItem notice = new PrimaryDrawerItem().withName("Notice").withIcon(R.drawable.info_icon).withIdentifier(3).withTypeface(face);
-        PrimaryDrawerItem deposit = new PrimaryDrawerItem().withName("Deposit").withIcon(R.drawable.rupee_icon).withIdentifier(4).withTypeface(face);
-        PrimaryDrawerItem withdraw = new PrimaryDrawerItem().withName("Withdrawal").withIcon(R.drawable.rupee_icon).withIdentifier(41).withTypeface(face);
+        PrimaryDrawerItem deposit = new PrimaryDrawerItem().withName("Deposit").withIcon(R.drawable.deposit).withIdentifier(4).withTypeface(face);
+        PrimaryDrawerItem withdraw = new PrimaryDrawerItem().withName("Withdrawal").withIcon(R.drawable.withdraw).withIdentifier(41).withTypeface(face);
         PrimaryDrawerItem ledger = new PrimaryDrawerItem().withName("Game Ledger").withIcon(R.drawable.two_arraw).withIdentifier(6).withTypeface(face);
-        PrimaryDrawerItem transaction = new PrimaryDrawerItem().withName("Balance Enquiry").withIcon(R.drawable.wallet_icon).withIdentifier(8).withTypeface(face);
+        PrimaryDrawerItem transaction = new PrimaryDrawerItem().withName("Passbook").withIcon(R.drawable.wallet_icon).withIdentifier(8).withTypeface(face);
         PrimaryDrawerItem played = new PrimaryDrawerItem().withName("Played Match").withIcon(R.drawable.play_icon).withIdentifier(9).withTypeface(face);
         PrimaryDrawerItem howto = new PrimaryDrawerItem().withName("How to Play").withIcon(R.drawable.question).withIdentifier(10).withTypeface(face);
         PrimaryDrawerItem share = new PrimaryDrawerItem().withName("Share").withIcon(R.drawable.share_icon).withIdentifier(11).withTypeface(face);
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 .withHeader(R.layout.header)
                 .withActionBarDrawerToggle(false)
                 .addDrawerItems(
-                        home, played, charts, ledger, earn, account, rate, notice, deposit, withdraw, howto, transaction, share, logout
+                        home, played,transaction,charts,rate, deposit, withdraw, account, notice,  howto,earn, share, logout
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -182,12 +182,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(sendIntent);
                         }
                         if (drawerItem.equals(7)) {
-                            preferences.edit().clear().apply();
-                            Intent in = new Intent(getApplicationContext(), login.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(in);
-                            finish();
+                           onLogoutClick();
                         }
                         if (drawerItem.equals(6)) {
                             startActivity(new Intent(MainActivity.this, ledger.class));

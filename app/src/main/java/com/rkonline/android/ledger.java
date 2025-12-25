@@ -122,12 +122,12 @@ public class ledger extends AppCompatActivity {
                     tvTotalNet.setText(formatAmountForDisplay(net));
 
                     // set adapter
-                    adaptertransaction rc =
-                            new adaptertransaction(ledger.this, date, remark, amount);
-
-                    recyclerview.setLayoutManager(new GridLayoutManager(ledger.this, 1));
-                    recyclerview.setAdapter(rc);
-                    rc.notifyDataSetChanged();
+//                    adaptertransaction rc =
+//                            new adaptertransaction(ledger.this, date, remark, amount);
+//
+//                    recyclerview.setLayoutManager(new GridLayoutManager(ledger.this, 1));
+//                    recyclerview.setAdapter(rc);
+//                    rc.notifyDataSetChanged();
 
                 })
                 .addOnFailureListener(e -> {

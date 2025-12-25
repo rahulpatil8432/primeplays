@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/back"
     tools:context=".rate">
 
 
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbar"
-            android:background="@color/background"
+            android:background="@color/back"
             >
 
             <LinearLayout
@@ -56,7 +56,7 @@
                     android:textSize="20sp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:text="Balance Enquiry"
+                    android:text="Passbook"
                     />
 
 
@@ -66,74 +66,23 @@
         </androidx.cardview.widget.CardView>
 
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
-            >
+            android:visibility="visible">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/back"
                 android:orientation="vertical"
                 >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="4"
-                    >
-
-                    <com.rkonline.android.latonormal
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Date"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:background="@color/primary"
-                        android:textColor="@color/background"
-                        />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        />
-
-                    <com.rkonline.android.latonormal
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Amount"
-                        android:padding="10dp"
-                        android:gravity="center"
-                        android:background="@color/primary"
-                        android:textColor="@color/background"
-                        />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        />
-
-
-                    <com.rkonline.android.latonormal
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:text="Narration"
-                        android:padding="10dp"
-                        android:background="@color/primary"
-                        android:textColor="@color/background"
-                        />
-
-                </LinearLayout>
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/back"
                     android:id="@+id/recyclerview"
                     />
 
@@ -142,7 +91,7 @@
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 

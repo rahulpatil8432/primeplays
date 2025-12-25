@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F0F0">
+    android:background="@color/back">
 
     <!-- Toolbar / Header -->
     <androidx.cardview.widget.CardView
@@ -63,9 +63,11 @@
         android:id="@+id/type"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/md_white_1000"
-        android:padding="8dp"
+        android:background="@drawable/spinner_background"
+        android:paddingStart="8dp"
+        android:paddingEnd="32dp"
         android:spinnerMode="dropdown"/>
+
 
     <!-- Number Selection Spinner -->
     <Spinner
@@ -73,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="12dp"
-        android:background="@color/md_white_1000"
+        android:background="@drawable/spinner_background"
         android:padding="8dp"
         android:spinnerMode="dropdown"/>
 
