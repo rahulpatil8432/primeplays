@@ -41,16 +41,16 @@ public class adaptertransaction extends RecyclerView.Adapter<adaptertransaction.
 
         if (m.type.equalsIgnoreCase("CREDIT")) {
             h.amount.setText("+ ₹" + m.amount);
-            h.amount.setTextColor(context.getColor(R.color.green));
+            h.amount.setTextColor(context.getColor(R.color.md_green_900));
             h.type.setText("CREDIT");
-            h.type.setTextColor(context.getColor(R.color.green));
-            h.statusStrip.setBackgroundColor(context.getColor(R.color.green));
+            h.type.setTextColor(context.getColor(R.color.md_green_900));
+            h.statusStrip.setBackgroundColor(context.getColor(R.color.md_green_900));
         } else {
             h.amount.setText("- ₹" + m.amount);
-            h.amount.setTextColor(context.getColor(R.color.red));
+            h.amount.setTextColor(context.getColor(R.color.md_red_900));
             h.type.setText("DEBIT");
-            h.type.setTextColor(context.getColor(R.color.red));
-            h.statusStrip.setBackgroundColor(context.getColor(R.color.red));
+            h.type.setTextColor(context.getColor(R.color.md_red_900));
+            h.statusStrip.setBackgroundColor(context.getColor(R.color.md_red_900));
         }
     }
 

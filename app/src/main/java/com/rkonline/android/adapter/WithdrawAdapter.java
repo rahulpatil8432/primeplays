@@ -51,11 +51,11 @@ public class WithdrawAdapter extends RecyclerView.Adapter<WithdrawAdapter.Withdr
         }
         else if (status.equals("approved")) {
             holder.status.setBackgroundResource(R.drawable.bg_status_approved);
-            holder.statusStrip.setBackgroundColor(Color.parseColor("#4CAF50"));
+            holder.statusStrip.setBackgroundColor(Color.parseColor("#1B5E20"));
         }
         else if (status.equals("rejected")) {
             holder.status.setBackgroundResource(R.drawable.bg_status_rejected);
-            holder.statusStrip.setBackgroundColor(Color.parseColor("#F44336"));
+            holder.statusStrip.setBackgroundColor(Color.parseColor("#B71C1C"));
         }
         if (TextUtils.isEmpty(request.getUpi()) || request.getUpi().trim().isEmpty()) {
             holder.upi.setText("UPI: - ");
