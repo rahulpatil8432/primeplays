@@ -31,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
     ImageButton lang_img;
     FirebaseFirestore db;
+    SwipeRefreshLayout swipeRefresh;
+
 
     private static final int NOTIFICATION_PERMISSION_CODE = 1001;
 
@@ -206,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 drawer.openDrawer();
             }
         });
+        swipeRefresh.setOnRefreshListener(() -> apicall());
 
     }
 
@@ -309,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 .orderBy("open_time")
                 .get()
                 .addOnSuccessListener(query -> {
-
+swipeRefresh.setRefreshing(false);
                     ArrayList<String> names = new ArrayList<>();
                     ArrayList<String> openTimeArray = new ArrayList<>();
                     ArrayList<String> closeTimeArray = new ArrayList<>();
@@ -372,8 +376,13 @@ public class MainActivity extends AppCompatActivity {
                     recyclerviewMarket.setAdapter(rc);
                     Log.e("sad",names.toString());
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(MainActivity.this, "Failed to load markets: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e ->{
+
+                            swipeRefresh.setRefreshing(false);
+                    Toast.makeText(MainActivity.this, "Failed to load markets: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    
+                        });
+
     }
     private void loadHomeLine() {
 
@@ -461,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.scrollView);
         recyclerview = findViewById(R.id.recyclerview);
         recyclerviewMarket = findViewById(R.id.recyclerviewMarket);
+        swipeRefresh = findViewById(R.id.swipeRefresh);
     }
 
     @Override

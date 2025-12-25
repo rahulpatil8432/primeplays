@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +24,8 @@ public class played extends AppCompatActivity {
     ViewDialog progressDialog;
 
     adapterplayed rc;
+    SwipeRefreshLayout swipeRefresh;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class played extends AppCompatActivity {
         setContentView(R.layout.activity_played);
 
         recyclerview = findViewById(R.id.recyclerview);
-
+swipeRefresh = findViewById(R.id.swipeRefresh);
         db = FirebaseFirestore.getInstance();
 
         rc = new adapterplayed(
@@ -51,7 +54,10 @@ public class played extends AppCompatActivity {
         recyclerview.setAdapter(rc);
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
+swipeRefresh.setOnRefreshListener(()->{
+        loadPlayedMatches();
 
+});
         loadPlayedMatches();
     }
 
@@ -69,7 +75,7 @@ public class played extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     progressDialog.hideDialog();
-
+                    swipeRefresh.setRefreshing(false);
                     ArrayList<String> date = new ArrayList<>();
                     ArrayList<String> bazar = new ArrayList<>();
                     ArrayList<String> amount = new ArrayList<>();
@@ -113,6 +119,7 @@ public class played extends AppCompatActivity {
                     recyclerview.setAdapter(rc);
                 })
                 .addOnFailureListener(e -> {
+                    swipeRefresh.setRefreshing(false);
                     Log.d("On Fail Played",e.getMessage());
                     progressDialog.hideDialog();
                     Toast.makeText(played.this,
