@@ -65,12 +65,38 @@
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/dateFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose Date"
+            android:textSize="16sp"
+            android:layout_below="@id/toolbar"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="@color/md_black_1000"
+            android:background="@drawable/spinner_background"
+            android:clickable="true"
+            android:focusable="true"/>
+        <TextView
+            android:id="@+id/noData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Data Found"
+            android:textSize="16sp"
+            android:layout_below="@id/dateFilter"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="@color/md_black_1000"
+            />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/noData"
             android:visibility="visible">
             <LinearLayout
                 android:layout_width="match_parent"

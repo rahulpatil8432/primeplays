@@ -8,16 +8,17 @@ public class TransactionModel {
     public String type;   // CREDIT / DEBIT
     public long timestamp;
 
-    public double balanceAfter; // calculated
+    public String balance; // calculated
 
     public TransactionModel() {}
 
     public TransactionModel(String date, String amount, String remark,
-                            String type, long timestamp) {
+                            String type, long timestamp,String balance) {
         this.date = date;
         this.amount = amount;
         this.remark = remark;
         this.type = type;
         this.timestamp = timestamp;
+        this.balance = balance;
     }
 }

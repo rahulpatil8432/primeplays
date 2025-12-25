@@ -37,7 +37,7 @@ public class adaptertransaction extends RecyclerView.Adapter<adaptertransaction.
 
         h.date.setText(m.date);
         h.remark.setText(m.remark);
-        h.balance.setText("Balance: ₹" + String.format("%.2f", m.balanceAfter));
+        h.balance.setText("Balance: ₹" + m.balance);
 
         if (m.type.equalsIgnoreCase("CREDIT")) {
             h.amount.setText("+ ₹" + m.amount);
