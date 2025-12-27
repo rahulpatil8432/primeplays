@@ -72,5 +72,10 @@ dependencies {
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.1.6"
     implementation "androidx.datastore:datastore-core:1.1.1"
+
+    // QR scanner and payment dependencies.
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    implementation 'com.google.zxing:core:3.5.2'
+
 }
 
