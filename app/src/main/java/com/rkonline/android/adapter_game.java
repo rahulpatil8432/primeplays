@@ -24,9 +24,9 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
     ArrayList<String> number = new ArrayList<>();
     String market,openTime,closeTime;
 
-    Boolean isMarketOpen;
+    Boolean isMarketOpen, closeNextDay;
 
-    public adapter_game(Context context,  ArrayList<String> name, ArrayList<String> rate, String market, boolean isMarketOpen,String openTime,String closeTime) {
+    public adapter_game(Context context,  ArrayList<String> name, ArrayList<String> rate, String market, boolean isMarketOpen,String openTime,String closeTime, boolean closeNextDay) {
         this.context = context;
         this.name = name;
         this.rate = rate;
@@ -34,6 +34,7 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.isMarketOpen = isMarketOpen;
+        this.closeNextDay = closeNextDay;
     }
 
     @NonNull
@@ -160,6 +161,7 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
             go.putExtra("openTime", openTime);
             go.putExtra("closeTime", closeTime);
             go.putExtra("isMarketOpen", isMarketOpen);
+            go.putExtra("closeNextDay", closeNextDay);
             go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if(!market.isEmpty()){
                 context.startActivity(go);

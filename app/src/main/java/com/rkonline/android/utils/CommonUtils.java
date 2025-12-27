@@ -23,13 +23,16 @@ public class CommonUtils {
             Context context,
             String selectedGameType,
             String openTimeStr,
-            String closeTimeStr
+            String closeTimeStr,
+            Boolean closeNextDay
     ) {
 
         long now = getCurrentISTMillis();
         long openMillis = getTimeInISTMillis(openTimeStr);
         long closeMillis = getTimeInISTMillis(closeTimeStr);
-
+        if (closeNextDay && closeMillis <= openMillis) {
+            closeMillis += 24 * 60 * 60 * 1000;  // push close to next day
+        }
         // After market opens → OPEN not allowed
         if (now >= openMillis) {
             if ("Open".equalsIgnoreCase(selectedGameType)) {
@@ -53,12 +56,15 @@ public class CommonUtils {
     public static boolean canPlaceSangamBet(Context context,
                                                 String openTime,
                                                 String closeTime,
-                                                String sangamType) {
+                                                String sangamType,
+                                                Boolean closeNextDay) {
 
         long now = getCurrentISTMillis();
         long openMillis = getTimeInISTMillis(openTime);
         long closeMillis = getTimeInISTMillis(closeTime);
-Log.d("sangam",openTime +" "+ closeTime + " "+ openMillis +" "+closeMillis + " "+ now);
+        if (closeNextDay && closeMillis <= openMillis) {
+            closeMillis += 24 * 60 * 60 * 1000;  // push close to next day
+        }
         if (now >= openMillis) {
             Toast.makeText(
                     context,

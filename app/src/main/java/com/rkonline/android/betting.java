@@ -52,6 +52,7 @@ public class betting extends AppCompatActivity {
     private String selectedGameType;
     ViewDialog progressDialog;
     private SelectedNumberAdapter adapter;
+    boolean closeNextDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class betting extends AppCompatActivity {
         market = getIntent().getStringExtra("market");
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        closeNextDay = getIntent().getBooleanExtra("closeNextDay",false);
         boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen", false);
         // Setup type spinner (Open/Close)
         ArrayList<String> types = new ArrayList<>();
@@ -146,7 +148,7 @@ public class betting extends AppCompatActivity {
 
         submit.setOnClickListener(v ->{
             Log.e("time",openTime + "  "+ closeTime + " "+ selectedGameType);
-            if (!canPlaceBet(betting.this, selectedGameType, openTime, closeTime)) {
+            if (!canPlaceBet(betting.this, selectedGameType, openTime, closeTime, closeNextDay)) {
                 return;
             }
             handleBetSubmit();

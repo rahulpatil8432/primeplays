@@ -319,6 +319,7 @@ swipeRefresh.setRefreshing(false);
                     ArrayList<String> closeTimeArray = new ArrayList<>();
                     ArrayList<Integer> marketStatus = new ArrayList<>();
                     ArrayList<String> marketResults = new ArrayList<>();
+                    ArrayList<Boolean> closeNextDayArray = new ArrayList<>();
                     for (DocumentSnapshot doc : query) {
                         String marketName = doc.getString("market_name");
                         String openTime = doc.getString("open_time_formatted");
@@ -329,6 +330,7 @@ swipeRefresh.setRefreshing(false);
                         String figure_close = Objects.requireNonNull(doc.getString("figure_close")).isEmpty() ? "*" : doc.getString("figure_close");
                         boolean isApproved = Boolean.TRUE.equals(doc.getBoolean("is_approved"));
                         String statusStr = doc.getString("status");
+                        Boolean closeNextDay = doc.getBoolean("close_next_day");
 
                         if (!isApproved || marketName == null || statusStr == null) continue;
 
@@ -344,6 +346,9 @@ swipeRefresh.setRefreshing(false);
                             long now = getCurrentISTMillis();
                             long openMillis = getTimeInISTMillis(openTime);
                             long closeMillis = getTimeInISTMillis(closeTime);
+                            if (Boolean.TRUE.equals(closeNextDay) && closeMillis <= openMillis) {
+                                closeMillis += 24 * 60 * 60 * 1000; // push close to next day
+                            }
 
                             if (now < openMillis) {
                                 status = MARKET_YET_TO_OPEN;
@@ -367,10 +372,11 @@ swipeRefresh.setRefreshing(false);
                         closeTimeArray.add(closeTime);
                         marketStatus.add(status);
                         marketResults.add(displayResult);
+                        closeNextDayArray.add(closeNextDay);
                     }
 
                     adapter_market rc =
-                            new adapter_market(MainActivity.this, names, openTimeArray, closeTimeArray, marketStatus, marketResults);
+                            new adapter_market(MainActivity.this, names, openTimeArray, closeTimeArray, marketStatus, marketResults, closeNextDayArray);
 
                     recyclerviewMarket.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     recyclerviewMarket.setAdapter(rc);

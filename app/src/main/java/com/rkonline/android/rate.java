@@ -29,6 +29,8 @@ public class rate extends AppCompatActivity {
     protected TextView headerTitle;
     String market,openTime,closeTime;
 
+    boolean closeNextDay;
+
 
 
     @Override
@@ -40,6 +42,7 @@ public class rate extends AppCompatActivity {
         market = getIntent().getStringExtra("market");
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        closeNextDay = getIntent().getBooleanExtra("closeNextDay",false);
         findViewById(R.id.back).setOnClickListener(v -> finish());
         apicall();
     }
@@ -65,7 +68,7 @@ public class rate extends AppCompatActivity {
                 adapter_game rc;
                 Log.e("header",headerTitle.getText().toString());
                 if(headerTitle.getText().toString().equalsIgnoreCase("Game Rate")){
-                   rc = new adapter_game(rate.this,name,rate,"", false,"","");
+                   rc = new adapter_game(rate.this,name,rate,market, false, openTime, closeTime, closeNextDay);
                     recyclerview.setLayoutManager(new LinearLayoutManager(rate.this));
 
                 }else{
@@ -75,7 +78,7 @@ public class rate extends AppCompatActivity {
                         name.remove("Half Sangam");
                         name.remove("Full Sangam");
                     }
-                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen,openTime,closeTime);
+                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen, openTime, closeTime, closeNextDay);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));
 
                 }

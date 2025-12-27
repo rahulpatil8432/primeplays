@@ -43,6 +43,7 @@ public class halfsangam extends AppCompatActivity {
     ArrayList<String> patti = new ArrayList<>();
 
     String market, game, openTime, closeTime;
+    boolean closeNextDay;
 
     SharedPreferences prefs;
 
@@ -65,6 +66,7 @@ public class halfsangam extends AppCompatActivity {
         market = getIntent().getStringExtra("market");
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        closeNextDay = getIntent().getBooleanExtra("closeNextDay", false);
 
         ank.add("0");
         ank.add("1");
@@ -79,7 +81,7 @@ public class halfsangam extends AppCompatActivity {
 
         patti.addAll(getpatti());
 
-        if (canPlaceSangamBet(this, openTime, closeTime, "Half Sangam")) {
+        if (canPlaceSangamBet(this, openTime, closeTime, "Half Sangam", closeNextDay)) {
             typeof.add("Open Ank Close Patti");
             typeof.add("Open Patti Close Ank");
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(halfsangam.this, R.layout.simple_list_item_1, typeof);
@@ -133,7 +135,8 @@ public class halfsangam extends AppCompatActivity {
                     halfsangam.this,
                     openTime,
                     closeTime,
-                    "Half Sangam"
+                    "Half Sangam",
+                    closeNextDay
             )) {
                 return;
             }

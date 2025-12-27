@@ -37,6 +37,7 @@ public class fullsangam extends AppCompatActivity {
     ArrayList<String> patti = new ArrayList<>();
 
     String market, game, openTime, closeTime;
+    boolean closeNextDay;
 
     SharedPreferences prefs;
 
@@ -55,6 +56,7 @@ public class fullsangam extends AppCompatActivity {
         market = getIntent().getStringExtra("market");
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        closeNextDay = getIntent().getBooleanExtra("closeNextDay", false);
 
         patti.addAll(getpatti());
 
@@ -66,7 +68,7 @@ public class fullsangam extends AppCompatActivity {
 
         submit.setOnClickListener(v -> {
 
-            if (!CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Full Sangam")) {
+            if (!CommonUtils.canPlaceSangamBet(this, openTime, closeTime, "Full Sangam", closeNextDay)) {
                 return;
             }
             // Validate picks

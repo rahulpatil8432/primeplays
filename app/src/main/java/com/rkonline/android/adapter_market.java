@@ -27,13 +27,15 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
     ArrayList<String> closeTimeArray;
     ArrayList<Integer> marketStatus;
     ArrayList<String> marketResults;
+    ArrayList<Boolean> closeNextDayArray;
 
     public adapter_market(Context context,
                           ArrayList<String> names,
                           ArrayList<String> openTimeArray,
                           ArrayList<String> closeTimeArray,
                           ArrayList<Integer> marketStatus,
-                          ArrayList<String> marketResults) {
+                          ArrayList<String> marketResults,
+                          ArrayList<Boolean> closeNextDayArray) {
 
         this.context = context;
         this.names = names;
@@ -41,6 +43,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
         this.closeTimeArray = closeTimeArray;
         this.marketStatus = marketStatus;
         this.marketResults = marketResults;
+        this.closeNextDayArray = closeNextDayArray;
     }
 
     @NonNull
@@ -97,6 +100,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 go.putExtra("isMarketOpen", true);
                 go.putExtra("openTime", openTimeArray.get(position));
                 go.putExtra("closeTime", closeTimeArray.get(position));
+                go.putExtra("closeNextDay", closeNextDayArray.get(position));
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
@@ -112,6 +116,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 go.putExtra("isMarketOpen", false);
                 go.putExtra("openTime", openTimeArray.get(position));
                 go.putExtra("closeTime", closeTimeArray.get(position));
+                go.putExtra("closeNextDay", closeNextDayArray.get(position));
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
