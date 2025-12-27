@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         PrimaryDrawerItem withdraw = new PrimaryDrawerItem().withName("Withdrawal").withIcon(R.drawable.withdraw).withIdentifier(41).withTypeface(face);
         PrimaryDrawerItem ledger = new PrimaryDrawerItem().withName("Game Ledger").withIcon(R.drawable.two_arraw).withIdentifier(6).withTypeface(face);
         PrimaryDrawerItem transaction = new PrimaryDrawerItem().withName("Passbook").withIcon(R.drawable.wallet_icon).withIdentifier(8).withTypeface(face);
-        PrimaryDrawerItem played = new PrimaryDrawerItem().withName("Played Match").withIcon(R.drawable.play_icon).withIdentifier(9).withTypeface(face);
+        PrimaryDrawerItem played = new PrimaryDrawerItem().withName("Game History").withIcon(R.drawable.play_icon).withIdentifier(9).withTypeface(face);
         PrimaryDrawerItem howto = new PrimaryDrawerItem().withName("How to Play").withIcon(R.drawable.question).withIdentifier(10).withTypeface(face);
         PrimaryDrawerItem share = new PrimaryDrawerItem().withName("Share").withIcon(R.drawable.share_icon).withIdentifier(11).withTypeface(face);
         PrimaryDrawerItem logout = new PrimaryDrawerItem().withName("Logout").withIcon(R.drawable.logout_icon).withIdentifier(7).withTypeface(face);

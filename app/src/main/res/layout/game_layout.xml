@@ -19,8 +19,8 @@
 
         <!-- Icon circle -->
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/bg_circle_game_icon"
             android:gravity="center">
 
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Single Digit"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/font"
             android:gravity="center" />
@@ -52,8 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="10 x 95"
-            android:textSize="12sp"
-            android:textColor="@color/md_grey_600"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/md_light_green_600"
             android:visibility="visible"
             android:gravity="center" />
 
