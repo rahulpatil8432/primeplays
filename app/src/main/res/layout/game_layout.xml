@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp"
     app:cardUseCompatPadding="true">
@@ -21,6 +20,7 @@
         <FrameLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:id="@+id/Iconframe"
             android:background="@drawable/bg_circle_game_icon"
             android:gravity="center">
 
@@ -43,19 +43,6 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/font"
-            android:gravity="center" />
-
-        <!-- Rate (optional) -->
-        <TextView
-            android:id="@+id/rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="10 x 95"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_light_green_600"
-            android:visibility="visible"
             android:gravity="center" />
 
     </LinearLayout>

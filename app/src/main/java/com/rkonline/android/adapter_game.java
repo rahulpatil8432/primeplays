@@ -43,9 +43,6 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_layout, parent, false);
-        if(this.rate.isEmpty()){
-            v.findViewById(R.id.rate).setVisibility(View.GONE);
-        }
         return new ViewHolder(v);
     }
 
@@ -55,12 +52,6 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
         String gameName = name.get(position);
         holder.name.setText(gameName);
-        if (!rate.isEmpty()) {
-            holder.rate.setText(rate.get(position));
-            holder.rate.setVisibility(View.VISIBLE);
-        } else {
-            holder.rate.setVisibility(View.GONE);
-        }
         switch (gameName) {
 
             case "Single Ank":
@@ -179,14 +170,13 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, rate;
+        TextView name;
         LinearLayout layout;
         ImageView gameIcon;
 
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.gameName);
-            rate = view.findViewById(R.id.rate);
             layout = view.findViewById(R.id.layout);
             gameIcon = view.findViewById(R.id.gameIcon);
         }

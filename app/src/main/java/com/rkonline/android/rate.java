@@ -1,8 +1,16 @@
 package com.rkonline.android;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +35,7 @@ public class rate extends AppCompatActivity {
     ViewDialog progressDialog;
     FirebaseFirestore db;
     RecyclerView recyclerview;
+    ListView listView;
     protected TextView headerTitle;
     String market,openTime,closeTime;
 
@@ -72,8 +81,8 @@ public class rate extends AppCompatActivity {
                     if (isActive == null || !isActive) continue;
                     if (headerTitle.getText().toString().equalsIgnoreCase("Game Rate")) {
                         if (gameRate != null && !gameRate.trim().isEmpty()) {
-                            name.add(gameName);
-                            rate.add(gameRate);
+                            name.add(gameName + " : " + gameRate);
+//                            rate.add(gameRate);
                         }
                     } else {
                         name.add(gameName);
@@ -82,10 +91,45 @@ public class rate extends AppCompatActivity {
                 adapter_game rc;
                 Log.e("header",headerTitle.getText().toString());
                 if(headerTitle.getText().toString().equalsIgnoreCase("Game Rate")){
-                   rc = new adapter_game(rate.this,name,rate,market, false, openTime, closeTime, closeNextDay);
-                    recyclerview.setLayoutManager(new LinearLayoutManager(rate.this));
+                    listView.setVisibility(View.VISIBLE);
+                    recyclerview.setVisibility(View.GONE);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                            this,
+                            android.R.layout.simple_list_item_1,
+                            name
+                    ) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            // Get default view
+                            TextView textView = (TextView) super.getView(position, convertView, parent);
 
+                            // Center text
+                            textView.setGravity(Gravity.CENTER);
+                            textView.setTypeface(null, Typeface.BOLD);
+                            // Add padding
+                            int padding = (int) (16 * getResources().getDisplayMetrics().density);
+                            textView.setPadding(padding, padding, padding, padding);
+
+                            listView.setDivider(new ColorDrawable(Color.TRANSPARENT)); // invisible divider
+                            listView.setDividerHeight((int) (8 * getResources().getDisplayMetrics().density));
+                            // Add background with rounded corners
+                            GradientDrawable bg = new GradientDrawable();
+                            bg.setColor(Color.parseColor("#FFFFFF")); // background color
+                            bg.setCornerRadius(16 * getResources().getDisplayMetrics().density); // corner radius in px
+                            textView.setBackground(bg);
+
+                            return textView;
+                        }
+                    };
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+//                   rc = new adapter_game(rate.this,name,rate,market, false, openTime, closeTime, closeNextDay);
+//                   recyclerview.setLayoutManager(new LinearLayoutManager(rate.this));
                 }else{
+                    recyclerview.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
+
                     boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen",false);
                     if(isMarketOpen){
                         name.remove("Jodi");
@@ -95,10 +139,10 @@ public class rate extends AppCompatActivity {
                     }
                     rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen, openTime, closeTime, closeNextDay);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));
-
+                    recyclerview.setAdapter(rc);
+                    rc.notifyDataSetChanged();
                 }
-                recyclerview.setAdapter(rc);
-                rc.notifyDataSetChanged();
+
             } else {
                 AlertHelper.showCustomAlert(rate.this, "Something went wrong" , "Please try again", 0,0);
             }
@@ -110,6 +154,7 @@ public class rate extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         recyclerview = findViewById(R.id.gameRecyclerView);
         headerTitle = findViewById(R.id.header_title);
+        listView = findViewById(R.id.listView);
 
     }
 }
