@@ -128,60 +128,43 @@ public class crossing extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mobile = prefs.getString("mobile", "");
 
-        final int total = fillnumber.size();
-        final int[] completed = {0};
-        final boolean[] failed = {false};
+        ArrayList<BetEngine.BetItem> bets = new ArrayList<>();
 
         for (int i = 0; i < fillnumber.size(); i++) {
-
-            String betNum = fillnumber.get(i);
-
-            int betAmount;
             try {
-                betAmount = Integer.parseInt(fillamount.get(i));
+                int amt = Integer.parseInt(fillamount.get(i));
+                bets.add(new BetEngine.BetItem(fillnumber.get(i), amt));
             } catch (NumberFormatException e) {
                 submit.setEnabled(true);
                 progressDialog.hideDialog();
-                AlertHelper.showCustomAlert(this, "Sorry!" , "Invalid bet amount", 0,0);
-
+                AlertHelper.showCustomAlert(this, "Sorry!", "Invalid bet amount", 0, 0);
                 return;
             }
-
-            BetEngine.placeBet(
-                    db,
-                    mobile,
-                    market,
-                    game,
-                    betNum,
-                    betAmount,
-                    "Crossing Bet - " + market,
-                    null,
-                    new BetEngine.BetCallback() {
-
-                        @Override
-                        public synchronized void onSuccess(int newWallet) {
-                            if (failed[0]) return;
-
-                            completed[0]++;
-
-                            if (completed[0] == total) {
-                                prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
-                                onAllCrossingComplete();
-                            }
-                        }
-
-                        @Override
-                        public synchronized void onFailure(String error) {
-                            if (failed[0]) return;
-
-                            failed[0] = true;
-                            submit.setEnabled(true);
-                            progressDialog.hideDialog();
-                            AlertHelper.showCustomAlert(crossing.this, "Sorry!" , "Something went wrong!", 0,0);
-                        }
-                    }
-            );
         }
+
+        BetEngine.placeMultipleBets(
+                db,
+                mobile,
+                market,
+                game,
+                null, // crossing doesn't use Open/Close
+                bets,
+                new BetEngine.BetCallback() {
+                    @Override
+                    public void onSuccess(int newWallet) {
+                        prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+                        progressDialog.hideDialog();
+                        onAllCrossingComplete();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        submit.setEnabled(true);
+                        progressDialog.hideDialog();
+                        AlertHelper.showCustomAlert(crossing.this, "Sorry!", error, 0, 0);
+                    }
+                }
+        );
     }
 
 

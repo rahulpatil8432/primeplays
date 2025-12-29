@@ -330,52 +330,38 @@ public class betting extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mobile = prefs.getString("mobile", "");
 
+        ArrayList<BetEngine.BetItem> betItems = new ArrayList<>();
+
         for (int i = 0; i < selectedNumbers.size(); i++) {
-
-            String betNum = selectedNumbers.get(i);
-            int amount = Integer.parseInt(amounts.get(i));
-
-            Map<String, Object> extras = new HashMap<>();
-            extras.put("gameType", selectedGameType);
-
-            BetEngine.placeBet(
-                    db,
-                    mobile,
-                    market,
-                    game,
-                    betNum,
-                    amount,
-                    "Bet placed - " + market,
-                    extras,
-                    new BetEngine.BetCallback() {
-
-                        int completed = 0;
-                        boolean failed = false;
-
-                        @Override
-                        public synchronized void onSuccess(int newWallet) {
-                            if (failed) return;
-
-                            completed++;
-
-                            if (completed == selectedNumbers.size()) {
-                                prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
-                                onAllBetsComplete();
-                            }
-                        }
-
-                        @Override
-                        public synchronized void onFailure(String error) {
-                            if (failed) return;
-
-                            failed = true;
-                            submit.setEnabled(true);
-                            progressDialog.hideDialog();
-                            AlertHelper.showCustomAlert(betting.this, "Sorry!" , "Something went wrong", 0,0);
-                        }
-                    }
-            );
+            betItems.add(new BetEngine.BetItem(
+                    selectedNumbers.get(i),
+                    Integer.parseInt(amounts.get(i))
+            ));
         }
+
+        BetEngine.placeMultipleBets(
+                db,
+                mobile,
+                market,
+                game,
+                selectedGameType,
+                betItems,
+                new BetEngine.BetCallback() {
+                    @Override
+                    public void onSuccess(int newWallet) {
+                        prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+                        onAllBetsComplete();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        submit.setEnabled(true);
+                        progressDialog.hideDialog();
+                        AlertHelper.showCustomAlert(betting.this, "Sorry!", "Something went wrong", 0, 0);
+                    }
+                }
+        );
+
     }
 
 
