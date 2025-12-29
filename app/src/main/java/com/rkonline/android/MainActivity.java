@@ -41,6 +41,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.rkonline.android.timetable.TimeTableActivity;
 import com.rkonline.android.utils.AlertHelper;
 
 import org.json.JSONObject;
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         PrimaryDrawerItem howto = new PrimaryDrawerItem().withName("How to Play").withIcon(R.drawable.question).withIdentifier(10).withTypeface(face);
         PrimaryDrawerItem share = new PrimaryDrawerItem().withName("Share").withIcon(R.drawable.share_icon).withIdentifier(11).withTypeface(face);
         PrimaryDrawerItem logout = new PrimaryDrawerItem().withName("Logout").withIcon(R.drawable.logout_icon).withIdentifier(7).withTypeface(face);
+        PrimaryDrawerItem timetable = new PrimaryDrawerItem().withName("Time Table").withIcon(R.drawable.time_table).withIdentifier(32).withTypeface(face);
 
 
         final Drawer drawer = new DrawerBuilder()
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 .withHeader(R.layout.header)
                 .withActionBarDrawerToggle(false)
                 .addDrawerItems(
-                        home, played,transaction,charts,rate, deposit, withdraw, account, notice,  howto,earn, share, logout
+                        home, played, transaction, charts, timetable, rate, deposit, withdraw, account, notice,  howto,earn, share, logout
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -196,6 +198,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                         if (drawerItem.equals(9)) {
                             startActivity(new Intent(MainActivity.this, played.class));
+                        }
+                        if (drawerItem.equals(32)) {
+                            startActivity(new Intent(MainActivity.this, TimeTableActivity.class));
                         }
                         return false;
                     }
