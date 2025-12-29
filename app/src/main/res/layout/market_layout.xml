@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="20dp"
-    app:cardUseCompatPadding="true"
-
-    app:cardBackgroundColor="#111827">
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:id="@+id/layout"
@@ -22,18 +20,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MARKET NAME"
-            android:textColor="#E5E7EB"
-            android:textSize="14sp"
+            android:textColor="@color/md_black_1000"
+            android:textSize="16sp"
             android:textStyle="bold"/>
 
-<!--        &lt;!&ndash; STATUS DOT &ndash;&gt;-->
-<!--        <View-->
-<!--            android:layout_width="8dp"-->
-<!--            android:layout_height="8dp"-->
-<!--            android:layout_alignBaseline="@id/name"-->
-<!--            android:layout_toEndOf="@id/name"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:background="@drawable/status_dot_open"/>-->
 
         <!-- RESULT -->
         <com.rkonline.android.latobold
@@ -41,18 +31,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="5dp"
             android:text="256-31-399"
-            android:textColor="#F9FAFB"
+            android:textColor="@color/md_black_1000"
             android:textSize="28sp"
             android:textStyle="bold"/>
 
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/close_icon">
+
+        </ImageView>
         <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/marketResult"
-            android:layout_marginTop="14dp"
             android:background="#1F2933"/>
 
         <!-- OPEN / CLOSE -->
@@ -61,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/marketResult"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <!-- OPEN -->
@@ -75,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="OPEN"
-                    android:textColor="#9CA3AF"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="11sp"/>
 
                 <com.rkonline.android.latobold
@@ -83,8 +81,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="09:05 PM"
-                    android:textColor="#D1D5DB"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="13sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <com.rkonline.android.latobold
+                    android:id="@+id/statusText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textAlignment="center"
+                    android:text="Bet is Running"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="13sp"/>
+
             </LinearLayout>
 
             <!-- CLOSE -->
@@ -99,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CLOSE"
-                    android:textColor="#9CA3AF"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="11sp"/>
 
                 <com.rkonline.android.latobold
@@ -107,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="11:05 PM"
-                    android:textColor="#D1D5DB"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="13sp"/>
             </LinearLayout>
 
