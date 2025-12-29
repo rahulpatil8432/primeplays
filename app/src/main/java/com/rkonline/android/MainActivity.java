@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -441,17 +442,27 @@ swipeRefresh.setRefreshing(false);
                 .addOnSuccessListener(documentSnapshot -> {
 
                     if (!documentSnapshot.exists()) {
-                        Toast.makeText(this, "Config not found", Toast.LENGTH_SHORT).show();
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
                         return;
                     }
 
                     String phone = documentSnapshot.getString("phone");
                     String message = documentSnapshot.getString("message");
 
-                    if (phone == null || message == null) {
-                        AlertHelper.showCustomAlert(this, "Sorry!" , "Support service is temporarily unavailable.", 0,0);
-
-                        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(message)) {
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
                         return;
                     }
 
@@ -459,20 +470,27 @@ swipeRefresh.setRefreshing(false);
                             "?text=" + Uri.encode(message);
 
                     try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         intent.setPackage("com.whatsapp");
                         startActivity(intent);
                     } catch (Exception e) {
-                        AlertHelper.showCustomAlert(this, "Sorry!" , "WhatsApp not installed", 0,0);
-
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "WhatsApp is not installed on your device.",
+                                0,
+                                0
+                        );
                     }
                 })
                 .addOnFailureListener(e ->
-                        {
-                            AlertHelper.showCustomAlert(this, "Sorry!" , "Support service is temporarily unavailable.", 0,0);
-
-                        }
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        )
                 );
     }
 
