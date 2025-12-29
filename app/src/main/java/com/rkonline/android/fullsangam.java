@@ -119,7 +119,7 @@ public class fullsangam extends AppCompatActivity {
         int amount = Integer.parseInt(amountStr);
 
         if (amount < constant.min_single || amount > constant.max_single) {
-            AlertHelper.showCustomAlert(this, "Info!" , "Bet amount must be between 10 and 10000", 0,0);
+            AlertHelper.showCustomAlert(this, "Info!" , "Bet amount must be between 10 and 10000", R.drawable.info_icon,0);
 
             return;
         }

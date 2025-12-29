@@ -35,8 +35,9 @@ public class AlertHelper {
         ImageView alertImage = dialog.findViewById(R.id.alert_image);
         if (imageRes == 0) {
             alertImage.setImageResource(R.drawable.close_icon);
+        }else{
+            alertImage.setImageResource(imageRes);
         }
-        alertImage.setImageResource(imageRes);
         if(color == 0) color = R.color.md_red_900;
         alertImage.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN);
         // Set Title

@@ -292,7 +292,7 @@ public class betting extends AppCompatActivity {
             String amtStr = amounts.get(i);
 
             if (TextUtils.isEmpty(amtStr)) {
-                AlertHelper.showCustomAlert(this, "Info!" , "Please enter amount for number " + selectedNumbers.get(i), 0,0);
+                AlertHelper.showCustomAlert(this, "Info!" , "Please enter amount for number " + selectedNumbers.get(i), R.drawable.info_icon,0);
                 return;
             }
 
@@ -300,13 +300,13 @@ public class betting extends AppCompatActivity {
             try {
                 amt = Integer.parseInt(amtStr);
             } catch (NumberFormatException e) {
-                AlertHelper.showCustomAlert(this, "Info!" , "Invalid amount for number " + selectedNumbers.get(i), 0,0);
+                AlertHelper.showCustomAlert(this, "Info!" , "Invalid amount for number " + selectedNumbers.get(i), R.drawable.info_icon,0);
                 return;
             }
 
             if (amt < 10 || amt > 10000) {
                 AlertHelper.showCustomAlert(this, "Info!" , "Amount for number " + selectedNumbers.get(i) +
-                " must be between 10 and 10000", 0,0);
+                " must be between 10 and 10000", R.drawable.info_icon,0);
                 return;
             }
 
@@ -314,7 +314,7 @@ public class betting extends AppCompatActivity {
         }
 
         if (total < constant.min_total || total > constant.max_total) {
-            AlertHelper.showCustomAlert(this, "Info!" , "Total bet amount must be between " + constant.min_total + " and " + constant.max_total, 0,0);
+            AlertHelper.showCustomAlert(this, "Info!" , "Total bet amount must be between " + constant.min_total + " and " + constant.max_total, R.drawable.info_icon,0);
             return;
         }
         placeBetsWithEngine();
