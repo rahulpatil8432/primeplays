@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.AlertHelper;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -84,8 +85,7 @@ public class chart_menu extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e ->{
-                        System.out.println("loadMarkets failed");
-                        Toast.makeText(chart_menu.this, "Failed to load charts", Toast.LENGTH_SHORT).show();
+                    AlertHelper.showCustomAlert(this, "Sorry!" , "Failed to load charts", 0,0);
     });
     }
 

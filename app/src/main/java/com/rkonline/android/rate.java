@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.rkonline.android.utils.AlertHelper;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -99,7 +100,7 @@ public class rate extends AppCompatActivity {
                 recyclerview.setAdapter(rc);
                 rc.notifyDataSetChanged();
             } else {
-                Toast.makeText(rate.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                AlertHelper.showCustomAlert(rate.this, "Something went wrong" , "Please try again", 0,0);
             }
         });
     }

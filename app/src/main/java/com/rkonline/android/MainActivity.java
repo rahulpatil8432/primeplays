@@ -41,6 +41,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.rkonline.android.utils.AlertHelper;
 
 import org.json.JSONObject;
 
@@ -385,8 +386,7 @@ swipeRefresh.setRefreshing(false);
                 .addOnFailureListener(e ->{
 
                             swipeRefresh.setRefreshing(false);
-                    Toast.makeText(MainActivity.this, "Failed to load markets: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    
+                    AlertHelper.showCustomAlert(MainActivity.this, "Something went wrong" , "Please try again", 0,0);
                         });
 
     }
@@ -444,7 +444,9 @@ swipeRefresh.setRefreshing(false);
                     String message = documentSnapshot.getString("message");
 
                     if (phone == null || message == null) {
-                        Toast.makeText(this, "Support service is temporarily unavailable.", Toast.LENGTH_SHORT).show();
+                        AlertHelper.showCustomAlert(this, "Sorry!" , "Support service is temporarily unavailable.", 0,0);
+
+                        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -457,11 +459,15 @@ swipeRefresh.setRefreshing(false);
                         intent.setPackage("com.whatsapp");
                         startActivity(intent);
                     } catch (Exception e) {
-                        Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+                        AlertHelper.showCustomAlert(this, "Sorry!" , "WhatsApp not installed", 0,0);
+
                     }
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Support service is temporarily unavailable.", Toast.LENGTH_SHORT).show()
+                        {
+                            AlertHelper.showCustomAlert(this, "Sorry!" , "Support service is temporarily unavailable.", 0,0);
+
+                        }
                 );
     }
 

@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rkonline.android.adapter.SelectedNumberAdapter;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
 
 import java.util.ArrayList;
@@ -291,7 +292,7 @@ public class betting extends AppCompatActivity {
             String amtStr = amounts.get(i);
 
             if (TextUtils.isEmpty(amtStr)) {
-                showAlert("Please enter amount for number " + selectedNumbers.get(i));
+                AlertHelper.showCustomAlert(this, "Info!" , "Please enter amount for number " + selectedNumbers.get(i), 0,0);
                 return;
             }
 
@@ -299,13 +300,13 @@ public class betting extends AppCompatActivity {
             try {
                 amt = Integer.parseInt(amtStr);
             } catch (NumberFormatException e) {
-                showAlert("Invalid amount for number " + selectedNumbers.get(i));
+                AlertHelper.showCustomAlert(this, "Info!" , "Invalid amount for number " + selectedNumbers.get(i), 0,0);
                 return;
             }
 
             if (amt < 10 || amt > 10000) {
-                showAlert("Amount for number " + selectedNumbers.get(i) +
-                        " must be between 10 and 10000");
+                AlertHelper.showCustomAlert(this, "Info!" , "Amount for number " + selectedNumbers.get(i) +
+                " must be between 10 and 10000", 0,0);
                 return;
             }
 
@@ -313,8 +314,7 @@ public class betting extends AppCompatActivity {
         }
 
         if (total < constant.min_total || total > constant.max_total) {
-            showAlert("Total bet amount must be between " +
-                    constant.min_total + " and " + constant.max_total);
+            AlertHelper.showCustomAlert(this, "Info!" , "Total bet amount must be between " + constant.min_total + " and " + constant.max_total, 0,0);
             return;
         }
         placeBetsWithEngine();
@@ -371,7 +371,7 @@ public class betting extends AppCompatActivity {
                             failed = true;
                             submit.setEnabled(true);
                             progressDialog.hideDialog();
-                            Toast.makeText(betting.this, error, Toast.LENGTH_LONG).show();
+                            AlertHelper.showCustomAlert(betting.this, "Sorry!" , "Something went wrong", 0,0);
                         }
                     }
             );
@@ -384,8 +384,6 @@ public class betting extends AppCompatActivity {
 
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         soundPlayAndVibrate(betting.this, vibrator);
-
-        Toast.makeText(betting.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
         goThankYou();
     }
 
@@ -394,12 +392,5 @@ public class betting extends AppCompatActivity {
         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(in);
         finish();
-    }
-
-    private void showAlert(String msg) {
-        new AlertDialog.Builder(this)
-                .setMessage(msg)
-                .setPositiveButton("OK", null)
-                .show();
     }
 }

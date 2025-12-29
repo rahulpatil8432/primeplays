@@ -17,6 +17,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.OtpHelper;
 
 import java.util.Random;
@@ -98,7 +99,8 @@ public class login extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(String error) {
-                Toast.makeText(login.this, error, Toast.LENGTH_LONG).show();
+                AlertHelper.showCustomAlert(login.this, "Sorry!" , "Something went wrong\n Please try again", 0,0);
+
             }
         });
     }
@@ -111,9 +113,7 @@ public class login extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(doc -> {
                     if (!doc.exists()) {
-                        Toast.makeText(this,
-                                "User not registered",
-                                Toast.LENGTH_SHORT).show();
+                        AlertHelper.showCustomAlert(this, "Sorry!" , "User not registered", 0,0);
                         return;
                     }
                     otpHelper.sendOtp(formatPhone(mob));
@@ -136,9 +136,7 @@ public class login extends AppCompatActivity {
                         fetchUserDataAndLogin();
                     } else {
                         isSigningIn = false;
-                        Toast.makeText(this,
-                                "Invalid OTP",
-                                Toast.LENGTH_LONG).show();
+                        AlertHelper.showCustomAlert(this, "Sorry!" , "Invalid OTP", 0,0);
                     }
                 });
     }
@@ -157,7 +155,7 @@ public class login extends AppCompatActivity {
     private void handleUserLogin(DocumentSnapshot document) {
 
         if (!document.exists()) {
-            Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+            AlertHelper.showCustomAlert(this, "Sorry!" , "User not found", 0,0);
             return;
         }
 

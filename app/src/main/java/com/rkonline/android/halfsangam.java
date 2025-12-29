@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
 import com.rkonline.android.utils.GameData;
 
@@ -175,7 +176,8 @@ public class halfsangam extends AppCompatActivity {
         int amount = Integer.parseInt(totalamount.getText().toString());
 
         if (amount < constant.min_single || amount > constant.max_single) {
-            Toast.makeText(this, "Bet amount must be between 10 and 10000", Toast.LENGTH_SHORT).show();
+            AlertHelper.showCustomAlert(this, "Info!" , "Bet amount must be between 10 and 10000", 0,0);
+
             return;
         }
 
@@ -210,7 +212,8 @@ public class halfsangam extends AppCompatActivity {
                     public void onFailure(String error) {
                         submit.setEnabled(true);
                         progressDialog.hideDialog();
-                        Toast.makeText(halfsangam.this, error, Toast.LENGTH_SHORT).show();
+                        AlertHelper.showCustomAlert(halfsangam.this, "Sorry!" , "Something went wrong", 0,0);
+
                     }
                 }
         );

@@ -36,17 +36,13 @@ public class CommonUtils {
         // After market opens → OPEN not allowed
         if (now >= openMillis) {
             if ("Open".equalsIgnoreCase(selectedGameType)) {
-                Toast.makeText(
-                        context,
-                        "OPEN betting is closed now. Please play CLOSE",
-                        Toast.LENGTH_SHORT
-                ).show();
+                AlertHelper.showCustomAlert(context, "Sorry!" , "OPEN betting is closed now.\n Please play CLOSE", 0,0);
                 return false;
             }
         }
         Log.e("Cancel Time",openMillis +" "+closeMillis + " "+now);
         if (now > closeMillis) {
-            Toast.makeText(context, "Market is closed now", Toast.LENGTH_SHORT).show();
+            AlertHelper.showCustomAlert(context, "Sorry!" , "Betting is closed for today.\n Please come next day to play", 0,0);
             return false;
         }
         return true;
@@ -66,16 +62,12 @@ public class CommonUtils {
             closeMillis += 24 * 60 * 60 * 1000;  // push close to next day
         }
         if (now >= openMillis) {
-            Toast.makeText(
-                    context,
-                    sangamType+" betting is closed after market open",
-                    Toast.LENGTH_SHORT
-            ).show();
+            AlertHelper.showCustomAlert(context, "Sorry!" , sangamType+" betting is closed after market open", 0,0);
             return false;
         }
 
         if (now > closeMillis) {
-            Toast.makeText(context, "Market is closed now", Toast.LENGTH_SHORT).show();
+            AlertHelper.showCustomAlert(context, "Sorry!" , "Betting is closed for today.\n Please come next day to play", 0,0);
             return false;
         }
         return true;

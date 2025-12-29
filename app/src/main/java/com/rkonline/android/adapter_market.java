@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rkonline.android.utils.AlertHelper;
+
 import java.util.ArrayList;
 
 class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
@@ -92,7 +94,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
 
             case MARKET_YET_TO_OPEN:
                 return new MarketStatusInfo(
-                        ContextCompat.getColor(context, R.color.md_blue_900),
+                        ContextCompat.getColor(context, R.color.md_green_900),
                         R.drawable.play_icon_circle,
                         ContextCompat.getColor(context, R.color.md_green_900),
                         0.9f,
@@ -120,7 +122,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                         0.55f,
                         "Close for today",
                         false,
-                        "Market is closed"
+                        "Betting is closed for today.\n Please come next day to play"
                 );
         }
     }
@@ -158,9 +160,7 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                 go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(go);
 
-            } else if (info.toastMessage != null) {
-                Toast.makeText(context, info.toastMessage, Toast.LENGTH_SHORT).show();
-
+            } else {
                 if (marketStatus.get(pos) == MARKET_YET_TO_OPEN) {
                     Intent go = new Intent(context, rate.class);
                     go.putExtra("header", "Select Game");
@@ -171,11 +171,18 @@ class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
                     go.putExtra("closeNextDay", closeNextDayArray.get(pos));
                     go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(go);
+                } else {
+                    AlertHelper.showCustomAlert(
+                            context,
+                            "Sorry!",
+                            info.toastMessage,
+                            R.drawable.close_icon,
+                            R.color.md_red_900
+                    );
                 }
-            } else {
-                Toast.makeText(context, "Market is closed", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.rkonline.android.adapter.WithdrawAdapter;
 import com.rkonline.android.model.WithdrawRequest;
+import com.rkonline.android.utils.AlertHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,7 +156,8 @@ public class withdraw_money extends AppCompatActivity {
                         .document(userMobile)
                         .update("upi", upi, "accountNo", accNum, "IFSCCode", ifscCode)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "Withdrawal Request Submitted!\nAdmin will process shortly.", Toast.LENGTH_LONG).show();
+                            AlertHelper.showCustomAlert(withdraw_money.this, "Success!" , "Withdrawal Request Submitted!\nAdmin will process shortly.", R.drawable.check,R.color.md_green_900);
+
                             fetchPreviousRequests(); // Refresh list
                             amountInput.removeTextChangedListener(watcher);
                             upiInput.removeTextChangedListener(watcher);
@@ -174,13 +176,14 @@ public class withdraw_money extends AppCompatActivity {
                             submitBtn.setAlpha(0.5f);
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(this, "Failed to update user info. Try again.", Toast.LENGTH_SHORT).show();
+                            AlertHelper.showCustomAlert(this, "Sorry!" , "Something went wrong", 0,0);
+
                             submitBtn.setEnabled(true);
                             submitBtn.setAlpha(1f);
                             loader.setVisibility(View.GONE);
                         }))
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to submit withdrawal. Try again.", Toast.LENGTH_SHORT).show();
+                    AlertHelper.showCustomAlert(this, "Sorry!" , "Something went wrong", 0,0);
                     submitBtn.setEnabled(true);
                     submitBtn.setAlpha(1f);
                     loader.setVisibility(View.GONE);

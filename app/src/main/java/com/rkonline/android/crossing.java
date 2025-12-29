@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
 
 import java.util.ArrayList;
@@ -141,7 +142,8 @@ public class crossing extends AppCompatActivity {
             } catch (NumberFormatException e) {
                 submit.setEnabled(true);
                 progressDialog.hideDialog();
-                Toast.makeText(this, "Invalid bet amount", Toast.LENGTH_SHORT).show();
+                AlertHelper.showCustomAlert(this, "Sorry!" , "Invalid bet amount", 0,0);
+
                 return;
             }
 
@@ -175,7 +177,7 @@ public class crossing extends AppCompatActivity {
                             failed[0] = true;
                             submit.setEnabled(true);
                             progressDialog.hideDialog();
-                            Toast.makeText(crossing.this, error, Toast.LENGTH_LONG).show();
+                            AlertHelper.showCustomAlert(crossing.this, "Sorry!" , "Something went wrong!", 0,0);
                         }
                     }
             );
@@ -185,8 +187,6 @@ public class crossing extends AppCompatActivity {
 
     private void onAllCrossingComplete() {
         progressDialog.hideDialog();
-
-        Toast.makeText(this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
         goThankYou();
     }
 

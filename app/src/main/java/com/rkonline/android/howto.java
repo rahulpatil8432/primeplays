@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.AlertHelper;
 
 public class howto extends AppCompatActivity {
 
@@ -56,6 +57,7 @@ public class howto extends AppCompatActivity {
                 .addOnFailureListener(e -> {
 
                     progressDialog.hideDialog();   // 🔥 ALSO IMPORTANT
+                    AlertHelper.showCustomAlert(this, "Sorry!" , "Something went wrong", 0,0);
 
                     text.setText("Unable to load content.");
                     Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
