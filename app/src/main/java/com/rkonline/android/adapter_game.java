@@ -114,7 +114,7 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
                     break;
 
                 case "Jodi":
-                case "crossing":
+                case "Crossing":
                     jodi();
                     break;
 
@@ -146,7 +146,7 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
                     go = new Intent(context, fullsangam.class);
                     break;
 
-                case "crossing":
+                case "Crossing":
                     go = new Intent(context, crossing.class);
                     break;
 

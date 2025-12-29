@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.BetEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,18 +58,25 @@ public class crossing extends AppCompatActivity {
 
         submit.setOnClickListener(v -> {
 
+            if (!submit.isEnabled()) return;
+            submit.setEnabled(false);
+
             if (number.getText().toString().isEmpty()) {
                 number.setError("Enter numbers");
+                submit.setEnabled(true);
                 return;
             }
+
             if (amount.getText().toString().isEmpty() || amount.getText().toString().equals("0")) {
                 amount.setError("Enter amount");
+                submit.setEnabled(true);
                 return;
             }
 
             String totalStr = totalamount.getText().toString();
             if (totalStr.isEmpty()) {
                 showAlert("Enter amount");
+                submit.setEnabled(true);
                 return;
             }
 
@@ -77,42 +85,111 @@ public class crossing extends AppCompatActivity {
                 totalVal = Integer.parseInt(totalStr);
             } catch (NumberFormatException e) {
                 showAlert("Invalid total amount");
+                submit.setEnabled(true);
                 return;
             }
 
             if (totalVal < 10 || totalVal > 10000) {
                 showAlert("You can only bet between 10 INR to 10000 INR");
+                submit.setEnabled(true);
                 return;
             }
 
-            int wallet = Integer.parseInt(prefs.getString("wallet", "0"));
-
-            if (totalVal <= wallet) {
-                // prepare fill lists
-                fillnumber.clear();
-                fillamount.clear();
-                for (int a = 0; a < numbers.size(); a++) {
-                    fillnumber.add(numbers.get(a));
-                    fillamount.add(amount.getText().toString());
-                }
-
-                numb = TextUtils.join(",", fillnumber);
-                amou = TextUtils.join(",", fillamount);
-
-                saveCrossingToFirestore();
-            } else {
-                new AlertDialog.Builder(crossing.this)
-                        .setMessage("You don't have enough wallet balance to place this bet, Recharge your wallet to play")
-                        .setPositiveButton("Recharge", (dialog, id) -> {
-                            Intent intent = new Intent(crossing.this, deposit_money.class);
-                            startActivity(intent);
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton("Cancel", (dialog, id) -> dialog.cancel())
-                        .show();
-            }
+            prepareCrossingBets();
         });
+
     }
+
+    private void prepareCrossingBets() {
+
+        fillnumber.clear();
+        fillamount.clear();
+
+        for (String n : numbers) {
+            fillnumber.add(n);
+            fillamount.add(amount.getText().toString());
+        }
+
+        if (fillnumber.isEmpty()) {
+            showAlert("No numbers to place bet");
+            return;
+        }
+
+        placeCrossingWithEngine();
+    }
+
+    private void placeCrossingWithEngine() {
+
+        progressDialog = new ViewDialog(crossing.this);
+        progressDialog.showDialog();
+        submit.setEnabled(false);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String mobile = prefs.getString("mobile", "");
+
+        final int total = fillnumber.size();
+        final int[] completed = {0};
+        final boolean[] failed = {false};
+
+        for (int i = 0; i < fillnumber.size(); i++) {
+
+            String betNum = fillnumber.get(i);
+
+            int betAmount;
+            try {
+                betAmount = Integer.parseInt(fillamount.get(i));
+            } catch (NumberFormatException e) {
+                submit.setEnabled(true);
+                progressDialog.hideDialog();
+                Toast.makeText(this, "Invalid bet amount", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            BetEngine.placeBet(
+                    db,
+                    mobile,
+                    market,
+                    game,
+                    betNum,
+                    betAmount,
+                    "Crossing Bet - " + market,
+                    null,
+                    new BetEngine.BetCallback() {
+
+                        @Override
+                        public synchronized void onSuccess(int newWallet) {
+                            if (failed[0]) return;
+
+                            completed[0]++;
+
+                            if (completed[0] == total) {
+                                prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+                                onAllCrossingComplete();
+                            }
+                        }
+
+                        @Override
+                        public synchronized void onFailure(String error) {
+                            if (failed[0]) return;
+
+                            failed[0] = true;
+                            submit.setEnabled(true);
+                            progressDialog.hideDialog();
+                            Toast.makeText(crossing.this, error, Toast.LENGTH_LONG).show();
+                        }
+                    }
+            );
+        }
+    }
+
+
+    private void onAllCrossingComplete() {
+        progressDialog.hideDialog();
+
+        Toast.makeText(this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
+        goThankYou();
+    }
+
 
     private void showAlert(String msg) {
         new AlertDialog.Builder(crossing.this)
@@ -120,72 +197,6 @@ public class crossing extends AppCompatActivity {
                 .setCancelable(true)
                 .setNegativeButton("Okay", (dialog, id) -> dialog.dismiss())
                 .show();
-    }
-
-    private void saveCrossingToFirestore() {
-
-        progressDialog = new ViewDialog(crossing.this);
-        progressDialog.showDialog();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        String mobile = prefs.getString("mobile", null);
-        String bazarName = market;
-        String gameType = "jodi"; // crossing uses jodi game as earlier code indicated
-
-        long timestamp = System.currentTimeMillis();
-        String date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
-        String time = new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date());
-
-        if (fillnumber.isEmpty()) {
-            progressDialog.hideDialog();
-            Toast.makeText(crossing.this, "No numbers to place bet", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // track failures to show a single error if needed
-        final int totalBets = fillnumber.size();
-        final int[] successCount = {0};
-        final int[] failureCount = {0};
-
-        for (int i = 0; i < fillnumber.size(); i++) {
-            final int idx = i;
-            String betNum = fillnumber.get(idx);
-            String betAmount = fillamount.get(idx);
-
-            Map<String, Object> betData = new HashMap<>();
-            betData.put("mobile", mobile);
-            betData.put("market", bazarName);
-            betData.put("game", gameType);
-            betData.put("bet", betNum);
-            betData.put("amount", betAmount);
-            betData.put("date", date);
-            betData.put("time", time);
-            betData.put("timestamp", timestamp);
-
-            db.collection("played")
-                    .add(betData)
-                    .addOnSuccessListener(docRef -> {
-                        successCount[0]++;
-
-                        // when last one succeeds (or all finished), go to thankyou
-                        if (successCount[0] + failureCount[0] == totalBets) {
-                            progressDialog.hideDialog();
-                            if (failureCount[0] == 0) {
-                                goThankYou();
-                            } else {
-                                Toast.makeText(crossing.this, "Some bets failed. Please check your played history.", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        failureCount[0]++;
-                        if (successCount[0] + failureCount[0] == totalBets) {
-                            progressDialog.hideDialog();
-                            Toast.makeText(crossing.this, "Failed placing some bets: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-        }
     }
 
     private void goThankYou() {

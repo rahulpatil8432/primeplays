@@ -17,11 +17,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.BetEngine;
 import com.rkonline.android.utils.CommonUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class fullsangam extends AppCompatActivity {
 
@@ -126,82 +125,42 @@ public class fullsangam extends AppCompatActivity {
         progressDialog.showDialog();
         submit.setEnabled(false);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        String mobile = prefs.getString("mobile", null);
-        int wallet = Integer.parseInt(prefs.getString("wallet", "0"));
-        int newWallet = wallet - amount;
-
         String betNumber = firstSel + " - " + secondSel;
 
-        long timestamp = System.currentTimeMillis();
-        String date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
-        String time = new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date());
+        BetEngine.placeBet(
+                FirebaseFirestore.getInstance(),
+                prefs.getString("mobile", ""),
+                market,
+                game,
+                betNumber,
+                amount,
+                "Full Sangam Bet - " + market,
+                null,
+                new BetEngine.BetCallback() {
+                    @Override
+                    public void onSuccess(int newWallet) {
+                        prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
+                        progressDialog.hideDialog();
+                        soundPlayAndVibrate(fullsangam.this,
+                                (Vibrator) getSystemService(VIBRATOR_SERVICE));
+                        goThankYou();
+                    }
 
-        db.runBatch(batch -> {
-
-            // 1️⃣ Played entry
-            Map<String, Object> betData = new HashMap<>();
-            betData.put("mobile", mobile);
-            betData.put("market", market);
-            betData.put("game", game);
-            betData.put("bet", betNumber);
-            betData.put("amount", String.valueOf(amount));
-            betData.put("date", date);
-            betData.put("time", time);
-            betData.put("timestamp", timestamp);
-
-            batch.set(
-                    db.collection("played").document(),
-                    betData
-            );
-
-            // 2️⃣ Wallet transaction
-            Map<String, Object> txn = new HashMap<>();
-            txn.put("mobile", mobile);
-            txn.put("amount", String.valueOf(amount));
-            txn.put("type", "DEBIT");
-            txn.put("remark", "Full Sangam Bet - " + market);
-            txn.put("timestamp", timestamp);
-            txn.put("date", date);
-            txn.put("game", game);
-            txn.put("market", market);
-            txn.put("balance",newWallet +"");
-
-            batch.set(
-                    db.collection("transactions").document(),
-                    txn
-            );
-
-            // 3️⃣ Wallet update
-            batch.update(
-                    db.collection("users").document(mobile),
-                    "wallet", newWallet
-            );
-
-        }).addOnSuccessListener(unused -> {
-
-            prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
-
-            progressDialog.hideDialog();
-            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            soundPlayAndVibrate(fullsangam.this,vibrator);
-            Toast.makeText(fullsangam.this, "Bet placed successfully 🎉", Toast.LENGTH_SHORT).show();
-
-            Intent in = new Intent(getApplicationContext(), thankyou.class);
-            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(in);
-            finish();
-
-        }).addOnFailureListener(e -> {
-
-            submit.setEnabled(true);
-            progressDialog.hideDialog();
-            Toast.makeText(fullsangam.this, "Bet failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
+                    @Override
+                    public void onFailure(String error) {
+                        submit.setEnabled(true);
+                        progressDialog.hideDialog();
+                        Toast.makeText(fullsangam.this, error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
-
+    private void goThankYou() {
+        startActivity(new Intent(this, thankyou.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+        finish();
+    }
     public ArrayList<String> getpatti() {
 
         ArrayList<String> number = new ArrayList<>();

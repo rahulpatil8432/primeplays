@@ -61,9 +61,22 @@ public class rate extends AppCompatActivity {
 
 
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    Map<String, Object> userMap = document.getData();
-                    name.add((String) userMap.get("name"));
-                    rate.add((String) userMap.get("rate"));
+
+                    Map<String, Object> game = document.getData();
+
+                    String gameName = (String) game.get("name");
+                    String gameRate = (String) game.get("rate");
+                    Boolean isActive = (Boolean) game.get("isActive");
+
+                    if (isActive == null || !isActive) continue;
+                    if (headerTitle.getText().toString().equalsIgnoreCase("Game Rate")) {
+                        if (gameRate != null && !gameRate.trim().isEmpty()) {
+                            name.add(gameName);
+                            rate.add(gameRate);
+                        }
+                    } else {
+                        name.add(gameName);
+                    }
                 }
                 adapter_game rc;
                 Log.e("header",headerTitle.getText().toString());
@@ -75,6 +88,7 @@ public class rate extends AppCompatActivity {
                     boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen",false);
                     if(isMarketOpen){
                         name.remove("Jodi");
+                        name.remove("Crossing");
                         name.remove("Half Sangam");
                         name.remove("Full Sangam");
                     }
