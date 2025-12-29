@@ -166,6 +166,7 @@ public class fullsangam extends AppCompatActivity {
             txn.put("date", date);
             txn.put("game", game);
             txn.put("market", market);
+            txn.put("balance",newWallet +"");
 
             batch.set(
                     db.collection("transactions").document(),
