@@ -134,6 +134,7 @@ public class rate extends AppCompatActivity {
                     if(isMarketOpen){
                         name.remove("Jodi");
                         name.remove("Crossing");
+                        name.remove("Red Jodi");
                         name.remove("Half Sangam");
                         name.remove("Full Sangam");
                     }

@@ -111,6 +111,10 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
                     jodi();
                     break;
 
+                case "Red Jodi":
+                    redJodi();
+                    break;
+
                 case "Single Pana":
                     singlepatti();
                     break;
@@ -190,6 +194,10 @@ class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
             String temp = String.format("%02d", i);
             number.add(temp);
         }
+    }
+
+    public void redJodi(){
+        number.addAll(GameData.getRedJodi());
     }
     public void singlepatti() {
         number.addAll(GameData.getSinglePana());

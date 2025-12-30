@@ -38,6 +38,11 @@ public final class GameData {
             "000","111","222","333","444","555","666","777","888","999"
     );
 
+    private static final List<String> RED_JODI = Arrays.asList(
+            "11","22","33","44","55","66","77","88","99","00",
+            "05","50","16","61","27","72","38","83","49","94"
+    );
+
     public static ArrayList<String> getSinglePana() {
         return new ArrayList<>(SINGLE_PANA);
     }
@@ -48,6 +53,10 @@ public final class GameData {
 
     public static ArrayList<String> getTriplePana() {
         return new ArrayList<>(TRIPLE_PANA);
+    }
+
+    public static ArrayList<String> getRedJodi() {
+        return new ArrayList<>(RED_JODI);
     }
 
     public static ArrayList<String> getAllPatti() {
