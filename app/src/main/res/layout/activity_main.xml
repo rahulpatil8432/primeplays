@@ -40,23 +40,21 @@
             android:src="@drawable/splash_logo" />
 
         <!-- Language Switch -->
-        <ImageButton
-            android:id="@+id/lang_switch"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <ImageView
+            android:id="@+id/notification"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/toolbar_circle_bg"
-            android:src="@drawable/ic_baseline_language_24"
-            app:tint="@color/primary_dark"
-            android:contentDescription="Language"/>
+            android:src="@drawable/bell"
+            android:contentDescription="notification"/>
 
         <!-- Wallet Pill -->
         <LinearLayout
             android:id="@+id/wallet_holder"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_toStartOf="@id/lang_switch"
+            android:layout_toStartOf="@id/notification"
             android:layout_marginEnd="12dp"
             android:layout_centerVertical="true"
             android:background="@drawable/wallet_pill_bg"

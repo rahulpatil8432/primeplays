@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.rkonline.android.notification.notification;
 import com.rkonline.android.timetable.TimeTableActivity;
 import com.rkonline.android.utils.AlertHelper;
 
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerview;
     RecyclerView recyclerviewMarket;
     SharedPreferences preferences;
-    ImageButton lang_img;
+    ImageView notificationImage;
     FirebaseFirestore db;
     SwipeRefreshLayout swipeRefresh;
 
@@ -78,8 +81,11 @@ public class MainActivity extends AppCompatActivity {
         super.setContentView(R.layout.activity_main);
         AppUpdateManager.checkForUpdate(this);
         db = FirebaseFirestore.getInstance();
-        lang_img =   findViewById(R.id.lang_switch);
-        lang_img.setOnClickListener(v -> MainActivity.this.openOptionsMenu());
+        notificationImage =   findViewById(R.id.notification);
+
+        notificationImage.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, notification.class));
+        });
 
 
         initViews();

@@ -42,7 +42,7 @@ public class NotificationHelper {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.house) // Add your icon
+                .setSmallIcon(R.drawable.house)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setContentIntent(pendingIntent)

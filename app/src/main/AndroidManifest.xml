@@ -73,6 +73,7 @@
         <activity android:name=".login"/>
         <activity android:name=".withdraw_money"/>
         <activity android:name=".timetable.TimeTableActivity"/>
+        <activity android:name=".notification.notification"/>
         <activity android:name=".MainActivity" android:exported="true"/>
 
     </application>
