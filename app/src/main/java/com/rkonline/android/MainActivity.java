@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
                         if (drawerItem.equals(41)) {
+                            getTeamsAndConditions();
                             startActivity(new Intent(MainActivity.this, withdraw_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
                         if (drawerItem.equals(10)) {
@@ -261,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         });
         cardWithdraw.setOnClickListener(v  -> {
+            getTeamsAndConditions();
             startActivity(new Intent(MainActivity.this, withdraw_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         });
         cardCall.setOnClickListener(v -> {
@@ -599,6 +601,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         AppUpdateManager.onActivityResult(this, requestCode);
+    }
+
+    private void getTeamsAndConditions() {
+        SharedPreferences.Editor editor = preferences.edit();
+        db.collection("app_config")
+                .document("withdraw")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    editor.putString("withdrawTerms", documentSnapshot.getString("terms")).apply();
+                    Long minAmountLong = documentSnapshot.getLong("minAmount");
+                    int minAmount = minAmountLong != null ? minAmountLong.intValue() : 1000;
+                    editor.putInt("minAmount", minAmount).apply();
+                })
+                .addOnFailureListener(e -> {
+                    String terms = "You cannot withdraw deposited money. You can only withdraw winning money";
+                    editor.putString("withdrawTerms", terms).apply();
+                });
     }
 
 }

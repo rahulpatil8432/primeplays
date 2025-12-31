@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,7 +34,7 @@ public class withdraw_money extends AppCompatActivity {
     Button submitBtn;
     ProgressBar loader;
     SwipeRefreshLayout swipeRefresh;
-    String userMobile, wallet;
+    String userMobile, wallet, terms;
 
     RecyclerView recyclerView;
     LinearLayout previousContainer;
@@ -70,6 +69,8 @@ public class withdraw_money extends AppCompatActivity {
         IFSCcodeInput.setText(getSharedPreferences(constant.prefs,MODE_PRIVATE).getString("IFSCCode",""));
 
         db = FirebaseFirestore.getInstance();
+        terms = getSharedPreferences(constant.prefs,MODE_PRIVATE).getString("withdrawTerms", "");
+        AlertHelper.showCustomAlert(withdraw_money.this,"Terms & Conditions",terms,R.drawable.info_icon,0);
 
          watcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -193,7 +194,7 @@ public class withdraw_money extends AppCompatActivity {
     private boolean validateInputs() {
         boolean isValid = true;
         String amountStr = amountInput.getText().toString().trim();
-
+        int minAmount = getSharedPreferences(constant.prefs,MODE_PRIVATE).getInt("minAmount",1000);
         if (TextUtils.isEmpty(amountStr)) {
             amountInput.setError("Enter amount");
             isValid = false;
@@ -205,6 +206,9 @@ public class withdraw_money extends AppCompatActivity {
                 isValid = false;
             } else if (amount > Double.parseDouble(wallet)) {
                 amountInput.setError("Insufficient balance");
+                isValid = false;
+            } else if (amount < minAmount) {
+                amountInput.setError("Minimum Withdraw Amount must be "+minAmount);
                 isValid = false;
             } else {
                 amountInput.setError(null);
@@ -247,4 +251,5 @@ public class withdraw_money extends AppCompatActivity {
         String UPI_REGEX = "^[a-zA-Z0-9._-]{2,256}@[a-zA-Z]{2,64}$";
         return !TextUtils.isEmpty(upi) && upi.matches(UPI_REGEX);
     }
+
 }
