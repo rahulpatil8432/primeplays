@@ -119,7 +119,126 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#11000000" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="12dp"
+            android:weightSum="2">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardaddmoney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="15dp"
+                android:layout_margin="5dp"
+                app:cardElevation="3dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/deposit"
+                    android:layout_marginLeft="10dp"/>
+
+                <com.rkonline.android.latobold
+                    android:id="@+id/addmoney"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="ADD MONEY"
+                    android:textSize="15sp" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardwithdraw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="15dp"
+                android:layout_margin="5dp"
+                app:cardElevation="3dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/withdraw"
+                    android:layout_marginLeft="10dp"/>
+
+                <com.rkonline.android.latobold
+                    android:id="@+id/withdraw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WITHDRAW"
+                    android:textSize="15sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="12dp"
+            android:weightSum="2">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardwhatsapp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="15dp"
+                android:layout_margin="5dp"
+                app:cardElevation="3dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/whatsapp"
+                    android:layout_marginLeft="10dp">
+                </ImageView>
+                <com.rkonline.android.latobold
+                    android:id="@+id/whatsapp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="WhatsApp"
+                    android:textSize="15sp" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardcall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="15dp"
+                android:layout_margin="5dp"
+                app:cardElevation="3dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/call"
+                    android:layout_marginLeft="10dp">
+                </ImageView>
+                <com.rkonline.android.latobold
+                    android:id="@+id/call"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="Call"
+                    android:textSize="15sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#11000000" />
         <com.rkonline.android.latobold
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -199,25 +318,6 @@
                     android:text="REFRESH" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-        <!-- Support -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/support"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="5dp"
-            android:layout_margin="5dp"
-            app:cardElevation="3dp">
-
-            <com.rkonline.android.latobold
-                android:id="@+id/supportno"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="Contact us"
-                android:textSize="15sp" />
-        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

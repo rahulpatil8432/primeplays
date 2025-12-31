@@ -64,14 +64,16 @@ public class MainActivity extends AppCompatActivity {
     protected CardView exit;
     protected CardView logout;
     protected CardView refresh;
-    protected TextView supportno;
-    protected CardView support;
+    protected TextView supportno, call;
+    protected CardView support, cardCall, cardAddMoney, cardWithdraw;
     RecyclerView recyclerview;
     RecyclerView recyclerviewMarket;
     SharedPreferences preferences;
     ImageView notificationImage;
     FirebaseFirestore db;
     SwipeRefreshLayout swipeRefresh;
+
+    String url,phone;
 
 
     private static final int NOTIFICATION_PERMISSION_CODE = 1001;
@@ -90,7 +92,22 @@ public class MainActivity extends AppCompatActivity {
 
 
         initViews();
-        support.setOnClickListener(v -> openWhatsApp());
+        support.setOnClickListener(v -> {
+
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                intent.setPackage("com.whatsapp");
+                startActivity(intent);
+            } catch (Exception e) {
+                AlertHelper.showCustomAlert(
+                        this,
+                        "Sorry!",
+                        "WhatsApp is not installed on your device.",
+                        0,
+                        0
+                );
+            }
+        });
 
         exit.setOnClickListener(v -> {
             finishAffinity();
@@ -240,6 +257,18 @@ public class MainActivity extends AppCompatActivity {
         });
         swipeRefresh.setOnRefreshListener(() -> apicall());
 
+        cardAddMoney.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        });
+        cardWithdraw.setOnClickListener(v  -> {
+            startActivity(new Intent(MainActivity.this, withdraw_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        });
+        cardCall.setOnClickListener(v -> {
+            String uri = "tel:"+phone;
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse(uri));
+            startActivity(intent);
+        });
     }
 
     private void onLogoutClick(){
@@ -328,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
         });
         loadHomeLine();
         loadMarkets();
-
+        openWhatsApp();
     }
 
     private void loadMarkets() {
@@ -342,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                 .orderBy("open_time")
                 .get()
                 .addOnSuccessListener(query -> {
-swipeRefresh.setRefreshing(false);
+                    swipeRefresh.setRefreshing(false);
                     ArrayList<String> names = new ArrayList<>();
                     ArrayList<String> openTimeArray = new ArrayList<>();
                     ArrayList<String> closeTimeArray = new ArrayList<>();
@@ -474,8 +503,10 @@ swipeRefresh.setRefreshing(false);
                         return;
                     }
 
-                    String phone = documentSnapshot.getString("phone");
+                    phone = documentSnapshot.getString("phone");
                     String message = documentSnapshot.getString("message");
+                    call.setText(phone);
+                    supportno.setText(phone);
 
                     if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(message)) {
                         AlertHelper.showCustomAlert(
@@ -488,22 +519,8 @@ swipeRefresh.setRefreshing(false);
                         return;
                     }
 
-                    String url = "https://wa.me/" + phone +
+                    url = "https://wa.me/" + phone +
                             "?text=" + Uri.encode(message);
-
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        intent.setPackage("com.whatsapp");
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        AlertHelper.showCustomAlert(
-                                this,
-                                "Sorry!",
-                                "WhatsApp is not installed on your device.",
-                                0,
-                                0
-                        );
-                    }
                 })
                 .addOnFailureListener(e ->
                         AlertHelper.showCustomAlert(
@@ -522,12 +539,16 @@ swipeRefresh.setRefreshing(false);
         exit = findViewById(R.id.exit);
         logout = findViewById(R.id.logout);
         refresh = findViewById(R.id.refresh);
-        supportno = findViewById(R.id.supportno);
-        support = findViewById(R.id.support);
+        supportno = findViewById(R.id.whatsapp);
+        support = findViewById(R.id.cardwhatsapp);
         scrollView = findViewById(R.id.scrollView);
         recyclerview = findViewById(R.id.recyclerview);
         recyclerviewMarket = findViewById(R.id.recyclerviewMarket);
         swipeRefresh = findViewById(R.id.swipeRefresh);
+        cardCall = findViewById(R.id.cardcall);
+        cardAddMoney = findViewById(R.id.cardaddmoney);
+        cardWithdraw = findViewById(R.id.cardwithdraw);
+        call = findViewById(R.id.call);
     }
 
     @Override
