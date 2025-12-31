@@ -46,6 +46,7 @@
             android:id="@+id/deleteBtn"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:visibility="gone"
             android:padding="8dp"
             android:src="@drawable/ic_delete_modern"
             android:background="@drawable/delete_button_bg"
