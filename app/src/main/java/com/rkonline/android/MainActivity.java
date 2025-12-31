@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -127,6 +128,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             hometext.setText("Loading...");
         }
+        hometext.setSelected(true);
+        hometext.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    hometext.setSelected(false);
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    hometext.setSelected(true);
+                    break;
+            }
+            return true;
+        });
+
 
         Typeface face = Typeface.createFromAsset(getAssets(), "Oxygen-Bold.ttf");
 
