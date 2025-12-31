@@ -70,7 +70,7 @@ public class withdraw_money extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         terms = getSharedPreferences(constant.prefs,MODE_PRIVATE).getString("withdrawTerms", "");
-        AlertHelper.showCustomAlert(withdraw_money.this,"Terms & Conditions",terms,R.drawable.info_icon,0);
+        AlertHelper.showCustomAlert(withdraw_money.this,"Terms & Conditions",terms,R.drawable.info_icon, R.color.colorAccent);
 
          watcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

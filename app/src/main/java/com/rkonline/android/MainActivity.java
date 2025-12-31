@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -22,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -48,6 +46,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.rkonline.android.notification.notification;
 import com.rkonline.android.timetable.TimeTableActivity;
 import com.rkonline.android.utils.AlertHelper;
+import com.rkonline.android.utils.WithdrawUtils;
 
 import org.json.JSONObject;
 
@@ -213,8 +212,18 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
                         if (drawerItem.equals(41)) {
-                            getTeamsAndConditions();
-                            startActivity(new Intent(MainActivity.this, withdraw_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            WithdrawUtils.getTeamsAndConditions(db, preferences, () -> {
+                                if (WithdrawUtils.isWithdrawAllowed(preferences)) {
+                                    String info = "Withdrawals are allowed only between "
+                                            + preferences.getInt("withdrawStartHour", 11) + ":00 and "
+                                            + preferences.getInt("withdrawEndHour", 23) + ":00. Please try again during this time.";
+                                    AlertHelper.showCustomAlert(MainActivity.this, "Info", info, R.drawable.info_icon, R.color.colorAccent);
+                                    return;
+                                }
+                                Intent intent = new Intent(MainActivity.this, withdraw_money.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            });
                         }
                         if (drawerItem.equals(10)) {
                             startActivity(new Intent(MainActivity.this, howto.class));
@@ -262,8 +271,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         });
         cardWithdraw.setOnClickListener(v  -> {
-            getTeamsAndConditions();
-            startActivity(new Intent(MainActivity.this, withdraw_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            WithdrawUtils.getTeamsAndConditions(db, preferences, () -> {
+                if (WithdrawUtils.isWithdrawAllowed(preferences)) {
+                    String info = "Withdrawals are allowed only between "
+                            + preferences.getInt("withdrawStartHour", 11) + ":00 and "
+                            + preferences.getInt("withdrawEndHour", 23) + ":00. Please try again during this time.";
+                    AlertHelper.showCustomAlert(MainActivity.this, "Info", info, R.drawable.info_icon, R.color.colorAccent);
+                    return;
+                }
+
+                Intent intent = new Intent(MainActivity.this, withdraw_money.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            });
         });
         cardCall.setOnClickListener(v -> {
             String uri = "tel:"+phone;
@@ -601,23 +621,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         AppUpdateManager.onActivityResult(this, requestCode);
-    }
-
-    private void getTeamsAndConditions() {
-        SharedPreferences.Editor editor = preferences.edit();
-        db.collection("app_config")
-                .document("withdraw")
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    editor.putString("withdrawTerms", documentSnapshot.getString("terms")).apply();
-                    Long minAmountLong = documentSnapshot.getLong("minAmount");
-                    int minAmount = minAmountLong != null ? minAmountLong.intValue() : 1000;
-                    editor.putInt("minAmount", minAmount).apply();
-                })
-                .addOnFailureListener(e -> {
-                    String terms = "You cannot withdraw deposited money. You can only withdraw winning money";
-                    editor.putString("withdrawTerms", terms).apply();
-                });
     }
 
 }
