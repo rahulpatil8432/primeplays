@@ -75,8 +75,10 @@ public class played extends AppCompatActivity {
         int day = today.get(Calendar.DAY_OF_MONTH);
         int month = today.get(Calendar.MONTH) + 1;
         int year = today.get(Calendar.YEAR);
-        filterDate = year+"-"+month+"-"+day;
-        dateFilter.setText("Today: " + day + "/" + month + "/" + year);
+
+        filterDate = String.format("%04d-%02d-%02d", year, month, day);
+        dateFilter.setText(String.format("%02d/%02d/%04d", day, month, year));
+
         loadPlayedMatches();
     }
 
@@ -92,9 +94,9 @@ public class played extends AppCompatActivity {
                     Calendar end = Calendar.getInstance();
                     end.set(year, month, day, 23, 59, 59);
 
-                    filterDate = year+"-"+(month+1)+"-"+day;
-
-                    dateFilter.setText(day + "/" + (month + 1) + "/" + year);
+                    int realMonth = month + 1;
+                    filterDate = String.format("%04d-%02d-%02d", year, realMonth, day);
+                    dateFilter.setText(String.format("%02d/%02d/%04d", day, realMonth, year));
 
                     loadPlayedMatches();
                 },

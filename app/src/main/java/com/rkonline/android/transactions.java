@@ -69,8 +69,8 @@ public class transactions extends AppCompatActivity {
         int month = today.get(Calendar.MONTH) + 1;
         int year = today.get(Calendar.YEAR);
 
-        filterDate = year + "-" + month + "-" + day; // format YYYY-M-D
-        dateFilter.setText("Today: " + day + "/" + month + "/" + year);
+        filterDate = String.format("%04d-%02d-%02d", year, month, day);
+        dateFilter.setText(String.format("Today: %02d/%02d/%04d", day, month, year));
 
         loadTransactions();
     }
@@ -81,8 +81,11 @@ public class transactions extends AppCompatActivity {
         DatePickerDialog dialog = new DatePickerDialog(
                 this,
                 (view, year, month, day) -> {
-                    filterDate = year + "-" + (month + 1) + "-" + day;
-                    dateFilter.setText(day + "/" + (month + 1) + "/" + year);
+                    int realMonth = month + 1;
+
+                    filterDate = String.format("%04d-%02d-%02d", year, realMonth, day);
+                    dateFilter.setText(String.format("%02d/%02d/%04d", day, realMonth, year));
+
                     loadTransactions();
                 },
                 calendar.get(Calendar.YEAR),
