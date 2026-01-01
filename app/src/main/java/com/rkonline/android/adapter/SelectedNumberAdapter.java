@@ -44,60 +44,61 @@ public class SelectedNumberAdapter extends RecyclerView.Adapter<SelectedNumberAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.numberText.setText(selectedNumbers.get(position));
+        if (holder.textWatcher   != null) {
+            holder.amountEdit.removeTextChangedListener(holder.textWatcher);
+        }
         holder.amountEdit.setText(amounts.get(position));
-        holder.itemView.startAnimation(
-                android.view.animation.AnimationUtils
-                        .loadAnimation(holder.itemView.getContext(), R.animator.row_enter)
-        );
-        holder.amountEdit.addTextChangedListener(new TextWatcher() {
+        holder.textWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
+                int adapterPos = holder.getAdapterPosition();
+                if (adapterPos == RecyclerView.NO_POSITION) return;
                 String value = s.toString().trim();
+
                 if (TextUtils.isEmpty(value)) {
-                    amounts.set(holder.getAdapterPosition(), "0"); // default 0
-                } else {
-                    amounts.set(holder.getAdapterPosition(), value);
+                    amounts.set(adapterPos, "");
+                    listener.onAmountChanged(calculateTotal());
+                    return;
                 }
 
-                // Recalculate total
-                int total = 0;
-                for (String amt : amounts) {
-                    try {
-                        total += Integer.parseInt(amt);
-                    } catch (NumberFormatException e) {
-                        total += 0;
-                    }
-                }
-                listener.onAmountChanged(total);
+                amounts.set(adapterPos, value);
+
+                listener.onAmountChanged(calculateTotal());
             }
-        });
+        };
+
+        holder.amountEdit.addTextChangedListener(holder.textWatcher);
 
         holder.deleteBtn.setOnClickListener(v -> {
-            holder.itemView.animate()
-                    .alpha(0f)
-                    .scaleX(0.9f)
-                    .scaleY(0.9f)
-                    .setDuration(100)
-                    .withEndAction(() ->
-                            listener.onDelete(holder.getAdapterPosition())
-                    )
-                    .start();
+            listener.onDelete(holder.getAdapterPosition());
         });
-
     }
 
     @Override
     public int getItemCount() {
         return selectedNumbers.size();
     }
+    private int calculateTotal() {
+        int total = 0;
+        for (String amt : amounts) {
+            if (!TextUtils.isEmpty(amt)) {
+                try {
+                    total += Integer.parseInt(amt);
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return total;
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView numberText;
         EditText amountEdit;
         ImageButton deleteBtn;
+        TextWatcher textWatcher;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
