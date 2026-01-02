@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefresh;
 
     String url,phone;
+    LinearLayout walletPill;
 
 
     private static final int NOTIFICATION_PERMISSION_CODE = 1001;
@@ -589,6 +591,12 @@ public class MainActivity extends AppCompatActivity {
         cardAddMoney = findViewById(R.id.cardaddmoney);
         cardWithdraw = findViewById(R.id.cardwithdraw);
         call = findViewById(R.id.call);
+        walletPill = findViewById(R.id.wallet_holder);
+
+        walletPill.setOnClickListener(v->{
+            startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+        });
     }
 
     @Override
