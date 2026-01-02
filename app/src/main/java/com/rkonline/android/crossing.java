@@ -1,15 +1,16 @@
 package com.rkonline.android;
 
+import static com.rkonline.android.utils.CommonUtils.soundPlayAndVibrate;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -170,6 +171,8 @@ public class crossing extends AppCompatActivity {
 
     private void onAllCrossingComplete() {
         progressDialog.hideDialog();
+        soundPlayAndVibrate(crossing.this,
+                (Vibrator) getSystemService(VIBRATOR_SERVICE));
         goThankYou();
     }
 

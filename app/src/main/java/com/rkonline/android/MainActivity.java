@@ -526,6 +526,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     phone = documentSnapshot.getString("phone");
+                    assert phone != null;
+                    if (!phone.startsWith("+91")) {
+                        phone = "+91" + phone;
+                    }
                     String message = documentSnapshot.getString("message");
                     call.setText(phone);
                     supportno.setText(phone);
