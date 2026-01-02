@@ -26,7 +26,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -109,10 +111,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         exit.setOnClickListener(v -> {
-            finishAffinity();
-            Process.killProcess(Process.myPid());
-            System.exit(1);
-            finish();
+            showExitDialog();
         });
 
         logout.setOnClickListener(v -> {
@@ -145,6 +144,12 @@ public class MainActivity extends AppCompatActivity {
             hometext.setText("Loading...");
         }
         hometext.setSelected(true);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitDialog();
+            }
+        });
         hometext.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -291,6 +296,15 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse(uri));
             startActivity(intent);
         });
+    }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Exit App")
+                .setMessage("Do you want to exit?")
+                .setPositiveButton("Yes", (dialog, which) ->    finishAffinity())
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void onLogoutClick(){
