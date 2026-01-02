@@ -7,318 +7,150 @@
     android:background="@color/back"
     tools:context=".MainActivity">
 
-    <!-- ================= TOOLBAR ================= -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:padding="12dp"
         android:background="@color/background">
 
-        <!-- Back Button (Modern Circular) -->
         <ImageButton
             android:id="@+id/back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerVertical="true"
             android:background="@drawable/toolbar_circle_bg"
             android:src="@drawable/ic_baseline_menu_open_24"
-            app:tint="@color/font"
-            android:contentDescription="Back"/>
+            app:tint="@color/font" />
 
-        <!-- App Logo -->
         <ImageView
             android:id="@+id/logo"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_toEndOf="@id/back"
-            android:layout_centerVertical="true"
             android:layout_marginStart="12dp"
             android:src="@drawable/splash_logo" />
 
-        <!-- Language Switch -->
         <ImageView
             android:id="@+id/notification"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/bell"
-            android:contentDescription="notification"/>
+            android:src="@drawable/bell" />
 
-        <!-- Wallet Pill -->
         <LinearLayout
             android:id="@+id/wallet_holder"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_toStartOf="@id/notification"
-            android:layout_marginEnd="12dp"
-            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/wallet_pill_bg"
             android:gravity="center"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp">
 
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@drawable/coin"
-                android:layout_marginEnd="6dp"/>
+                android:src="@drawable/coin" />
 
             <com.rkonline.android.latobold
                 android:id="@+id/balance"
+                android:layout_marginStart="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="600"
-                android:textColor="@android:color/black"
                 android:textSize="15sp" />
-
         </LinearLayout>
-
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:padding="5dp"
+        android:background="@color/back">
 
-    <!-- ================= MAIN CONTENT ================= -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            app:cardElevation="3dp">
+
+            <com.rkonline.android.latobold
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="EXIT" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/logout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            app:cardElevation="3dp">
+
+            <com.rkonline.android.latobold
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="LOGOUT" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/refresh"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            app:cardElevation="3dp">
+
+            <com.rkonline.android.latobold
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="REFRESH" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:visibility="visible">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical">
+        android:layout_above="@id/bottom_buttons">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#11000000" />
-
-        <com.rkonline.android.latonormal
-            android:id="@+id/hometext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/playnwin"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:textColor="@color/font"
-            android:textSize="15sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#11000000" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="12dp"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardaddmoney"
+            <com.rkonline.android.latonormal
+                android:id="@+id/hometext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                android:layout_margin="5dp"
-                app:cardElevation="3dp">
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/playnwin"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textSize="15sp"
+                android:textColor="@color/font" />
+            <include layout="@layout/home_action_cards"/>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/deposit"
-                    android:layout_marginLeft="10dp"/>
-
-                <com.rkonline.android.latobold
-                    android:id="@+id/addmoney"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="ADD MONEY"
-                    android:textSize="15sp" />
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardwithdraw"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewMarket"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                android:layout_margin="5dp"
-                app:cardElevation="3dp">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/withdraw"
-                    android:layout_marginLeft="10dp"/>
-
-                <com.rkonline.android.latobold
-                    android:id="@+id/withdraw"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="WITHDRAW"
-                    android:textSize="15sp" />
-            </androidx.cardview.widget.CardView>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="12dp"
-            android:weightSum="2">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardwhatsapp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                android:layout_margin="5dp"
-                app:cardElevation="3dp">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/whatsapp"
-                    android:layout_marginLeft="10dp">
-                </ImageView>
-                <com.rkonline.android.latobold
-                    android:id="@+id/whatsapp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="WhatsApp"
-                    android:textSize="15sp" />
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardcall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardCornerRadius="15dp"
-                android:layout_margin="5dp"
-                app:cardElevation="3dp">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/call"
-                    android:layout_marginLeft="10dp">
-                </ImageView>
-                <com.rkonline.android.latobold
-                    android:id="@+id/call"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="Call"
-                    android:textSize="15sp" />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#11000000" />
-        <com.rkonline.android.latobold
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Market"
-            android:textColor="@color/font"
-            android:visibility="gone"
-            android:textSize="17sp" />
-
-        <!-- Recycler -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewMarket"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="10dp" />
-
-        <!-- Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:layout_marginTop="10dp">
-
-            <!-- EXIT -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/exit"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="5dp"
-                app:cardElevation="3dp" android:layout_height="45dp">
-
-                <com.rkonline.android.latobold
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:gravity="center"
-                    android:text="EXIT" />
-            </androidx.cardview.widget.CardView>
-
-            <!-- LOGOUT -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/logout"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="5dp"
-                android:layout_marginEnd="5dp"
-                app:cardElevation="3dp"
-                android:layout_height="45dp">
-
-                <com.rkonline.android.latobold
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:gravity="center"
-                    android:text="LOGOUT" />
-            </androidx.cardview.widget.CardView>
-
-            <!-- REFRESH -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/refresh"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="5dp"
-                android:layout_marginEnd="5dp"
-                app:cardElevation="3dp"
-                android:layout_height="45dp">
-
-                <com.rkonline.android.latobold
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:gravity="center"
-                    android:text="REFRESH" />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-    </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </RelativeLayout>
