@@ -1,47 +1,61 @@
 package com.rkonline.android.adapter;
 
-
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import android.widget.ImageView;
-
 import com.rkonline.android.R;
 import com.rkonline.android.betting;
 import com.rkonline.android.crossing;
 import com.rkonline.android.fullsangam;
 import com.rkonline.android.halfsangam;
+import com.rkonline.android.model.GameHandler;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.GameData;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
-    Context context;
-    ArrayList<String> name = new ArrayList<>();
-    ArrayList<String> rate = new ArrayList<>();
-    ArrayList<String> number = new ArrayList<>();
-    String market,openTime,closeTime;
+    private final Context context;
+    private final ArrayList<String> gameNames;
+    private final String market, openTime, closeTime;
+    private final boolean isMarketOpen, closeNextDay;
 
-    Boolean isMarketOpen, closeNextDay;
+    private final Map<String, GameHandler> GameHandlerMap = new HashMap<>();
 
-    public adapter_game(Context context,  ArrayList<String> name, ArrayList<String> rate, String market, boolean isMarketOpen,String openTime,String closeTime, boolean closeNextDay) {
+    public adapter_game(Context context, ArrayList<String> gameNames,
+                       String market, boolean isMarketOpen, String openTime, String closeTime, boolean closeNextDay) {
         this.context = context;
-        this.name = name;
-        this.rate = rate;
+        this.gameNames = gameNames;
         this.market = market;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.isMarketOpen = isMarketOpen;
         this.closeNextDay = closeNextDay;
+
+        GameHandlerMap.put("Single Ank", new GameHandler(R.drawable.ic_single_digit,GameData::getSingleAnk, betting.class));
+        GameHandlerMap.put("Jodi", new GameHandler(R.drawable.ic_jodi,GameData::getJodi, betting.class));
+        GameHandlerMap.put("Crossing", new GameHandler(R.drawable.ic_jodi,GameData::getJodi, crossing.class));
+        GameHandlerMap.put("Red Jodi", new GameHandler(R.drawable.ic_jodi,GameData::getRedJodi, betting.class));
+        GameHandlerMap.put("Single Pana", new GameHandler(R.drawable.ic_single_pana,GameData::getSinglePana, betting.class));
+        GameHandlerMap.put("SP Motor", new GameHandler(R.drawable.ic_jodi,GameData::getSinglePana, crossing.class));
+        GameHandlerMap.put("Double Pana", new GameHandler(R.drawable.ic_double_pana,GameData::getDoublePana, betting.class));
+        GameHandlerMap.put("Triple Pana", new GameHandler(R.drawable.ic_triple_pana,GameData::getTriplePana, betting.class));
+        GameHandlerMap.put("Half Sangam", new GameHandler(R.drawable.ic_half_sangam,GameData::getTriplePana, halfsangam.class));
+        GameHandlerMap.put("Full Sangam", new GameHandler(R.drawable.ic_full_sangam,GameData::getTriplePana, fullsangam.class));
+        GameHandlerMap.put("DP Motor", new GameHandler(R.drawable.ic_jodi,GameData::getDoublePana, crossing.class));
     }
 
     @NonNull
@@ -51,134 +65,39 @@ public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> 
         return new ViewHolder(v);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-
-        String gameName = name.get(position);
+        final String gameName = gameNames.get(position);
         holder.name.setText(gameName);
-        switch (gameName) {
+        GameHandler handler = GameHandlerMap.get(gameName.trim());
 
-            case "Single Ank":
-                holder.gameIcon.setImageResource(R.drawable.ic_single_digit);
-                break;
+        if (handler != null) {
+            holder.gameIcon.setImageResource(handler.icon);
+            holder.layout.setOnClickListener(v -> {
+                ArrayList<String> numbers = handler.generateNumbers();
+                Intent intent = new Intent(context, handler.targetActivity);
+                intent.putExtra("list", numbers);
+                intent.putExtra("game", gameName);
+                intent.putExtra("market", market);
+                intent.putExtra("openTime", openTime);
+                intent.putExtra("closeTime", closeTime);
+                intent.putExtra("isMarketOpen", isMarketOpen);
+                intent.putExtra("closeNextDay", closeNextDay);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            case "Single Ank Bulk":
-                holder.gameIcon.setImageResource(R.drawable.ic_single_digit_bulk);
-                break;
-
-            case "Jodi":
-                holder.gameIcon.setImageResource(R.drawable.ic_jodi);
-                break;
-
-            case "Jodi Bulk":
-                holder.gameIcon.setImageResource(R.drawable.ic_jodi_bulk);
-                break;
-
-            case "Single Pana":
-                holder.gameIcon.setImageResource(R.drawable.ic_single_pana);
-                break;
-
-            case "Double Pana":
-                holder.gameIcon.setImageResource(R.drawable.ic_double_pana);
-                break;
-
-            case "Triple Pana":
-                holder.gameIcon.setImageResource(R.drawable.ic_triple_pana);
-                break;
-
-            case "Half Sangam":
-                holder.gameIcon.setImageResource(R.drawable.ic_half_sangam);
-                break;
-
-            case "Full Sangam":
-                holder.gameIcon.setImageResource(R.drawable.ic_full_sangam);
-                break;
-
-            default:
-                holder.gameIcon.setImageResource(R.drawable.ic_single_digit);
-                break;
+                if (!market.isEmpty()) context.startActivity(intent);
+            });
+        } else {
+            AlertHelper.showCustomAlert(context, "Error" , gameName+ " Have some problem", 0,0);
         }
-
-        /* ---------------- CLICK LOGIC ONLY ---------------- */
-
-        holder.layout.setOnClickListener(v -> {
-
-            number = new ArrayList<>();
-
-            switch (gameName) {
-                case "Single Ank":
-                    single();
-                    break;
-
-                case "Jodi":
-                case "Crossing":
-                    jodi();
-                    break;
-
-                case "Red Jodi":
-                    redJodi();
-                    break;
-
-                case "Single Pana":
-                    singlepatti();
-                    break;
-
-                case "Double Pana":
-                    doublepatti();
-                    break;
-
-                case "Triple Pana":
-                    triplepatti();
-                    break;
-
-                default:
-                    triplepatti();
-                    break;
-            }
-
-            Intent go;
-
-            switch (gameName) {
-                case "Half Sangam":
-                    go = new Intent(context, halfsangam.class);
-                    break;
-
-                case "Full Sangam":
-                    go = new Intent(context, fullsangam.class);
-                    break;
-
-                case "Crossing":
-                    go = new Intent(context, crossing.class);
-                    break;
-
-                default:
-                    go = new Intent(context, betting.class);
-                    break;
-            }
-
-            go.putExtra("list", number);
-            go.putExtra("game", gameName);
-            go.putExtra("market", market);
-            go.putExtra("openTime", openTime);
-            go.putExtra("closeTime", closeTime);
-            go.putExtra("isMarketOpen", isMarketOpen);
-            go.putExtra("closeNextDay", closeNextDay);
-            go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if(!market.isEmpty()){
-                context.startActivity(go);
-            }
-        });
     }
-
 
     @Override
     public int getItemCount() {
-        return name.size();
+        return gameNames.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView name;
         LinearLayout layout;
         ImageView gameIcon;
@@ -190,30 +109,4 @@ public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> 
             gameIcon = view.findViewById(R.id.gameIcon);
         }
     }
-
-    public void single() {
-        for (int i = 0; i <= 9; i++) number.add("" + i);
-    }
-    public void jodi() {
-        for (int i = 0; i < 100; i++) {
-            String temp = String.format("%02d", i);
-            number.add(temp);
-        }
-    }
-
-    public void redJodi(){
-        number.addAll(GameData.getRedJodi());
-    }
-    public void singlepatti() {
-        number.addAll(GameData.getSinglePana());
-    }
-
-    public void doublepatti() {
-        number.addAll(GameData.getDoublePana());
-    }
-
-    public void triplepatti() {
-        number.addAll(GameData.getTriplePana());
-    }
-
 }

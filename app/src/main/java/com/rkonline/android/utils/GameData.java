@@ -50,6 +50,16 @@ public final class GameData {
     public static ArrayList<String> getDoublePana() {
         return new ArrayList<>(DOUBLE_PANA);
     }
+    public static ArrayList<String> getJodi() {
+        ArrayList<String> numbers = new ArrayList<>();
+        for (int i = 0; i < 100; i++) numbers.add(String.format("%02d", i));
+        return numbers;
+    }
+    public static ArrayList<String> getSingleAnk() {
+        ArrayList<String> numbers = new ArrayList<>();
+        for (int i = 0; i <= 9; i++) numbers.add(String.valueOf(i));
+        return numbers;
+    }
 
     public static ArrayList<String> getTriplePana() {
         return new ArrayList<>(TRIPLE_PANA);
@@ -102,5 +112,51 @@ public final class GameData {
         }
         return sum % 10;
     }
+    public static ArrayList<String> generateSPNumbers(String input) {
+        ArrayList<String> numbers = new ArrayList<>();
+        char[] chars = input.toCharArray();
+        int len = chars.length;
+
+        for (int i = 0; i < len - 2; i++) {
+            for (int j = i + 1; j < len - 1; j++) {
+                for (int k = j + 1; k < len; k++) {
+                    numbers.add("" + chars[i] + chars[j] + chars[k]);
+                }
+            }
+        }
+        return numbers;
+    }
+
+    public static ArrayList<String> generateDPNumbers(String input) {
+        ArrayList<String> numbers = new ArrayList<>();
+        char[] chars = input.toCharArray();
+        int len = chars.length;
+        for (int i = 0; i < len; i++) {
+            for (int j = i + 1; j < len; j++) {
+                char a = input.charAt(i);
+                char b = input.charAt(j);
+                numbers.add("" + a + a + b);
+                numbers.add("" + a + b + b);
+            }
+        }
+        return numbers;
+    }
+
+    public static ArrayList<String> generateCrossingNumbers(String input) {
+        ArrayList<String> numbers = new ArrayList<>();
+        ArrayList<Character> unique = new ArrayList<>();
+        for (char c : input.toCharArray()) {
+            if (!unique.contains(c)) {
+                unique.add(c);
+            }
+        }
+        for (char a : unique) {
+            for (char b : unique) {
+                numbers.add("" + a + b);
+            }
+        }
+        return numbers;
+    }
+
 
 }

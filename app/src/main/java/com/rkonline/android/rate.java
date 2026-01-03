@@ -119,8 +119,7 @@ public class rate extends AppCompatActivity {
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
-//                   rc = new adapter_game(rate.this,name,rate,market, false, openTime, closeTime, closeNextDay);
-//                   recyclerview.setLayoutManager(new LinearLayoutManager(rate.this));
+//
                 }else{
                     recyclerview.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
@@ -133,7 +132,7 @@ public class rate extends AppCompatActivity {
                         name.remove("Half Sangam");
                         name.remove("Full Sangam");
                     }
-                    rc = new adapter_game(rate.this,name,new ArrayList<>(), market, isMarketOpen, openTime, closeTime, closeNextDay);
+                    rc = new adapter_game(rate.this,name, market, isMarketOpen, openTime, closeTime, closeNextDay);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));
                     recyclerview.setAdapter(rc);
                     rc.notifyDataSetChanged();

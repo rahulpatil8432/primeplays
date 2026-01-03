@@ -1,5 +1,7 @@
 package com.rkonline.android;
 
+import static com.rkonline.android.utils.CommonUtils.canPlaceBet;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,10 +12,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,13 +27,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
 import com.rkonline.android.utils.CommonUtils;
+import com.rkonline.android.utils.GameData;
 import com.rkonline.android.utils.PlayedBetRenderer;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 public class crossing extends AppCompatActivity {
 
     private EditText number, amount;
-    private TextView totalamount;
+    private Spinner type;
+
+    private TextView totalamount,Heading;
     private Button submit;
 
     private LinearLayout allAmountsContainer, amountHeaderRow;
@@ -36,9 +46,12 @@ public class crossing extends AppCompatActivity {
 
     private SharedPreferences prefs;
 
-    private final ArrayList<String> numbers = new ArrayList<>();
-    private String market, game;
+    private ArrayList<String> numbers = new ArrayList<>();
+    private String market, game, openTime, closeTime;
+    boolean closeNextDay;
     private ViewDialog progressDialog;
+    private String selectedGameType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +64,60 @@ public class crossing extends AppCompatActivity {
         prefs = getSharedPreferences(constant.prefs, MODE_PRIVATE);
         game = getIntent().getStringExtra("game");
         market = getIntent().getStringExtra("market");
-
-        submit.setOnClickListener(v -> handleSubmit());
+        boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen", false);
+        setupTypeSpinner(isMarketOpen);
+        openTime = getIntent().getStringExtra("openTime");
+        closeTime = getIntent().getStringExtra("closeTime");
+        closeNextDay = getIntent().getBooleanExtra("closeNextDay", false);
+        Heading.setText(game);
+        if(Objects.equals(game, "Crossing")){
+            type.setVisibility(View.GONE);
+            selectedGameType = null;
+        }
+//        submit.
+        submit.setOnClickListener(v -> {
+            if (!canPlaceBet(this, selectedGameType, openTime, closeTime, closeNextDay)) return;
+            handleSubmit();
+        });
     }
 
 
     private void initView() {
         number = findViewById(R.id.number);
         amount = findViewById(R.id.amount);
+        Heading = findViewById(R.id.heading);
         totalamount = findViewById(R.id.totalamount);
         submit = findViewById(R.id.submit);
-
+        type = findViewById(R.id.type);
         amountHeaderRow = findViewById(R.id.amountHeaderRow);
         allAmountsContainer = findViewById(R.id.allAmountsContainer);
         scrollForPlayed = findViewById(R.id.scrollForPlayed);
-
         hidePlayedSection();
 
         number.addTextChangedListener(simpleWatcher(this::onNumberChanged));
         amount.addTextChangedListener(simpleWatcher(this::onAmountChanged));
     }
+    private void setupTypeSpinner(boolean isMarketOpen) {
+        ArrayList<String> types = new ArrayList<>();
 
+        if (isMarketOpen) types.add("Close");
+        else {
+            types.add("Open");
+            types.add("Close");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, types);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type.setAdapter(adapter);
+
+        type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
+                selectedGameType = parent.getItemAtPosition(position).toString();
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
     private void onNumberChanged(String input) {
         numbers.clear();
         allAmountsContainer.removeAllViews();
@@ -82,7 +128,17 @@ public class crossing extends AppCompatActivity {
             return;
         }
 
-        generateCrossingNumbers(input);
+        switch (game) {
+            case "Crossing":
+                numbers = GameData.generateCrossingNumbers(input);
+                break;
+            case "SP Motor":
+                numbers = GameData.generateSPNumbers(input);
+                break;
+            case "DP Motor":
+                numbers = GameData.generateDPNumbers(input);
+                break;
+        }
         showPlayedBets();
         calculateTotal();
     }
@@ -91,23 +147,6 @@ public class crossing extends AppCompatActivity {
         showPlayedBets();
         calculateTotal();
     }
-
-
-    private void generateCrossingNumbers(String input) {
-        ArrayList<Character> unique = new ArrayList<>();
-        for (char c : input.toCharArray()) {
-            if (!unique.contains(c)) {
-                unique.add(c);
-            }
-        }
-
-        for (char a : unique) {
-            for (char b : unique) {
-                numbers.add("" + a + b);
-            }
-        }
-    }
-
 
     private void showPlayedBets() {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) scrollForPlayed.getLayoutParams(); params.height = 0; params.weight = 1f;
@@ -136,7 +175,6 @@ public class crossing extends AppCompatActivity {
         try {
             int amt = Integer.parseInt(amount.getText().toString());
             totalamount.setText("Total : "+ amt * numbers.size());
-
         } catch (NumberFormatException e) {
             totalamount.setText("");
         }
@@ -148,17 +186,16 @@ public class crossing extends AppCompatActivity {
             showAlert("Enter numbers");
             return;
         }
-        int amt = Integer.parseInt(amount.getText().toString());
-        if (amt * numbers.size() < constant.min_total || amt * numbers.size() > constant.max_total) {
-            AlertHelper.showCustomAlert(this, "Info!",
-                    "Total bet must be between " + constant.min_total + " and " + constant.max_total,
-                    R.drawable.info_icon, 0);
-        }
+
         if (TextUtils.isEmpty(amount.getText()) || amount.getText().toString().equals("0")) {
             amount.setError("Enter amount");
             return;
         }
-
+        int amt = Integer.parseInt(amount.getText().toString());
+        if (amt  < constant.min_total || amt  > constant.max_total) {
+            amount.setError("Amount bet must be between " + constant.min_total + " and " + constant.max_total);
+            return;
+        }
         prepareCrossingBets();
     }
 
@@ -181,7 +218,7 @@ public class crossing extends AppCompatActivity {
                 mobile,
                 market,
                 game,
-                null,
+                selectedGameType,
                 bets,
                 new BetEngine.BetCallback() {
                     @Override

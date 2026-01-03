@@ -81,7 +81,6 @@ public class betting extends AppCompatActivity {
         loadNumbersDirectly();
 
         submit.setOnClickListener(v -> {
-            Log.e("time", openTime + " " + closeTime + " " + selectedGameType);
             if (!canPlaceBet(this, selectedGameType, openTime, closeTime, closeNextDay)) return;
             handleBetSubmit();
         });
