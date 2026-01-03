@@ -1,7 +1,5 @@
 package com.rkonline.android;
 
-import static com.rkonline.android.utils.CommonUtils.soundPlayAndVibrate;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +8,6 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,16 +16,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
+import com.rkonline.android.utils.CommonUtils;
 import com.rkonline.android.utils.PlayedBetRenderer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 public class crossing extends AppCompatActivity {
 
     private EditText number, amount;
@@ -186,6 +180,8 @@ public class crossing extends AppCompatActivity {
                     public void onSuccess(int newWallet) {
                         prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
                         progressDialog.hideDialog();
+                        CommonUtils.soundPlayAndVibrate(crossing.this,
+                                (Vibrator) getSystemService(VIBRATOR_SERVICE));
                         goThankYou();
                     }
 
@@ -198,7 +194,6 @@ public class crossing extends AppCompatActivity {
         );
     }
 
-    /* ---------------- HELPERS ---------------- */
 
     private TextWatcher simpleWatcher(TextChangeListener listener) {
         return new TextWatcher() {
