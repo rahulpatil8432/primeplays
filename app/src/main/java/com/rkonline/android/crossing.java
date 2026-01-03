@@ -8,6 +8,7 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
 import com.rkonline.android.utils.CommonUtils;
 import com.rkonline.android.utils.PlayedBetRenderer;
@@ -134,6 +136,7 @@ public class crossing extends AppCompatActivity {
         try {
             int amt = Integer.parseInt(amount.getText().toString());
             totalamount.setText("Total : "+ amt * numbers.size());
+
         } catch (NumberFormatException e) {
             totalamount.setText("");
         }
@@ -145,7 +148,12 @@ public class crossing extends AppCompatActivity {
             showAlert("Enter numbers");
             return;
         }
-
+        int amt = Integer.parseInt(amount.getText().toString());
+        if (amt * numbers.size() < constant.min_total || amt * numbers.size() > constant.max_total) {
+            AlertHelper.showCustomAlert(this, "Info!",
+                    "Total bet must be between " + constant.min_total + " and " + constant.max_total,
+                    R.drawable.info_icon, 0);
+        }
         if (TextUtils.isEmpty(amount.getText()) || amount.getText().toString().equals("0")) {
             amount.setError("Enter amount");
             return;
