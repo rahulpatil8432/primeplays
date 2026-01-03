@@ -1,4 +1,4 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 import android.graphics.Color;
 import android.text.SpannableString;
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.rkonline.android.R;
 
 import java.util.List;
 
