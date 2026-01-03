@@ -1,4 +1,4 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rkonline.android.R;
 import com.rkonline.android.model.TransactionModel;
 
 import java.util.ArrayList;

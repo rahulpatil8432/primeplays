@@ -2,7 +2,6 @@ package com.rkonline.android;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
@@ -15,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.rkonline.android.adapter.adaptertransaction;
 import com.rkonline.android.model.TransactionModel;
 
 import java.text.SimpleDateFormat;
