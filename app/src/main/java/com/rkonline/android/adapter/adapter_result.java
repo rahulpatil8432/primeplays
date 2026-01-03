@@ -1,26 +1,26 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rkonline.android.R;
+
 import java.util.ArrayList;
 
-class adapter_chart extends RecyclerView.Adapter<adapter_chart.ViewHolder> {
+class adapter_result extends RecyclerView.Adapter<adapter_result.ViewHolder> {
 
     Context context;
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> result = new ArrayList<>();
 
-    public adapter_chart(Context context, ArrayList<String> name, ArrayList<String> result) {
+    public adapter_result(Context context,  ArrayList<String> name, ArrayList<String> result) {
         this.context = context;
         this.name = name;
         this.result = result;
@@ -29,7 +29,7 @@ class adapter_chart extends RecyclerView.Adapter<adapter_chart.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_layout, parent, false);
         return new ViewHolder(v);
     }
 
@@ -38,12 +38,7 @@ class adapter_chart extends RecyclerView.Adapter<adapter_chart.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         holder.name.setText(name.get(position));
-        holder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context,charts.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("href",result.get(position)));
-            }
-        });
+        holder.result.setText(result.get(position));
 
     }
 
@@ -53,18 +48,14 @@ class adapter_chart extends RecyclerView.Adapter<adapter_chart.ViewHolder> {
         return result.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
-        RelativeLayout layout;
+        TextView name,result;
 
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
-            layout = view.findViewById(R.id.layout);
-
-
+            result = view.findViewById(R.id.result);
         }
     }
 

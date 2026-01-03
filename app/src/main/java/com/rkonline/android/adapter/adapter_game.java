@@ -1,4 +1,4 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 
 import android.content.Context;
@@ -15,10 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import android.widget.ImageView;
 
+import com.rkonline.android.R;
+import com.rkonline.android.betting;
+import com.rkonline.android.crossing;
+import com.rkonline.android.fullsangam;
+import com.rkonline.android.halfsangam;
 import com.rkonline.android.utils.GameData;
 
 
-class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
+public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
     Context context;
     ArrayList<String> name = new ArrayList<>();

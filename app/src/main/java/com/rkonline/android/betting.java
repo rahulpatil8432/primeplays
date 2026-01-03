@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.rkonline.android.adapter.SelectedNumberAdapter;
 import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
+import com.rkonline.android.utils.PlayedBetRenderer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,8 +54,7 @@ public class betting extends AppCompatActivity {
     private SelectedNumberAdapter adapter;
     ViewDialog progressDialog;
 
-    private LinearLayout allAmountsContainer;
-    private LinearLayout amountHeaderRow;
+    private LinearLayout allAmountsContainer,amountHeaderRow;
     ScrollView scrollForPlayed;
 
     private int selectedFilter = -1;
@@ -243,42 +243,13 @@ public class betting extends AppCompatActivity {
     }
 
     private void showALLPlayedBet() {
-        allAmountsContainer.removeAllViews();
-        amountHeaderRow.setVisibility(View.VISIBLE);
-        allAmountsContainer.setVisibility(View.VISIBLE);
-        scrollForPlayed.setVisibility(View.VISIBLE);
-        boolean alternate = false;
-        for (String num : masterNumbers) {
-            String amt = amountMap.get(num);
-            if (!TextUtils.isEmpty(amt)) {
-                LinearLayout row = new LinearLayout(this);
-                row.setOrientation(LinearLayout.HORIZONTAL);
-                row.setPadding(4, 4, 4, 4);
-                if (alternate) {
-                    row.setBackgroundColor(getResources().getColor(R.color.md_grey_100));
-
-                } else {
-                    row.setBackgroundColor(getResources().getColor(R.color.md_white_1000));
-                }
-                alternate = !alternate;
-
-                TextView numTv = new TextView(this);
-                numTv.setLayoutParams(new LinearLayout.LayoutParams(0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                numTv.setGravity(android.view.Gravity.CENTER);
-                numTv.setText(num);
-
-                TextView amtTv = new TextView(this);
-                amtTv.setLayoutParams(new LinearLayout.LayoutParams(0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                amtTv.setGravity(android.view.Gravity.CENTER);
-                amtTv.setText(amt);
-
-                row.addView(numTv);
-                row.addView(amtTv);
-                allAmountsContainer.addView(row);
-            }
-        }
+        PlayedBetRenderer.renderVariableAmount(
+                this,
+                amountMap,
+                amountHeaderRow,
+                allAmountsContainer,
+                scrollForPlayed
+        );
     }
 
 

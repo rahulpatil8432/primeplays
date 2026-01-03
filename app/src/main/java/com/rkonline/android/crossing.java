@@ -8,43 +8,41 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
+import com.rkonline.android.utils.PlayedBetRenderer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 public class crossing extends AppCompatActivity {
 
-    protected EditText number;
-    protected EditText amount;
-    protected EditText totalamount;
-    protected latobold submit;
-    protected NestedScrollView scrollView;
-    protected RecyclerView recyclerview;
-    String value = "";
-    SharedPreferences prefs;
-    Boolean ischange = false;
+    private EditText number, amount;
+    private TextView totalamount;
+    private Button submit;
 
-    String market, game;
-    ViewDialog progressDialog;
+    private LinearLayout allAmountsContainer, amountHeaderRow;
+    private ScrollView scrollForPlayed;
 
-    ArrayList<String> fillnumber = new ArrayList<>();
-    ArrayList<String> fillamount = new ArrayList<>();
-    String numb, amou;
+    private SharedPreferences prefs;
 
-    ArrayList<String> numbers = new ArrayList<>();
+    private final ArrayList<String> numbers = new ArrayList<>();
+    private String market, game;
+    private ViewDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,89 +56,122 @@ public class crossing extends AppCompatActivity {
         game = getIntent().getStringExtra("game");
         market = getIntent().getStringExtra("market");
 
-        submit.setOnClickListener(v -> {
-
-            if (!submit.isEnabled()) return;
-            submit.setEnabled(false);
-
-            if (number.getText().toString().isEmpty()) {
-                number.setError("Enter numbers");
-                submit.setEnabled(true);
-                return;
-            }
-
-            if (amount.getText().toString().isEmpty() || amount.getText().toString().equals("0")) {
-                amount.setError("Enter amount");
-                submit.setEnabled(true);
-                return;
-            }
-
-            String totalStr = totalamount.getText().toString();
-            if (totalStr.isEmpty()) {
-                showAlert("Enter amount");
-                submit.setEnabled(true);
-                return;
-            }
-
-            int totalVal;
-            try {
-                totalVal = Integer.parseInt(totalStr);
-            } catch (NumberFormatException e) {
-                showAlert("Invalid total amount");
-                submit.setEnabled(true);
-                return;
-            }
-
-            if (totalVal < 10 || totalVal > 10000) {
-                showAlert("You can only bet between 10 INR to 10000 INR");
-                submit.setEnabled(true);
-                return;
-            }
-
-            prepareCrossingBets();
-        });
-
+        submit.setOnClickListener(v -> handleSubmit());
     }
 
-    private void prepareCrossingBets() {
 
-        fillnumber.clear();
-        fillamount.clear();
+    private void initView() {
+        number = findViewById(R.id.number);
+        amount = findViewById(R.id.amount);
+        totalamount = findViewById(R.id.totalamount);
+        submit = findViewById(R.id.submit);
 
-        for (String n : numbers) {
-            fillnumber.add(n);
-            fillamount.add(amount.getText().toString());
-        }
+        amountHeaderRow = findViewById(R.id.amountHeaderRow);
+        allAmountsContainer = findViewById(R.id.allAmountsContainer);
+        scrollForPlayed = findViewById(R.id.scrollForPlayed);
 
-        if (fillnumber.isEmpty()) {
-            showAlert("No numbers to place bet");
+        hidePlayedSection();
+
+        number.addTextChangedListener(simpleWatcher(this::onNumberChanged));
+        amount.addTextChangedListener(simpleWatcher(this::onAmountChanged));
+    }
+
+    private void onNumberChanged(String input) {
+        numbers.clear();
+        allAmountsContainer.removeAllViews();
+
+        if (TextUtils.isEmpty(input)) {
+            hidePlayedSection();
+            totalamount.setText("");
             return;
         }
 
-        placeCrossingWithEngine();
+        generateCrossingNumbers(input);
+        showPlayedBets();
+        calculateTotal();
     }
 
-    private void placeCrossingWithEngine() {
+    private void onAmountChanged(String amt) {
+        showPlayedBets();
+        calculateTotal();
+    }
 
-        progressDialog = new ViewDialog(crossing.this);
+
+    private void generateCrossingNumbers(String input) {
+        ArrayList<Character> unique = new ArrayList<>();
+        for (char c : input.toCharArray()) {
+            if (!unique.contains(c)) {
+                unique.add(c);
+            }
+        }
+
+        for (char a : unique) {
+            for (char b : unique) {
+                numbers.add("" + a + b);
+            }
+        }
+    }
+
+
+    private void showPlayedBets() {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) scrollForPlayed.getLayoutParams(); params.height = 0; params.weight = 1f;
+        PlayedBetRenderer.renderFixedAmount(
+                this,
+                numbers,
+                amount.getText().toString(),
+                amountHeaderRow,
+                allAmountsContainer,
+                scrollForPlayed
+        );
+    }
+
+    private void hidePlayedSection() {
+        amountHeaderRow.setVisibility(View.GONE);
+        allAmountsContainer.setVisibility(View.GONE);
+        scrollForPlayed.setVisibility(View.GONE);
+    }
+
+    private void calculateTotal() {
+        if (TextUtils.isEmpty(amount.getText())) {
+            totalamount.setText("");
+            return;
+        }
+
+        try {
+            int amt = Integer.parseInt(amount.getText().toString());
+            totalamount.setText("Total : "+ amt * numbers.size());
+        } catch (NumberFormatException e) {
+            totalamount.setText("");
+        }
+    }
+
+
+    private void handleSubmit() {
+        if (numbers.isEmpty()) {
+            showAlert("Enter numbers");
+            return;
+        }
+
+        if (TextUtils.isEmpty(amount.getText()) || amount.getText().toString().equals("0")) {
+            amount.setError("Enter amount");
+            return;
+        }
+
+        prepareCrossingBets();
+    }
+
+    private void prepareCrossingBets() {
+        progressDialog = new ViewDialog(this);
         progressDialog.showDialog();
-        submit.setEnabled(false);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mobile = prefs.getString("mobile", "");
 
         ArrayList<BetEngine.BetItem> bets = new ArrayList<>();
+        int amt = Integer.parseInt(amount.getText().toString());
 
-        for (int i = 0; i < fillnumber.size(); i++) {
-            try {
-                int amt = Integer.parseInt(fillamount.get(i));
-                bets.add(new BetEngine.BetItem(fillnumber.get(i), amt));
-            } catch (NumberFormatException e) {
-                submit.setEnabled(true);
-                progressDialog.hideDialog();
-                AlertHelper.showCustomAlert(this, "Sorry!", "Invalid bet amount", 0, 0);
-                return;
-            }
+        for (String n : numbers) {
+            bets.add(new BetEngine.BetItem(n, amt));
         }
 
         BetEngine.placeMultipleBets(
@@ -148,143 +179,51 @@ public class crossing extends AppCompatActivity {
                 mobile,
                 market,
                 game,
-                null, // crossing doesn't use Open/Close
+                null,
                 bets,
                 new BetEngine.BetCallback() {
                     @Override
                     public void onSuccess(int newWallet) {
                         prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();
                         progressDialog.hideDialog();
-                        onAllCrossingComplete();
+                        goThankYou();
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        submit.setEnabled(true);
                         progressDialog.hideDialog();
-                        AlertHelper.showCustomAlert(crossing.this, "Sorry!", error, 0, 0);
+                        showAlert(error);
                     }
                 }
         );
     }
 
+    /* ---------------- HELPERS ---------------- */
 
-    private void onAllCrossingComplete() {
-        progressDialog.hideDialog();
-        soundPlayAndVibrate(crossing.this,
-                (Vibrator) getSystemService(VIBRATOR_SERVICE));
-        goThankYou();
+    private TextWatcher simpleWatcher(TextChangeListener listener) {
+        return new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override public void afterTextChanged(Editable s) {
+                listener.onChange(s.toString());
+            }
+        };
     }
 
+    interface TextChangeListener {
+        void onChange(String value);
+    }
 
     private void showAlert(String msg) {
-        new AlertDialog.Builder(crossing.this)
+        new AlertDialog.Builder(this)
                 .setMessage(msg)
-                .setCancelable(true)
-                .setNegativeButton("Okay", (dialog, id) -> dialog.dismiss())
+                .setPositiveButton("OK", null)
                 .show();
     }
 
     private void goThankYou() {
-        Intent in = new Intent(getApplicationContext(), thankyou.class);
-        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(in);
+        startActivity(new Intent(this, thankyou.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         finish();
-    }
-
-    public void characterCount(String inputString) {
-        StringBuilder data = new StringBuilder();
-        HashMap<Character, Integer> charCountMap = new HashMap<>();
-        char[] strArray = inputString.toCharArray();
-        for (char c : strArray) {
-            if (charCountMap.containsKey(c)) {
-                charCountMap.put(c, charCountMap.get(c) + 1);
-            } else {
-                charCountMap.put(c, 1);
-            }
-        }
-
-        numbers.clear();
-
-        for (Map.Entry entry : charCountMap.entrySet()) {
-            data.append(entry.getKey().toString());
-        }
-
-        value = data.toString();
-
-        for (int a = 0; a < value.length(); a++) {
-            Log.e("fr", value.charAt(a) + "");
-            for (int i = 0; i < value.length(); i++) {
-                String nd = value.charAt(a) + "" + value.charAt(i) + "";
-                numbers.add(nd);
-            }
-        }
-
-        adapter_crossing adapterbetting = new adapter_crossing(crossing.this, numbers);
-        recyclerview.setLayoutManager(new GridLayoutManager(crossing.this, 4));
-        recyclerview.setAdapter(adapterbetting);
-        adapterbetting.notifyDataSetChanged();
-
-        number.setText(value);
-
-        if (!amount.getText().toString().isEmpty()) {
-            totalamount.setText("" + (Integer.parseInt(amount.getText().toString().toString()) * (value.length() * value.length())));
-        }
-    }
-
-    private void initView() {
-        number = findViewById(R.id.number);
-        amount = findViewById(R.id.amount);
-        totalamount = findViewById(R.id.totalamount);
-        submit = findViewById(R.id.submit);
-        scrollView = findViewById(R.id.scrollView);
-        recyclerview = findViewById(R.id.recyclerview);
-
-        number.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // no-op
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // no-op
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && s.length() > 0 && !value.equals(s.toString())) {
-                    ischange = true;
-                    characterCount(s.toString());
-                } else if (s.toString().equals("")) {
-                    numbers.clear();
-                    adapter_crossing adapterbetting = new adapter_crossing(crossing.this, numbers);
-                    recyclerview.setLayoutManager(new GridLayoutManager(crossing.this, 4));
-                    recyclerview.setAdapter(adapterbetting);
-                    adapterbetting.notifyDataSetChanged();
-                }
-            }
-        });
-
-        amount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // no-op
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // no-op
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s != null && s.length() > 0 && value != null && value.length() > 0) {
-                    totalamount.setText("" + (Integer.parseInt(s.toString()) * (value.length() * value.length())));
-                } else {
-                    totalamount.setText("");
-                }
-            }
-        });
     }
 }

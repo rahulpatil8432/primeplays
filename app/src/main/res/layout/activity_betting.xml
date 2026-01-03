@@ -96,56 +96,10 @@
         android:layout_weight="1"
         android:layout_marginTop="4dp"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/md_grey_400" />
 
-    <LinearLayout
-        android:id="@+id/amountHeaderRow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:padding="8dp"
-        android:background="@color/md_grey_100">
+    <include layout="@layout/amount_number_table"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Number"
-            android:textStyle="bold"
-            android:textColor="@color/md_black_1000"
-            android:gravity="center"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Amount"
-            android:textStyle="bold"
-            android:textColor="@color/md_black_1000"
-            android:gravity="center"/>
-    </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-         android:visibility="gone"
-        android:id="@+id/scrollForPlayed"
-         android:fillViewport="true">
-
-    <LinearLayout
-        android:id="@+id/allAmountsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"/>
-</ScrollView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/md_grey_400" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

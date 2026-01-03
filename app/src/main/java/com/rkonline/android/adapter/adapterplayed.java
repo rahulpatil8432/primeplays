@@ -1,8 +1,7 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.rkonline.android.R;
 
 import java.util.ArrayList;
 

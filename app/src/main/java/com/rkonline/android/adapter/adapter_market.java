@@ -1,4 +1,4 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,17 +9,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rkonline.android.R;
+import com.rkonline.android.rate;
 import com.rkonline.android.utils.AlertHelper;
 
 import java.util.ArrayList;
 
-class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
+public class adapter_market extends RecyclerView.Adapter<adapter_market.ViewHolder> {
 
     public static final int MARKET_OPEN = 1;
     public static final int MARKET_YET_TO_OPEN = 2;

@@ -1,24 +1,29 @@
-package com.rkonline.android;
+package com.rkonline.android.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rkonline.android.R;
+import com.rkonline.android.charts;
+
 import java.util.ArrayList;
 
-class adapter_result extends RecyclerView.Adapter<adapter_result.ViewHolder> {
+class adapter_chart extends RecyclerView.Adapter<adapter_chart.ViewHolder> {
 
     Context context;
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> result = new ArrayList<>();
 
-    public adapter_result(Context context,  ArrayList<String> name, ArrayList<String> result) {
+    public adapter_chart(Context context, ArrayList<String> name, ArrayList<String> result) {
         this.context = context;
         this.name = name;
         this.result = result;
@@ -27,7 +32,7 @@ class adapter_result extends RecyclerView.Adapter<adapter_result.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_layout, parent, false);
         return new ViewHolder(v);
     }
 
@@ -36,7 +41,12 @@ class adapter_result extends RecyclerView.Adapter<adapter_result.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         holder.name.setText(name.get(position));
-        holder.result.setText(result.get(position));
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, charts.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("href",result.get(position)));
+            }
+        });
 
     }
 
@@ -46,14 +56,18 @@ class adapter_result extends RecyclerView.Adapter<adapter_result.ViewHolder> {
         return result.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name,result;
+        TextView name;
+        RelativeLayout layout;
 
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
-            result = view.findViewById(R.id.result);
+            layout = view.findViewById(R.id.layout);
+
+
         }
     }
 
