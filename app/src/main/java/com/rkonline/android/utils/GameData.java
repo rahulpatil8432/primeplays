@@ -2,6 +2,7 @@ package com.rkonline.android.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public final class GameData {
@@ -124,6 +125,7 @@ public final class GameData {
                 }
             }
         }
+        numbers.sort(Comparator.comparingInt(Integer::parseInt));
         return numbers;
     }
 
@@ -139,6 +141,7 @@ public final class GameData {
                 numbers.add("" + a + b + b);
             }
         }
+        numbers.sort(Comparator.comparingInt(Integer::parseInt));
         return numbers;
     }
 
@@ -155,6 +158,7 @@ public final class GameData {
                 numbers.add("" + a + b);
             }
         }
+        numbers.sort(Comparator.comparingInt(Integer::parseInt));
         return numbers;
     }
 
