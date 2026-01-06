@@ -119,6 +119,19 @@
             android:gravity="start"/>
 
         <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/showBets"
+            android:paddingHorizontal="24dp"
+            android:text="Show Bets"
+            android:textColor="#FFFFFF"
+            android:background="@color/primary"
+            android:layout_marginHorizontal="20dp"
+            >
+
+        </Button>
+
+        <Button
             android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="50dp"

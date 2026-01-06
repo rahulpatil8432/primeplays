@@ -3,6 +3,7 @@ package com.rkonline.android;
 import static com.rkonline.android.utils.CommonUtils.canPlaceBet;
 import static com.rkonline.android.utils.CommonUtils.soundPlayAndVibrate;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ import java.util.Map;
 public class betting extends AppCompatActivity {
 
     private Spinner type;
-    private Button submit;
+    private Button submit,showBets;
     private TextView totalamount;
     private RecyclerView selectedNumberRecycler;
     private LinearLayout filterRow;
@@ -54,8 +55,6 @@ public class betting extends AppCompatActivity {
     private SelectedNumberAdapter adapter;
     ViewDialog progressDialog;
 
-    private LinearLayout allAmountsContainer,amountHeaderRow;
-    ScrollView scrollForPlayed;
 
     private int selectedFilter = -1;
     private final ArrayList<Button> filterButtons = new ArrayList<>();
@@ -81,21 +80,20 @@ public class betting extends AppCompatActivity {
         loadNumbersDirectly();
 
         submit.setOnClickListener(v -> {
-            if (!canPlaceBet(this, selectedGameType, openTime, closeTime, closeNextDay)) return;
             handleBetSubmit();
+        });
+        showBets.setOnClickListener(v -> {
+            showALLPlayedBet();
         });
     }
 
     private void initView() {
         type = findViewById(R.id.type);
         submit = findViewById(R.id.submit);
+        showBets = findViewById(R.id.showBets);
         totalamount = findViewById(R.id.totalamount);
-        allAmountsContainer = findViewById(R.id.allAmountsContainer);
         selectedNumberRecycler = findViewById(R.id.selectedNumberRecycler);
         filterRow = findViewById(R.id.filterRow);
-        amountHeaderRow = findViewById(R.id.amountHeaderRow);
-        scrollForPlayed = findViewById(R.id.scrollForPlayed);
-        amountHeaderRow.setVisibility(View.GONE);
 
         prefs = getSharedPreferences(constant.prefs, MODE_PRIVATE);
     }
@@ -232,27 +230,57 @@ public class betting extends AppCompatActivity {
             }
         }
         totalamount.setText("Total: " + total);
-        if (total > 0) {
-            showALLPlayedBet();
-        } else {
-            amountHeaderRow.setVisibility(View.GONE);
-            allAmountsContainer.setVisibility(View.GONE);
-            scrollForPlayed.setVisibility(View.GONE);
-        }
     }
 
     private void showALLPlayedBet() {
+        View view = getLayoutInflater()
+                .inflate(R.layout.amount_number_table, null);
+
+        LinearLayout headerRow = view.findViewById(R.id.amountHeaderRow);
+        LinearLayout container = view.findViewById(R.id.allAmountsContainer);
+        ScrollView scrollView = view.findViewById(R.id.scrollForPlayed);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) scrollView.getLayoutParams(); params.height = 0; params.weight = 1f;
+
         PlayedBetRenderer.renderVariableAmount(
                 this,
                 amountMap,
-                amountHeaderRow,
-                allAmountsContainer,
-                scrollForPlayed
+                headerRow,
+                container,
+                scrollView
         );
+
+        if (container.getChildCount() == 0) {
+            AlertHelper.showCustomAlert(
+                    this,
+                    "Info!",
+                    "No bets played yet",
+                    R.drawable.info_icon,
+                    0
+            );
+            return;
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(true)
+                .setPositiveButton("Submit",null )
+                .setNegativeButton("Close", null)
+                .create();
+        dialog.show();
+        Button submitBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        int primaryColor = getResources().getColor(R.color.colorPrimary);
+        int whiteColor   = getResources().getColor(android.R.color.white);
+        submitBtn.setBackgroundColor(primaryColor);
+        submitBtn.setTextColor(whiteColor);
+        submitBtn.setOnClickListener(v -> {
+            handleBetSubmit();
+            dialog.dismiss();
+        });
     }
 
 
     private void handleBetSubmit() {
+        if (!canPlaceBet(this, selectedGameType, openTime, closeTime, closeNextDay)) return;
 
         int total = 0;
         boolean hasBet = false;
