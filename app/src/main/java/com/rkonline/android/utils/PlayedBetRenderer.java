@@ -1,9 +1,13 @@
 package com.rkonline.android.utils;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,9 +51,13 @@ public final class PlayedBetRenderer {
             row.addView(createCell(context, amount));
             ImageButton deleteBtn = createDelete(context, alternate);
             deleteBtn.setOnClickListener(v -> {
-                container.removeView(row);
-                numbers.remove(num);
-                listener.onBetDeleted(num);
+
+                animateSlideFadeCollapse(row, () -> {
+                    container.removeView(row);
+                    numbers.remove(num);
+                    refreshAlternateBackgrounds(context,container);
+                    listener.onBetDeleted(num);
+                });
             });
 
             row.addView(deleteBtn);
@@ -84,9 +92,12 @@ public final class PlayedBetRenderer {
             row.addView(createCell(context, amt));
             ImageButton deleteBtn = createDelete(context, alternate);
             deleteBtn.setOnClickListener(v -> {
-                container.removeView(row);
-                amountMap.remove(num);
-                listener.onBetDeleted(num);
+                animateSlideFadeCollapse(row, () -> {
+                    container.removeView(row);
+                    amountMap.remove(num);
+                    refreshAlternateBackgrounds(context,container);
+                    listener.onBetDeleted(num);
+                });
             });
             row.addView(deleteBtn);
             alternate = !alternate;
@@ -151,6 +162,61 @@ public final class PlayedBetRenderer {
     }
     public interface OnBetDeletedListener {
         void onBetDeleted(String number);
+    }
+    private static void animateSlideFadeCollapse(View view, Runnable endAction) {
+
+        int initialHeight = view.getMeasuredHeight();
+
+        view.animate()
+                .translationX(view.getWidth())
+                .alpha(0f)
+                .setDuration(500)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .withEndAction(() -> {
+                    ValueAnimator animator = ValueAnimator.ofInt(initialHeight, 0);
+                    animator.setDuration(350);
+                    animator.addUpdateListener(animation -> {
+                        int value = (int) animation.getAnimatedValue();
+                        view.getLayoutParams().height = value;
+                        view.requestLayout();
+                    });
+
+                    animator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            endAction.run();
+                        }
+                    });
+
+                    animator.start();
+                })
+                .start();
+    }
+
+    private static void refreshAlternateBackgrounds(
+            Context context,
+            LinearLayout container
+    ) {
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View child = container.getChildAt(i);
+
+            boolean alternate = i % 2 != 0;
+            int color = context.getResources().getColor(
+                    alternate ? R.color.md_grey_100 : R.color.md_white_1000
+            );
+
+            child.setBackgroundColor(color);
+
+            if (child instanceof LinearLayout) {
+                LinearLayout row = (LinearLayout) child;
+                for (int j = 0; j < row.getChildCount(); j++) {
+                    View v = row.getChildAt(j);
+                    if (v instanceof ImageButton) {
+                        v.setBackgroundColor(color);
+                    }
+                }
+            }
+        }
     }
 
 }
