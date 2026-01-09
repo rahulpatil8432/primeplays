@@ -33,6 +33,14 @@
             android:textStyle="bold"
             android:textColor="@color/md_black_1000"
             android:gravity="center"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:textStyle="bold"
+            android:textColor="@color/md_black_1000"
+            android:gravity="center"/>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"

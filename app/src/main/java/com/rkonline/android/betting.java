@@ -246,7 +246,11 @@ public class betting extends AppCompatActivity {
                 amountMap,
                 headerRow,
                 container,
-                scrollView
+                scrollView,deletedNumber ->{
+                    amountMap.remove(deletedNumber);
+                    updateTotal();
+                    adapter.notifyDataSetChanged();
+                }
         );
 
         if (container.getChildCount() == 0) {

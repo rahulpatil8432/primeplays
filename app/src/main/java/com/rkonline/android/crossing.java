@@ -194,7 +194,10 @@ public class crossing extends AppCompatActivity {
                 amount.getText().toString(),
                 amountHeaderRow,
                 allAmountsContainer,
-                scrollForPlayed
+                scrollForPlayed,deletedNumber -> {
+                    numbers.remove(deletedNumber);
+                    calculateTotal();
+                }
         );
     }
 

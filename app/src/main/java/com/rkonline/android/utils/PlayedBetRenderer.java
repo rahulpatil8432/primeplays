@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -24,7 +26,8 @@ public final class PlayedBetRenderer {
             String amount,
             LinearLayout headerRow,
             LinearLayout container,
-            ScrollView scrollView
+            ScrollView scrollView,
+            OnBetDeletedListener listener
     ) {
 
         container.removeAllViews();
@@ -40,11 +43,17 @@ public final class PlayedBetRenderer {
 
         for (String num : numbers) {
             LinearLayout row = createRow(context, alternate);
-            alternate = !alternate;
-
             row.addView(createCell(context, num));
             row.addView(createCell(context, amount));
+            ImageButton deleteBtn = createDelete(context, alternate);
+            deleteBtn.setOnClickListener(v -> {
+                container.removeView(row);
+                numbers.remove(num);
+                listener.onBetDeleted(num);
+            });
 
+            row.addView(deleteBtn);
+            alternate = !alternate;
             container.addView(row);
         }
     }
@@ -55,7 +64,8 @@ public final class PlayedBetRenderer {
             Map<String, String> amountMap,
             LinearLayout headerRow,
             LinearLayout container,
-            ScrollView scrollView
+            ScrollView scrollView,
+            OnBetDeletedListener listener
     ) {
 
         container.removeAllViews();
@@ -70,11 +80,16 @@ public final class PlayedBetRenderer {
             hasData = true;
 
             LinearLayout row = createRow(context, alternate);
-            alternate = !alternate;
-
             row.addView(createCell(context, num));
             row.addView(createCell(context, amt));
-
+            ImageButton deleteBtn = createDelete(context, alternate);
+            deleteBtn.setOnClickListener(v -> {
+                container.removeView(row);
+                amountMap.remove(num);
+                listener.onBetDeleted(num);
+            });
+            row.addView(deleteBtn);
+            alternate = !alternate;
             container.addView(row);
         }
 
@@ -108,6 +123,25 @@ public final class PlayedBetRenderer {
         return tv;
     }
 
+    private static ImageButton createDelete(Context context, boolean alternate) {
+        ImageButton ib = new ImageButton(context);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                1
+        );
+        ib.setLayoutParams(params);
+        ib.setBackgroundColor(
+                context.getResources().getColor(
+                        alternate ? R.color.md_grey_100 : R.color.md_white_1000
+                )
+        );
+        ib.setImageResource(R.drawable.ic_delete_modern);
+        ib.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        ib.setPadding(4, 4, 4, 4);
+        return ib;
+    }
+
     private static void show(View... views) {
         for (View v : views) v.setVisibility(View.VISIBLE);
     }
@@ -115,4 +149,8 @@ public final class PlayedBetRenderer {
     private static void hide(View... views) {
         for (View v : views) v.setVisibility(View.GONE);
     }
+    public interface OnBetDeletedListener {
+        void onBetDeleted(String number);
+    }
+
 }
