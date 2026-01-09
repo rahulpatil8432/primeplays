@@ -3,7 +3,9 @@ package com.rkonline.android.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class GameData {
 
@@ -113,36 +115,26 @@ public final class GameData {
         }
         return sum % 10;
     }
-    public static ArrayList<String> generateSPNumbers(String input) {
-        ArrayList<String> numbers = new ArrayList<>();
-        char[] chars = input.toCharArray();
-        int len = chars.length;
-
-        for (int i = 0; i < len - 2; i++) {
-            for (int j = i + 1; j < len - 1; j++) {
-                for (int k = j + 1; k < len; k++) {
-                    numbers.add("" + chars[i] + chars[j] + chars[k]);
+    public static ArrayList<String> generateMotorNumbers(String input,ArrayList<String> motor) {
+        Set<Character> inputDigits = new HashSet<>();
+        for (char c : input.toCharArray()) {
+            inputDigits.add(c);
+        }
+        ArrayList<String> result = new ArrayList<>();
+        for (String pana : motor) {
+            boolean valid = true;
+            for (char c : pana.toCharArray()) {
+                if (!inputDigits.contains(c)) {
+                    valid = false;
+                    break;
                 }
             }
-        }
-        numbers.sort(Comparator.comparingInt(Integer::parseInt));
-        return numbers;
-    }
-
-    public static ArrayList<String> generateDPNumbers(String input) {
-        ArrayList<String> numbers = new ArrayList<>();
-        char[] chars = input.toCharArray();
-        int len = chars.length;
-        for (int i = 0; i < len; i++) {
-            for (int j = i + 1; j < len; j++) {
-                char a = input.charAt(i);
-                char b = input.charAt(j);
-                numbers.add("" + a + a + b);
-                numbers.add("" + a + b + b);
+            if (valid) {
+                result.add(pana);
             }
         }
-        numbers.sort(Comparator.comparingInt(Integer::parseInt));
-        return numbers;
+        result.sort(Comparator.comparingInt(Integer::parseInt));
+        return result;
     }
 
     public static ArrayList<String> generateCrossingNumbers(String input) {

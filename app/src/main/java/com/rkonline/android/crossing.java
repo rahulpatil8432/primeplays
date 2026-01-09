@@ -147,10 +147,10 @@ public class crossing extends AppCompatActivity {
                 numbers = GameData.generateCrossingNumbers(normalized);
                 break;
             case "SP Motor":
-                numbers = GameData.generateSPNumbers(normalized);
+                numbers = GameData.generateMotorNumbers(normalized,GameData.getSinglePana());
                 break;
             case "DP Motor":
-                numbers = GameData.generateDPNumbers(normalized);
+                numbers = GameData.generateMotorNumbers(normalized,GameData.getDoublePana());
                 break;
         }
 
