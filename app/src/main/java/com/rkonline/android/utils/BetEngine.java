@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class BetEngine {
 
@@ -123,6 +124,14 @@ public class BetEngine {
                         if (gameType != null) betData.put("gameType", gameType);
                         if (b.extraFields != null) betData.putAll(b.extraFields);
 
+                        betData.put("result", null); // REQUIRED for queries
+
+                        boolean calculateOpen = isCalculateWinnerOpen(gameType, game);
+                        boolean calculateClose = !calculateOpen;
+
+                        betData.put("isCalculateWinnerOpen", calculateOpen);
+                        betData.put("isCalculateWinnerClose", calculateClose);
+
                         transaction.set(db.collection("played").document(), betData);
                     }
 
@@ -146,5 +155,17 @@ public class BetEngine {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    // ADD new games here if want to consider for for close winner only.
+    private static final Set<String> CLOSE_ONLY_GAMES = Set.of(
+            "Jodi",
+            "Crossing",
+            "Red Jodi",
+            "Half Sangam",
+            "Full Sangam"
+    );
+
+    private static boolean isCalculateWinnerOpen(String gameType, String game) {
+        return "Open".equals(gameType) && !CLOSE_ONLY_GAMES.contains(game);
+    }
 
 }
