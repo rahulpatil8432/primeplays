@@ -111,7 +111,7 @@ public class BetEngine {
                     if (wallet < total)
                         throw new RuntimeException("Insufficient balance");
 
-                    if (total > Integer.parseInt(playedLimit)){
+                    if (Integer.parseInt(playedLimit) !=-1 && total > Integer.parseInt(playedLimit)){
                         String gT = "-";
                         if(gameType != null){
                             gT = gameType;
@@ -121,8 +121,7 @@ public class BetEngine {
                                 "<b>Market:</b> "+market+"\n" +
                                 "<b>Game:</b> "+game+"\n" +
                                 "<b>Game Type:</b> "+gT+"\n" +
-                                "<b>Amount:</b> <code>Rs."+total+"</code>\n" +
-                                "<a href=\"https://rkonline-63b1c.web.app/dashboard-default\">View on dashboard</a>");
+                                "<b>Amount:</b> <code>Rs."+total+"</code>\n");
                     }
                     int newWallet = wallet - total;
 
