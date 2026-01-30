@@ -49,6 +49,7 @@ import com.rkonline.android.adapter.adapter_market;
 import com.rkonline.android.notification.notification;
 import com.rkonline.android.timetable.TimeTableActivity;
 import com.rkonline.android.utils.AlertHelper;
+import com.rkonline.android.utils.TelegramUtil;
 import com.rkonline.android.utils.WithdrawUtils;
 
 import org.json.JSONObject;
@@ -85,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
+
+        TelegramUtil.sendMessage("<b>Payment Success</b>\n" +
+                "<i>Amount:</i> <code>$120</code>\n" +
+                "<a href=\"https://example.com\">View Receipt</a>");
         AppUpdateManager.checkForUpdate(this);
         db = FirebaseFirestore.getInstance();
         notificationImage =   findViewById(R.id.notification);
