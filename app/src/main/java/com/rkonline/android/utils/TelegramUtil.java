@@ -2,6 +2,9 @@ package com.rkonline.android.utils;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.constant;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -13,9 +16,7 @@ public final class TelegramUtil {
 
     private static final String TAG = "TelegramUtil";
 
-    // ⚠️ NEVER expose real token in production
-    private static final String BOT_TOKEN = "8474217997:AAHKArrnrxNWQe_GWJVkqutRDeGRaVxD5-g";
-    private static final String CHAT_ID = "-1003721588864"; // or "-100xxxxxxxxxx" or "@channel"
+    private static final String CHAT_ID = "-1003721588864";
 
     private TelegramUtil() {}
 
@@ -24,8 +25,8 @@ public final class TelegramUtil {
             HttpURLConnection conn = null;
             try {
                 String urlString =
-                        "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage";
-
+                        "https://api.telegram.org/bot" + constant.TelegramToken + "/sendMessage";
+                Log.d(TAG, "sendMessage: "+constant.TelegramToken);
                 String data =
                         "chat_id=" + URLEncoder.encode(CHAT_ID, "UTF-8") +
                                 "&message_thread_id=" + 14 +
@@ -61,7 +62,7 @@ public final class TelegramUtil {
             }
         }).start();
     }
-
+    
     private static String readResponse(HttpURLConnection conn, int code) {
         try {
             BufferedReader reader = new BufferedReader(

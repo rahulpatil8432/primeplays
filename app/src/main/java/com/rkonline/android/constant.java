@@ -17,4 +17,5 @@ public class constant {
 
     // MAX AMOUNT ALLOWED FOR SINGLE BET
     static int max_single = 10000;
+    public static String TelegramToken = "";
 }

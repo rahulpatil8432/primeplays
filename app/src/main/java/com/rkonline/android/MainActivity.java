@@ -490,7 +490,12 @@ public class MainActivity extends AppCompatActivity {
     private void loadHomeLine() {
 
         String username = preferences.getString("name", "User");
-
+        db.collection("app_config").document("telegram")
+                .get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        constant.TelegramToken = documentSnapshot.getString("botToken");
+                    }
+                });
         db.collection("app_config").document("homeline")
                 .get()
                 .addOnSuccessListener(document -> {
