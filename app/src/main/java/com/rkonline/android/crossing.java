@@ -45,7 +45,7 @@ public class crossing extends AppCompatActivity {
     private SharedPreferences prefs;
     private ArrayList<String> numbers = new ArrayList<>();
 
-    private String market, game, openTime, closeTime;
+    private String market, game, openTime, closeTime,playedLimit;
     boolean closeNextDay;
     private ViewDialog progressDialog;
     private String selectedGameType;
@@ -68,6 +68,7 @@ public class crossing extends AppCompatActivity {
 
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        playedLimit = getIntent().getStringExtra("playedLimit");
         closeNextDay = getIntent().getBooleanExtra("closeNextDay", false);
 
         Heading.setText(game);
@@ -264,6 +265,7 @@ public class crossing extends AppCompatActivity {
                 game,
                 selectedGameType,
                 bets,
+                playedLimit,
                 new BetEngine.BetCallback() {
                     @Override
                     public void onSuccess(int newWallet) {

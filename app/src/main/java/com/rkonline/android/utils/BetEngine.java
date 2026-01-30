@@ -1,5 +1,7 @@
 package com.rkonline.android.utils;
 
+import android.content.Intent;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,12 +30,13 @@ public class BetEngine {
             int amount,
             String remark,
             Map<String, Object> extraFields,
+            String playedLimit,
             BetCallback callback
     ) {
 
         List<InternalBet> list = new java.util.ArrayList<>();
         list.add(new InternalBet(betNumber, amount, extraFields));
-        executeTransaction(db, mobile, market, game, null, remark, list, callback);
+        executeTransaction(db, mobile, market, game, null, remark, list,playedLimit, callback);
     }
 
     public static void placeMultipleBets(
@@ -43,6 +46,7 @@ public class BetEngine {
             String game,
             String gameType,
             List<BetItem> bets,
+            String playedLimit,
             BetCallback callback
     ) {
 
@@ -54,6 +58,7 @@ public class BetEngine {
         executeTransaction(db, mobile, market, game, gameType,
                 "Bet placed - " + market,
                 list,
+                playedLimit,
                 callback);
     }
 
@@ -89,6 +94,7 @@ public class BetEngine {
             String gameType,
             String remark,
             List<InternalBet> bets,
+            String playedLimit,
             BetCallback callback
     ) {
 
@@ -105,6 +111,19 @@ public class BetEngine {
                     if (wallet < total)
                         throw new RuntimeException("Insufficient balance");
 
+                    if (total > Integer.parseInt(playedLimit)){
+                        String gT = "-";
+                        if(gameType != null){
+                            gT = gameType;
+                        }
+                        TelegramUtil.sendMessage("<b>Bet Placed Above Limit</b>\n" +
+                                "<b>User:</b>"+mobile+"\n" +
+                                "<b>Market:</b> "+market+"\n" +
+                                "<b>Game:</b> "+game+"\n" +
+                                "<b>Game Type:</b> "+gT+"\n" +
+                                "<b>Amount:</b> <code>Rs."+total+"</code>\n" +
+                                "<a href=\"https://rkonline-63b1c.web.app/dashboard-default\">View on dashboard</a>");
+                    }
                     int newWallet = wallet - total;
 
                     long ts = System.currentTimeMillis();

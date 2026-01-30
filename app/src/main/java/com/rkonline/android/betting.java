@@ -43,7 +43,7 @@ public class betting extends AppCompatActivity {
     private LinearLayout filterRow;
     private SharedPreferences prefs;
 
-    String market, game, openTime, closeTime;
+    String market, game, openTime, closeTime,playedLimit;
     boolean closeNextDay;
 
     private ArrayList<String> masterNumbers = new ArrayList<>();
@@ -72,6 +72,7 @@ public class betting extends AppCompatActivity {
         market = getIntent().getStringExtra("market");
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        playedLimit = getIntent().getStringExtra("playedLimit");
         closeNextDay = getIntent().getBooleanExtra("closeNextDay", false);
         boolean isMarketOpen = getIntent().getBooleanExtra("isMarketOpen", false);
 
@@ -340,7 +341,7 @@ public class betting extends AppCompatActivity {
             }
         }
 
-        BetEngine.placeMultipleBets(db, mobile, market, game, selectedGameType, betItems,
+        BetEngine.placeMultipleBets(db, mobile, market, game, selectedGameType, betItems,playedLimit,
                 new BetEngine.BetCallback() {
                     @Override public void onSuccess(int newWallet) {
                         prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();

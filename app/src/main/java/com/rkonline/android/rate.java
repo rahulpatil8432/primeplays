@@ -62,7 +62,7 @@ public class rate extends AppCompatActivity {
             progressDialog.hideDialog();
             if (task.isSuccessful()) {
                 ArrayList<String> name = new ArrayList<>();
-                ArrayList<String> rate = new ArrayList<>();
+                ArrayList<String> playedLimit = new ArrayList<>();
 
 
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -71,6 +71,7 @@ public class rate extends AppCompatActivity {
 
                     String gameName = (String) game.get("name");
                     String gameRate = (String) game.get("rate");
+                    String gamePlayedLimit = (String) game.get("playedLimit");
                     Boolean isActive = (Boolean) game.get("isActive");
 
                     if (isActive == null || !isActive) continue;
@@ -81,6 +82,7 @@ public class rate extends AppCompatActivity {
                         }
                     } else {
                         name.add(gameName);
+                        playedLimit.add(gamePlayedLimit);
                     }
                 }
                 adapter_game rc;
@@ -132,7 +134,7 @@ public class rate extends AppCompatActivity {
                         name.remove("Half Sangam");
                         name.remove("Full Sangam");
                     }
-                    rc = new adapter_game(rate.this,name, market, isMarketOpen, openTime, closeTime, closeNextDay);
+                    rc = new adapter_game(rate.this,name, market, isMarketOpen, openTime, closeTime, closeNextDay,playedLimit);
                     recyclerview.setLayoutManager(new GridLayoutManager(rate.this,2));
                     recyclerview.setAdapter(rc);
                     rc.notifyDataSetChanged();

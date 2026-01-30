@@ -29,14 +29,14 @@ import java.util.Map;
 public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> {
 
     private final Context context;
-    private final ArrayList<String> gameNames;
+    private final ArrayList<String> gameNames,playedLimit;
     private final String market, openTime, closeTime;
     private final boolean isMarketOpen, closeNextDay;
 
     private final Map<String, GameHandler> GameHandlerMap = new HashMap<>();
 
     public adapter_game(Context context, ArrayList<String> gameNames,
-                       String market, boolean isMarketOpen, String openTime, String closeTime, boolean closeNextDay) {
+                       String market, boolean isMarketOpen, String openTime, String closeTime, boolean closeNextDay,ArrayList<String> playedLimit) {
         this.context = context;
         this.gameNames = gameNames;
         this.market = market;
@@ -44,6 +44,7 @@ public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> 
         this.closeTime = closeTime;
         this.isMarketOpen = isMarketOpen;
         this.closeNextDay = closeNextDay;
+        this.playedLimit = playedLimit;
 
         GameHandlerMap.put("Single Ank", new GameHandler(R.drawable.ic_single_digit,GameData::getSingleAnk, betting.class));
         GameHandlerMap.put("Jodi", new GameHandler(R.drawable.ic_jodi,GameData::getJodi, betting.class));
@@ -68,6 +69,7 @@ public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final String gameName = gameNames.get(position);
+        final String playedLimit = this.playedLimit.get(position);
         holder.name.setText(gameName);
         GameHandler handler = GameHandlerMap.get(gameName.trim());
 
@@ -83,6 +85,7 @@ public class adapter_game extends RecyclerView.Adapter<adapter_game.ViewHolder> 
                 intent.putExtra("closeTime", closeTime);
                 intent.putExtra("isMarketOpen", isMarketOpen);
                 intent.putExtra("closeNextDay", closeNextDay);
+                intent.putExtra("playedLimit", playedLimit);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 if (!market.isEmpty()) context.startActivity(intent);

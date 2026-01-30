@@ -37,7 +37,7 @@ public class fullsangam extends AppCompatActivity {
 
     ArrayList<String> patti = new ArrayList<>();
 
-    String market, game, openTime, closeTime;
+    String market, game, openTime, closeTime,playedLimit;
     boolean closeNextDay;
 
     SharedPreferences prefs;
@@ -57,6 +57,7 @@ public class fullsangam extends AppCompatActivity {
         market = getIntent().getStringExtra("market");
         openTime = getIntent().getStringExtra("openTime");
         closeTime = getIntent().getStringExtra("closeTime");
+        playedLimit = getIntent().getStringExtra("playedLimit");
         closeNextDay = getIntent().getBooleanExtra("closeNextDay", false);
 
         patti.addAll(getpatti());
@@ -139,6 +140,7 @@ public class fullsangam extends AppCompatActivity {
                 amount,
                 "Full Sangam Bet - " + market,
                 null,
+                playedLimit,
                 new BetEngine.BetCallback() {
                     @Override
                     public void onSuccess(int newWallet) {
