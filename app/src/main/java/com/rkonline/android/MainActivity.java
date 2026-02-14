@@ -295,10 +295,11 @@ public class MainActivity extends AppCompatActivity {
             });
         });
         cardCall.setOnClickListener(v -> {
-            String uri = "tel:"+phone;
+            /*String uri = "tel:"+phone;
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse(uri));
-            startActivity(intent);
+            startActivity(intent);*/
+            openTelegram();
         });
     }
 
@@ -438,8 +439,6 @@ public class MainActivity extends AppCompatActivity {
                         if ("market_close_today".equalsIgnoreCase(statusStr)) {
                             status = MARKET_CLOSE_TODAY;
                             displayResult = "***-**-***";
-                            openTime = "00:00";
-                            closeTime = "00:00";
                         }else{
                             long now = getCurrentISTMillis();
                             long openMillis = getTimeInISTMillis(openTime);
@@ -581,6 +580,72 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
     }
+
+    private void openTelegram() {
+
+        db.collection("app_config")
+                .document("telegram")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+
+                    if (!documentSnapshot.exists()) {
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
+                        return;
+                    }
+
+                    String username = documentSnapshot.getString("username");
+                    String message = documentSnapshot.getString("message");
+
+                    if (TextUtils.isEmpty(username) || TextUtils.isEmpty(message)) {
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
+                        return;
+                    }
+
+                    if (username.startsWith("@")) {
+                        username = username.substring(1);
+                    }
+
+                    String url = "https://t.me/" + username +
+                            "?text=" + Uri.encode(message);
+
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.setPackage("org.telegram.messenger");
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Telegram is not installed on your device.",
+                                0,
+                                0
+                        );
+                    }
+
+                })
+                .addOnFailureListener(e ->
+                        AlertHelper.showCustomAlert(
+                                this,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        )
+                );
+    }
+
 
     private void initViews() {
         balance = findViewById(R.id.balance);
