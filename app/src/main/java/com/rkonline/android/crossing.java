@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rkonline.android.utils.AlertHelper;
 import com.rkonline.android.utils.BetEngine;
 import com.rkonline.android.utils.CommonUtils;
 import com.rkonline.android.utils.GameData;
@@ -281,8 +282,13 @@ public class crossing extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String error) {
+                        submit.setEnabled(true);
                         progressDialog.hideDialog();
-                        showAlert(error);
+                        String message = "Something went wrong";
+                        if ("Admin Bet".equals(error)) {
+                            message = "Admin can not place bet.";
+                        }
+                        AlertHelper.showCustomAlert(crossing.this, "Sorry!" , message, 0,0);
                     }
                 }
         );

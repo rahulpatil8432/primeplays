@@ -350,6 +350,11 @@ public class betting extends AppCompatActivity {
                     @Override public void onFailure(String error) {
                         submit.setEnabled(true);
                         progressDialog.hideDialog();
+                        String message = "Something went wrong";
+                        if ("Admin Bet".equals(error)) {
+                            message = "Admin can not place bet.";
+                        }
+                        AlertHelper.showCustomAlert(betting.this, "Sorry!" , message, 0,0);
                     }
                 });
     }

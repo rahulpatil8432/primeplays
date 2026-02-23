@@ -98,7 +98,10 @@ public class BetEngine {
             String playedLimit,
             BetCallback callback
     ) {
-
+        if (mobile.equals(adminMobile)) {
+            callback.onFailure("Admin Bet");
+            return;
+        }
         db.runTransaction(transaction -> {
 
                     DocumentReference adminRef = db.collection("users").document(adminMobile);

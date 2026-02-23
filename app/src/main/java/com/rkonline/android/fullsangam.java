@@ -156,7 +156,11 @@ public class fullsangam extends AppCompatActivity {
                     public void onFailure(String error) {
                         submit.setEnabled(true);
                         progressDialog.hideDialog();
-                        AlertHelper.showCustomAlert(fullsangam.this, "Sorry!" , "Something went wrong", 0,0);
+                        String message = "Something went wrong";
+                        if ("Admin Bet".equals(error)) {
+                            message = "Admin can not place bet.";
+                        }
+                        AlertHelper.showCustomAlert(fullsangam.this, "Sorry!" , message, 0,0);
                     }
                 }
         );
