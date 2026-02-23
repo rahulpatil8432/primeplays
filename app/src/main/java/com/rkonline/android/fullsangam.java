@@ -134,6 +134,7 @@ public class fullsangam extends AppCompatActivity {
         BetEngine.placeBet(
                 FirebaseFirestore.getInstance(),
                 prefs.getString("mobile", ""),
+                prefs.getString("adminMobile", ""),
                 market,
                 game,
                 betNumber,

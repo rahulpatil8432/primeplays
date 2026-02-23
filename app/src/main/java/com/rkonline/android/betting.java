@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -331,6 +329,7 @@ public class betting extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mobile = prefs.getString("mobile", "");
+        String adminMobile = prefs.getString("adminMobile", "");
 
         ArrayList<BetEngine.BetItem> betItems = new ArrayList<>();
 
@@ -341,7 +340,7 @@ public class betting extends AppCompatActivity {
             }
         }
 
-        BetEngine.placeMultipleBets(db, mobile, market, game, selectedGameType, betItems,playedLimit,
+        BetEngine.placeMultipleBets(db, mobile, adminMobile, market, game, selectedGameType, betItems,playedLimit,
                 new BetEngine.BetCallback() {
                     @Override public void onSuccess(int newWallet) {
                         prefs.edit().putString("wallet", String.valueOf(newWallet)).apply();

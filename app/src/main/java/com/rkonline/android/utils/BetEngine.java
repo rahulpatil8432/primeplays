@@ -1,7 +1,5 @@
 package com.rkonline.android.utils;
 
-import android.content.Intent;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +22,7 @@ public class BetEngine {
     public static void placeBet(
             FirebaseFirestore db,
             String mobile,
+            String adminMobile,
             String market,
             String game,
             String betNumber,
@@ -36,12 +35,13 @@ public class BetEngine {
 
         List<InternalBet> list = new java.util.ArrayList<>();
         list.add(new InternalBet(betNumber, amount, extraFields));
-        executeTransaction(db, mobile, market, game, null, remark, list,playedLimit, callback);
+        executeTransaction(db, mobile, adminMobile, market, game, null, remark, list,playedLimit, callback);
     }
 
     public static void placeMultipleBets(
             FirebaseFirestore db,
             String mobile,
+            String adminMobile,
             String market,
             String game,
             String gameType,
@@ -55,7 +55,7 @@ public class BetEngine {
             list.add(new InternalBet(b.number, b.amount, null));
         }
 
-        executeTransaction(db, mobile, market, game, gameType,
+        executeTransaction(db, mobile, adminMobile, market, game, gameType,
                 "Bet placed - " + market,
                 list,
                 playedLimit,
@@ -89,6 +89,7 @@ public class BetEngine {
     private static void executeTransaction(
             FirebaseFirestore db,
             String mobile,
+            String adminMobile,
             String market,
             String game,
             String gameType,
@@ -99,6 +100,10 @@ public class BetEngine {
     ) {
 
         db.runTransaction(transaction -> {
+
+                    DocumentReference adminRef = db.collection("users").document(adminMobile);
+                    DocumentSnapshot adminSnap = transaction.get(adminRef);
+                    int adminWallet = Objects.requireNonNull(adminSnap.getLong("wallet")).intValue();
 
                     DocumentReference userRef = db.collection("users").document(mobile);
                     DocumentSnapshot userSnap = transaction.get(userRef);
@@ -124,6 +129,7 @@ public class BetEngine {
                                 "<b>Amount:</b> <code>Rs."+total+"</code>\n");
                     }
                     int newWallet = wallet - total;
+                    int newAdminWallet = adminWallet + total;
 
                     long ts = System.currentTimeMillis();
                     String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -153,6 +159,7 @@ public class BetEngine {
                         transaction.set(db.collection("played").document(), betData);
                     }
 
+                    // user transaction and wallet update
                     Map<String, Object> txn = new HashMap<>();
                     txn.put("mobile", mobile);
                     txn.put("amount", String.valueOf(total));
@@ -166,6 +173,21 @@ public class BetEngine {
 
                     transaction.set(db.collection("transactions").document(), txn);
                     transaction.update(userRef, "wallet", newWallet);
+
+                    // Admin transaction and wallet update
+                    Map<String, Object> adminTxn = new HashMap<>();
+                    adminTxn.put("mobile", adminMobile);
+                    adminTxn.put("amount", String.valueOf(total));
+                    adminTxn.put("type", "CREDIT");
+                    adminTxn.put("remark", "Bet amount received from " + mobile);
+                    adminTxn.put("timestamp", ts);
+                    adminTxn.put("date", date);
+                    adminTxn.put("game", game);
+                    adminTxn.put("market", market);
+                    adminTxn.put("balance", String.valueOf(newAdminWallet));
+
+                    transaction.set(db.collection("transactions").document(), adminTxn);
+                    transaction.update(adminRef, "wallet", newAdminWallet);
 
                     return newWallet;
                 })

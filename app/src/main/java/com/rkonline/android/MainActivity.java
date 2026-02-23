@@ -399,6 +399,7 @@ public class MainActivity extends AppCompatActivity {
         loadHomeLine();
         loadMarkets();
         openWhatsApp();
+        loadAdminMobile();
     }
 
     private void loadMarkets() {
@@ -646,6 +647,28 @@ public class MainActivity extends AppCompatActivity {
                 );
     }
 
+    private void loadAdminMobile() {
+
+        db.collection("app_config")
+                .document("admin")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+
+                    if (documentSnapshot.exists()) {
+
+                        String adminMobile = documentSnapshot.getString("adminMobile");
+
+                        if (!TextUtils.isEmpty(adminMobile)) {
+
+                            preferences.edit()
+                                    .putString("adminMobile", adminMobile)
+                                    .apply();
+
+                            Log.d("ADMIN", "Admin mobile saved: " + adminMobile);
+                        }
+                    }
+                });
+    }
 
     private void initViews() {
         balance = findViewById(R.id.balance);

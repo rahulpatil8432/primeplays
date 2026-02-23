@@ -250,6 +250,7 @@ public class crossing extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mobile = prefs.getString("mobile", "");
+        String adminMobile = prefs.getString("adminMobile", "");
 
         ArrayList<BetEngine.BetItem> bets = new ArrayList<>();
         int amt = Integer.parseInt(amount.getText().toString());
@@ -261,6 +262,7 @@ public class crossing extends AppCompatActivity {
         BetEngine.placeMultipleBets(
                 db,
                 mobile,
+                adminMobile,
                 market,
                 game,
                 selectedGameType,
