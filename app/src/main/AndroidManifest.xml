@@ -52,6 +52,21 @@
         <activity android:name=".fullsangam"/>
         <activity android:name=".halfsangam"/>
         <activity android:name=".betting"/>
+        <activity android:exported="true" android:name=".payment.PaymentResultActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="myapp"
+                    android:host="payment-success"/>
+            </intent-filter>
+
+        </activity>
+
         <activity
             android:name=".splash"
             android:exported="true">
@@ -72,6 +87,7 @@
         <activity android:name=".signup"/>
         <activity android:name=".login"/>
         <activity android:name=".withdraw_money"/>
+        <activity android:name=".payment.PaymentWebViewActivity"/>
         <activity android:name=".timetable.TimeTableActivity"/>
         <activity android:name=".notification.notification"/>
         <activity android:name=".MainActivity" android:exported="true"/>

@@ -49,6 +49,7 @@ import com.rkonline.android.adapter.adapter_market;
 import com.rkonline.android.notification.notification;
 import com.rkonline.android.timetable.TimeTableActivity;
 import com.rkonline.android.utils.AlertHelper;
+import com.rkonline.android.utils.CommonUtils;
 import com.rkonline.android.utils.TelegramUtil;
 import com.rkonline.android.utils.WithdrawUtils;
 
@@ -99,19 +100,7 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         support.setOnClickListener(v -> {
 
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                intent.setPackage("com.whatsapp");
-                startActivity(intent);
-            } catch (Exception e) {
-                AlertHelper.showCustomAlert(
-                        this,
-                        "Sorry!",
-                        "WhatsApp is not installed on your device.",
-                        0,
-                        0
-                );
-            }
+           CommonUtils.openWhatsApp(this);
         });
 
         exit.setOnClickListener(v -> {
@@ -218,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(new Intent(MainActivity.this, notice.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
                         if (drawerItem.equals(4)) {
-                            startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            callDeposit();
                         }
                         if (drawerItem.equals(41)) {
                             WithdrawUtils.getTeamsAndConditions(db, preferences, () -> {
@@ -277,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(() -> apicall());
 
         cardAddMoney.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            callDeposit();
         });
         cardWithdraw.setOnClickListener(v  -> {
             WithdrawUtils.getTeamsAndConditions(db, preferences, () -> {
@@ -299,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse(uri));
             startActivity(intent);*/
-            openTelegram();
+            CommonUtils.openTelegram(this);
         });
     }
 
@@ -398,9 +387,10 @@ public class MainActivity extends AppCompatActivity {
         });
         loadHomeLine();
         loadMarkets();
-        openWhatsApp();
+        loadSupport();
         loadAdminMobile();
     }
+
 
     private void loadMarkets() {
 
@@ -531,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    private void openWhatsApp() {
+    private void loadSupport() {
         db.collection("app_config")
                 .document("whatsapp")
                 .get()
@@ -567,9 +557,6 @@ public class MainActivity extends AppCompatActivity {
                         );
                         return;
                     }
-
-                    url = "https://wa.me/" + phone +
-                            "?text=" + Uri.encode(message);
                 })
                 .addOnFailureListener(e ->
                         AlertHelper.showCustomAlert(
@@ -582,70 +569,6 @@ public class MainActivity extends AppCompatActivity {
                 );
     }
 
-    private void openTelegram() {
-
-        db.collection("app_config")
-                .document("telegram")
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-
-                    if (!documentSnapshot.exists()) {
-                        AlertHelper.showCustomAlert(
-                                this,
-                                "Sorry!",
-                                "Support service is temporarily unavailable.",
-                                0,
-                                0
-                        );
-                        return;
-                    }
-
-                    String username = documentSnapshot.getString("username");
-                    String message = documentSnapshot.getString("message");
-
-                    if (TextUtils.isEmpty(username) || TextUtils.isEmpty(message)) {
-                        AlertHelper.showCustomAlert(
-                                this,
-                                "Sorry!",
-                                "Support service is temporarily unavailable.",
-                                0,
-                                0
-                        );
-                        return;
-                    }
-
-                    if (username.startsWith("@")) {
-                        username = username.substring(1);
-                    }
-
-                    String url = "https://t.me/" + username +
-                            "?text=" + Uri.encode(message);
-
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        intent.setPackage("org.telegram.messenger");
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        AlertHelper.showCustomAlert(
-                                this,
-                                "Sorry!",
-                                "Telegram is not installed on your device.",
-                                0,
-                                0
-                        );
-                    }
-
-                })
-                .addOnFailureListener(e ->
-                        AlertHelper.showCustomAlert(
-                                this,
-                                "Sorry!",
-                                "Support service is temporarily unavailable.",
-                                0,
-                                0
-                        )
-                );
-    }
 
     private void loadAdminMobile() {
 
@@ -689,9 +612,15 @@ public class MainActivity extends AppCompatActivity {
         walletPill = findViewById(R.id.wallet_holder);
 
         walletPill.setOnClickListener(v->{
-            startActivity(new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
+            callDeposit();
         });
+    }
+
+    private void callDeposit(){
+        Intent intent = new Intent(MainActivity.this, deposit_money.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("wallet",balance.getText().toString());
+        startActivity(intent);
+
     }
 
     @Override

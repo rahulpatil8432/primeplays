@@ -1,13 +1,18 @@
 package com.rkonline.android.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.rkonline.android.R;
 
 import java.text.SimpleDateFormat;
@@ -117,4 +122,131 @@ public class CommonUtils {
         mediaPlayer.start();
     }
 
+    public static void openTelegram(Activity activity) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("app_config")
+                .document("telegram")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+
+                    if (!documentSnapshot.exists()) {
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
+                        return;
+                    }
+
+                    String username = documentSnapshot.getString("username");
+                    String message = documentSnapshot.getString("message");
+
+                    if (TextUtils.isEmpty(username) || TextUtils.isEmpty(message)) {
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
+                        return;
+                    }
+
+                    if (username.startsWith("@")) {
+                        username = username.substring(1);
+                    }
+
+                    String url = "https://t.me/" + username +
+                            "?text=" + Uri.encode(message);
+
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.setPackage("org.telegram.messenger");
+                        activity.startActivity(intent);
+                    } catch (Exception e) {
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Telegram is not installed on your device.",
+                                0,
+                                0
+                        );
+                    }
+
+                })
+                .addOnFailureListener(e ->
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        )
+                );
+    }
+
+    public static void openWhatsApp(Activity activity) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("app_config")
+                .document("whatsapp")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+
+                    if (!documentSnapshot.exists()) {
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
+                        return;
+                    }
+
+                    String phone = documentSnapshot.getString("phone");
+                    assert phone != null;
+                    if (!phone.startsWith("+91")) {
+                        phone = "+91" + phone;
+                    }
+                    String message = documentSnapshot.getString("message");
+
+                    if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(message)) {
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        );
+                        return;
+                    }
+                   String url = "https://wa.me/" + phone +
+                            "?text=" + Uri.encode(message);
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.setPackage("com.whatsapp");
+                        activity.startActivity(intent);
+                    } catch (Exception e) {
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "WhatsApp is not installed on your device.",
+                                0,
+                                0
+                        );
+                    }
+
+                })
+                .addOnFailureListener(e ->
+                        AlertHelper.showCustomAlert(
+                                activity,
+                                "Sorry!",
+                                "Support service is temporarily unavailable.",
+                                0,
+                                0
+                        )
+                );
+    }
 }

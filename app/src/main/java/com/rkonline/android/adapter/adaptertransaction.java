@@ -46,7 +46,13 @@ public class adaptertransaction extends RecyclerView.Adapter<adaptertransaction.
             h.type.setText("CREDIT");
             h.type.setTextColor(context.getColor(R.color.md_green_900));
             h.statusStrip.setBackgroundColor(context.getColor(R.color.md_green_900));
-        } else {
+        } else if(m.type.equalsIgnoreCase("DEPOSIT")){
+                h.amount.setText("₹" + m.amount);
+                h.amount.setTextColor(context.getColor(R.color.md_red_900));
+                h.type.setText("FAILED");
+                h.type.setTextColor(context.getColor(R.color.md_red_900));
+                h.statusStrip.setBackgroundColor(context.getColor(R.color.md_red_900));
+        }else {
             h.amount.setText("- ₹" + m.amount);
             h.amount.setTextColor(context.getColor(R.color.md_red_900));
             h.type.setText("DEBIT");
