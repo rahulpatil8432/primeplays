@@ -25,9 +25,9 @@ public class deposit_money extends AppCompatActivity {
 
     EditText amountInput;
     String userMobile;
-    Button twothousand,five100,thousand,call,whatsapp;
+    Button twothousand, five100, thousand, call, whatsapp;
 
-    TextView wallet,number;
+    TextView wallet, number;
     private int minDeposit = 500;
 
     @Override
@@ -81,20 +81,29 @@ public class deposit_money extends AppCompatActivity {
         findViewById(R.id.back).setOnClickListener(v -> finish());
         findViewById(R.id.pay).setOnClickListener(v -> startUPIPayment());
 
+        fetchMinDeposit();
+    }
+
+    private void fetchMinDeposit() {
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("app_config")
                 .document("deposit")
                 .get()
                 .addOnSuccessListener(document -> {
+
                     if (document.exists()) {
-                        try {
-                            String value = document.getString("min_deposit");
-                            if (value != null) {
-                                minDeposit = Integer.parseInt(value);
+
+                        Object value = document.get("min_deposit");
+
+                        if (value != null) {
+
+                            try {
+                                minDeposit = Integer.parseInt(value.toString());
+                            } catch (Exception ignored) {
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
                         }
                     }
                 });
@@ -105,8 +114,7 @@ public class deposit_money extends AppCompatActivity {
         if (TextUtils.isEmpty(amount) || amount.equals("0")) {
             amountInput.setError("Enter valid amount");
             return;
-        }
-        else if(Integer.parseInt(amount) < minDeposit){
+        } else if (Integer.parseInt(amount) < minDeposit) {
             amountInput.setError("Amount Should be Greater than " + minDeposit);
             return;
         }
