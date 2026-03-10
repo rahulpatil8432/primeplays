@@ -113,7 +113,6 @@ public class PaymentResultActivity extends AppCompatActivity {
     }
     private void handlePaymentResponse(String res){
 
-        dialog.dismiss();
         try {
 
             JSONObject json = new JSONObject(res);
@@ -205,6 +204,7 @@ public class PaymentResultActivity extends AppCompatActivity {
             return null;
 
         }).addOnSuccessListener(unused -> {
+            dialog.dismiss();
 
             if (paymentStatus.equals("SUCCESS")) {
                 Toast.makeText(this,
@@ -221,6 +221,7 @@ public class PaymentResultActivity extends AppCompatActivity {
             }
 
         }).addOnFailureListener(e -> {
+            dialog.dismiss();
 
             Toast.makeText(this,
                     "Failed to update Wallet Balance. Contact Admin",
