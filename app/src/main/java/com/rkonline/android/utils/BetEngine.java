@@ -182,7 +182,7 @@ public class BetEngine {
                     adminTxn.put("mobile", adminMobile);
                     adminTxn.put("amount", String.valueOf(total));
                     adminTxn.put("type", "CREDIT");
-                    adminTxn.put("remark", "Bet amount received from " + mobile);
+                    adminTxn.put("remark", "Admin-Bet amount received from " + mobile);
                     adminTxn.put("timestamp", ts);
                     adminTxn.put("date", date);
                     adminTxn.put("game", game);

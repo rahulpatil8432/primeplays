@@ -28,6 +28,7 @@ public class deposit_money extends AppCompatActivity {
     Button twothousand,five100,thousand,call,whatsapp;
 
     TextView wallet,number;
+    private int minDeposit = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,24 @@ public class deposit_money extends AppCompatActivity {
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
         findViewById(R.id.pay).setOnClickListener(v -> startUPIPayment());
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("app_config")
+                .document("deposit")
+                .get()
+                .addOnSuccessListener(document -> {
+                    if (document.exists()) {
+                        try {
+                            String value = document.getString("min_deposit");
+                            if (value != null) {
+                                minDeposit = Integer.parseInt(value);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     private void startUPIPayment() {
@@ -87,8 +106,8 @@ public class deposit_money extends AppCompatActivity {
             amountInput.setError("Enter valid amount");
             return;
         }
-        else if(Integer.parseInt(amount)<500){
-            amountInput.setError("Amount Should be Greater than 500");
+        else if(Integer.parseInt(amount) < minDeposit){
+            amountInput.setError("Amount Should be Greater than " + minDeposit);
             return;
         }
 
