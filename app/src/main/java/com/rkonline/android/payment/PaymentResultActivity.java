@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rkonline.android.MainActivity;
 import com.rkonline.android.R;
+import com.rkonline.android.constant;
 
 import org.json.JSONObject;
 
@@ -46,8 +47,8 @@ public class PaymentResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_success);
         db = FirebaseFirestore.getInstance();
-       btnDone =findViewById(R.id.btnDone);
-        btnDone.setOnClickListener(v ->{
+        btnDone = findViewById(R.id.btnDone);
+        btnDone.setOnClickListener(v -> {
             Intent intent = new Intent(PaymentResultActivity.this, MainActivity.class);
             startActivity(intent);
             finishAffinity();
@@ -60,14 +61,14 @@ public class PaymentResultActivity extends AppCompatActivity {
         Log.d("PaymentResultActivity", "data: " + data);
         findViewById(R.id.back).setOnClickListener(v -> finish());
 
-        if(data != null){
+        if (data != null) {
             String orderId = data.getQueryParameter("order_id");
             String token = data.getQueryParameter("token");
             verifyPayment(orderId, token);
         }
     }
 
-    private void verifyPayment(String orderId, String token){
+    private void verifyPayment(String orderId, String token) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -83,7 +84,7 @@ public class PaymentResultActivity extends AppCompatActivity {
                     if (document.exists()) {
                         String domain = document.getString("gateway_domain");
                         Request request = new Request.Builder()
-                                .url(domain+"/api/check-order-status")
+                                .url(domain + "/api/check-order-status")
                                 .post(body)
                                 .build();
                         client.newCall(request).enqueue(new Callback() {
@@ -107,23 +108,32 @@ public class PaymentResultActivity extends AppCompatActivity {
                             }
                         });
 
-                    }});
+                    }
+                });
 
 
     }
-    private void handlePaymentResponse(String res){
+
+    private void handlePaymentResponse(String res) {
 
         try {
 
+            Log.d("handlePaymentResponse", res);
             JSONObject json = new JSONObject(res);
+            Log.d("handlePaymentResponse", json.toString());
 
-            if(json.getBoolean("status")){
+            if (json.getBoolean("status")) {
 
                 JSONObject result = json.getJSONObject("result");
 
                 String paymentStatus = result.getString("txnStatus");
                 String amount = result.getString("amount");
-                String mobile = result.getString("customer_mobile");
+                String mobile = result.optString("customer_mobile", null);
+
+                if (mobile == null || mobile.isEmpty()) {
+                    mobile = getSharedPreferences(constant.prefs, MODE_PRIVATE)
+                            .getString("mobile", "");
+                }
                 String orderId = result.getString("orderId");
                 TextView orderIdTV = findViewById(R.id.orderId);
                 orderIdTV.setText(orderId);
@@ -136,29 +146,30 @@ public class PaymentResultActivity extends AppCompatActivity {
                 ImageView statusIcon = findViewById(R.id.statusIcon);
                 TextView statusTitle = findViewById(R.id.statusTitle);
 
-                if(paymentStatus.equals("SUCCESS")){
+                if (paymentStatus.equals("SUCCESS")) {
                     statusIcon.setImageResource(R.drawable.ic_success);
                     statusTitle.setText("Payment Successful");
                     Log.d("PaymentResultActivity", "amount: " + amount);
-                    Log.d("PaymentResultActivity", "mobile:"+mobile);
-                    onPaymentSuccess(amount,mobile,paymentStatus);
-                    Toast.makeText(this, "Payment Success"+amount, Toast.LENGTH_LONG).show();
+                    Log.d("PaymentResultActivity", "mobile:" + mobile);
+                    onPaymentSuccess(amount, mobile, paymentStatus);
+                    Toast.makeText(this, "Payment Success" + amount, Toast.LENGTH_LONG).show();
 
-                }else{
-                    onPaymentSuccess(amount,mobile,paymentStatus);
-
+                } else {
+                    onPaymentSuccess(amount, mobile, paymentStatus);
                     statusIcon.setImageResource(R.drawable.ic_failed);
-                    statusTitle.setText("Payment Failed");
+                    statusTitle.setText("Payment Status " + paymentStatus);
                     Toast.makeText(this, "Payment Failed", Toast.LENGTH_LONG).show();
                 }
-
             }
 
         } catch (Exception e) {
+            Log.d("CatchPayment", e.getMessage());
+            dialog.dismiss();
             e.printStackTrace();
         }
 
     }
+
     private void onPaymentSuccess(String amount, String userMobile, String paymentStatus) {
 
         int depositAmount = Integer.parseInt(amount);
@@ -180,7 +191,7 @@ public class PaymentResultActivity extends AppCompatActivity {
             depositEntry.put("mobile", userMobile);
             depositEntry.put("amount", amount);
             depositEntry.put("remark", paymentStatus.equals("SUCCESS") ?
-                    "Payment Deposit Successful" : "Payment Deposit Failed");
+                    "Payment Deposit Successful" : paymentStatus.equals("PENDING") ? "Payment Deposit Pending" : "Payment Deposit Failed");
 
             depositEntry.put("type", paymentStatus.equals("SUCCESS") ?
                     "CREDIT" : "DEPOSIT");
@@ -198,7 +209,7 @@ public class PaymentResultActivity extends AppCompatActivity {
             transaction.set(txnRef, depositEntry);
 
             if (paymentStatus.equals("SUCCESS")) {
-                transaction.update(userRef, "wallet", newWallet+"");
+                transaction.update(userRef, "wallet", newWallet + "");
             }
 
             return null;
